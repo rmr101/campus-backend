@@ -15,7 +15,7 @@ public class CourseAssignment {
 //    private Date dueDate;
 //    private String acceptanceCriteria;
 
-    @ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-    @JoinColumn(name="course_id",insertable = false,updatable = false)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="courseId")
     private Course course;
 }

@@ -1,6 +1,6 @@
 package com.rmr101.campus.config;
 
-import com.rmr101.campus.dto.CourseDetails;
+import com.rmr101.campus.dto.CourseDto;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.mapper.CourseMapper;
 import org.springframework.context.annotation.Bean;

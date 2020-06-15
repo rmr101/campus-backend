@@ -1,11 +1,10 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.CourseDetails;
-import com.rmr101.campus.dto.CourseDetailsList;
+import com.rmr101.campus.dto.CourseDto;
+import com.rmr101.campus.dto.CourseList;
+import com.rmr101.campus.dto.SubjectList;
 import com.rmr101.campus.entity.Course;
-import com.rmr101.campus.entity.CourseAssignment;
 import com.rmr101.campus.mapper.CourseMapper;
-import com.rmr101.campus.repository.CourseAssignmentRepository;
 import com.rmr101.campus.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,30 +20,48 @@ public class CourseService {
     @Autowired
     private CourseMapper courseMapper;
 
-    public CourseDetailsList getCourseList(){
-//        CourseDetailsList courses = new CourseDetailsList();
-//        courses.getCourseList().add(new CourseDetials(101, "Java", "Java is the best language in the world."));
-//        courses.getCourseList().add(new CourseDetials(102, "JavaScript", "JavaScript is the best language in the world."));
-//        courses.getCourseList().add(new CourseDetials(103, "PHP", "PHP is the best language in the world."));
-        return null;
+    public CourseList getAllCourses(){
+        CourseList courseList = new CourseList();
+        courseRepository.findAll()
+                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
+        return courseList;
     }
 
-    public CourseDetails getCourse(int Id){
-        Optional<Course> optionalCourse = courseRepository.findById(Id);
+    public CourseDto getCourseById(int id){
+        Optional<Course> optionalCourse = courseRepository.findById(id);
 
         if(optionalCourse.isPresent()){
             Course course = optionalCourse.get();
-            return courseMapper.toCourseDetails(course);
+            return courseMapper.toCourseDto(course);
         }
         return null;
     }
 
-    public CourseDetails addCourse(CourseDetails courseDetails) {
-        Course coursePo = courseMapper.toCourse(courseDetails);
+    public CourseList getCourseByName(String name){
+        CourseList courseList = new CourseList();
+        courseRepository.findByName(name)
+                .stream()
+                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
+
+        return courseList;
+    }
+
+    public CourseList getCourseBySubjectId(int id){
+        CourseList courseList = new CourseList();
+        courseRepository.findBySubjectId(id)
+                .stream()
+                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
+
+        return courseList;
+    }
+
+    public CourseDto addCourse(CourseDto courseDto) {
+        Course coursePo = courseMapper.toCourse(courseDto);
 
         courseRepository.save(coursePo);
         System.out.println(coursePo);
-        courseDetails.setId(coursePo.getId());
-        return courseDetails;
+        courseDto.setId(coursePo.getId());
+        return courseDto;
     }
+
 }
