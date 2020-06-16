@@ -1,14 +1,16 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.CourseDto;
-import com.rmr101.campus.dto.CourseList;
-import com.rmr101.campus.dto.SubjectList;
+import com.rmr101.campus.dto.*;
 import com.rmr101.campus.entity.Course;
+import com.rmr101.campus.entity.CourseAssignment;
+import com.rmr101.campus.mapper.CourseAssignmentMapper;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,19 +22,37 @@ public class CourseService {
     @Autowired
     private CourseMapper courseMapper;
 
+    @Autowired
+    private CourseAssignmentMapper courseAssignmentMapper;
+
     public CourseList getAllCourses(){
         CourseList courseList = new CourseList();
+        courseList.setCourseList(new ArrayList<CourseDto>());
         courseRepository.findAll()
                 .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
         return courseList;
     }
 
-    public CourseDto getCourseById(int id){
+    public CourseDto getCourseById(long id){
         Optional<Course> optionalCourse = courseRepository.findById(id);
 
         if(optionalCourse.isPresent()){
             Course course = optionalCourse.get();
             return courseMapper.toCourseDto(course);
+        }
+        return null;
+    }
+
+    public CourseDetails getCourseDetailsById(long id){
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+
+        if(optionalCourse.isPresent()){
+            CourseDetails courseDetails = new CourseDetails();
+            Course course = optionalCourse.get();
+            courseDetails.setCourseDto(courseMapper.toCourseDto(course));
+            courseDetails.setAssignmentList(courseAssignmentMapper.toCourseAssignmentDto(course.getAssignments()));
+
+            return courseDetails;
         }
         return null;
     }

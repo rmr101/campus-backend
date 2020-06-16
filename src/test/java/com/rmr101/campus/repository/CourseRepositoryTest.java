@@ -26,10 +26,10 @@ public class CourseRepositoryTest {
         courseRepository.save(course);
     }
 
-
+    @Disabled
     @Test
     public void insertCourseWithSubject(){
-        int id = 1;
+        long id = 1;
         Subject subject = subjectRepository.findById(id).get();
         subject.setId(3);
 
@@ -41,6 +41,7 @@ public class CourseRepositoryTest {
         courseRepository.save(course);
     }
 
+    @Disabled
     @Test
     public void updateCourseWithSubject(){
         Subject subject = new Subject();
@@ -56,8 +57,9 @@ public class CourseRepositoryTest {
     @Disabled
     @Test
     public void retrieveCourseWithSubject(){
+        Long id = (long)2;
 
-        Course course = courseRepository.findById(31).get();
+        Course course = courseRepository.findById(id).get();
 //        System.out.println(course);
     }
 

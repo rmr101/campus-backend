@@ -1,15 +1,18 @@
 package com.rmr101.campus.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Data
 @Table(name = "course_assignment")
 public class CourseAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
     private String title;
     private String content;
 //    private Date dueDate;

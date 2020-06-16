@@ -3,6 +3,9 @@ package com.rmr101.campus.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -11,9 +14,11 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID")
-    private int id;
+    private long id;
 
     private String name;
     private String introduction;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject")
+    private List<Course> courses = new ArrayList<Course>();
 }

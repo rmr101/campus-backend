@@ -8,7 +8,9 @@ import lombok.Setter;
 @Data
 //@AllArgsConstructor
 public class CourseDto {
-    private int id;
+    private long id;
     private String name;
     private String introduction;
+
+    private long subjectId;
 }
