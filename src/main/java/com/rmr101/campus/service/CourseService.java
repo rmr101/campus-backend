@@ -57,23 +57,23 @@ public class CourseService {
         return null;
     }
 
-    public CourseList getCourseByName(String name){
-        CourseList courseList = new CourseList();
-        courseRepository.findByName(name)
-                .stream()
-                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
-
-        return courseList;
-    }
-
-    public CourseList getCourseBySubjectId(int id){
-        CourseList courseList = new CourseList();
-        courseRepository.findBySubjectId(id)
-                .stream()
-                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
-
-        return courseList;
-    }
+//    public CourseList getCourseByName(String name){
+//        CourseList courseList = new CourseList();
+//        courseRepository.findByName(name)
+//                .stream()
+//                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
+//
+//        return courseList;
+//    }
+//
+//    public CourseList getCourseBySubjectId(int id){
+//        CourseList courseList = new CourseList();
+//        courseRepository.findBySubjectId(id)
+//                .stream()
+//                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
+//
+//        return courseList;
+//    }
 
     public CourseDto addCourse(CourseDto courseDto) {
         Course coursePo = courseMapper.toCourse(courseDto);
