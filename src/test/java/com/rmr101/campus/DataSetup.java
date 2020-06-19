@@ -1,6 +1,10 @@
-package com.rmr101.campus.repository;
+package com.rmr101.campus;
 
 import com.rmr101.campus.entity.*;
+import com.rmr101.campus.repository.StudentRepository;
+import com.rmr101.campus.repository.SubjectRepository;
+import com.rmr101.campus.repository.TeacherRepository;
+import com.rmr101.campus.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +21,9 @@ public class DataSetup {
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Test
     public void dataSetup(){
@@ -68,7 +75,7 @@ public class DataSetup {
         teacher1.getCourses().add(teachercourse2);
         teacherRepository.save(teacher1);
 
-        //user2
+        //teacher2
         User user2 = new User();
         user2.setRole("teacher");
         userRepository.save(user2);
@@ -76,8 +83,28 @@ public class DataSetup {
         Teacher teacher2 = new Teacher();
         teacher2.setUuid(user2.getUuid());
         teacher2.setName("Joan Doe");
-
-
         teacherRepository.save(teacher2);
+
+        //add student1
+        User user3 = new User();
+        user3.setRole("student");
+        userRepository.save(user3);
+
+        Student student1 = new Student();
+        student1.setUuid(user3.getUuid());
+        student1.setName("Joan Doe");
+        studentRepository.save(student1);
+
+        //add student2
+        User user4 = new User();
+        user4.setRole("student");
+        userRepository.save(user4);
+
+        Student student2 = new Student();
+        student2.setUuid(user4.getUuid());
+        student2.setName("ALex D");
+        studentRepository.save(student2);
+        System.out.println(user4.getUuid());
+
     }
 }
