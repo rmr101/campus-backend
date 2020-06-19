@@ -26,6 +26,9 @@ public class Course {
     @JoinColumn(name = "subjectId")
     private Subject subject;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "course")
     private List<CourseAssignment> assignments = new ArrayList<CourseAssignment>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "course")
+    private List<TeacherCourse> teachers = new ArrayList<TeacherCourse>();
 }

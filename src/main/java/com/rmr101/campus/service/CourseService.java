@@ -3,8 +3,10 @@ package com.rmr101.campus.service;
 import com.rmr101.campus.dto.*;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.CourseAssignment;
+import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;
 import com.rmr101.campus.mapper.CourseMapper;
+import com.rmr101.campus.mapper.TeacherMapper;
 import com.rmr101.campus.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class CourseService {
 
     @Autowired
     private CourseMapper courseMapper;
+
+    @Autowired
+    private TeacherMapper teacherMapper;
 
     @Autowired
     private CourseAssignmentMapper courseAssignmentMapper;
@@ -51,6 +56,13 @@ public class CourseService {
             Course course = optionalCourse.get();
             courseDetails.setCourseDto(courseMapper.toCourseDto(course));
             courseDetails.setAssignmentList(courseAssignmentMapper.toCourseAssignmentDto(course.getAssignments()));
+            List<TeacherDto> teacherList = new ArrayList<TeacherDto>();
+            course.getTeachers().stream()
+                    .forEach( courseTeacher -> {
+                        TeacherDto teacherDto= teacherMapper.toTeacherDto(courseTeacher.getTeacher());
+                        teacherList.add(teacherDto);
+                    });
+            courseDetails.setTeachers(teacherList);
 
             return courseDetails;
         }

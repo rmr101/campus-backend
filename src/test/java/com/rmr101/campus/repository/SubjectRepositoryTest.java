@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@Disabled
+
 @SpringBootTest
 public class SubjectRepositoryTest {
     @Autowired
@@ -16,8 +16,8 @@ public class SubjectRepositoryTest {
     @Test
     public void insertSubject(){
         Subject subject = new Subject();
-        subject.setId(3);
-        subject.setName("Math");
+//        subject.setId(3);
+        subject.setName("Computer Science");
         subject.setIntroduction("Computer Science");
 
         subjectRepository.save(subject);

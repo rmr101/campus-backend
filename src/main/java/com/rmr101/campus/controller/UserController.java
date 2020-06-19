@@ -18,7 +18,7 @@ public class UserController {
     }
 
     @PutMapping("{id}")
-    public UserDto addUser(@RequestBody UserDto userDto, @PathVariable String id){
+    public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable String id){
         return userService.updateUser(userDto, id);
     }
 }
