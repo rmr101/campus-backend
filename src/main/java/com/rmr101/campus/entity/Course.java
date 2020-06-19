@@ -31,4 +31,7 @@ public class Course {
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "course")
     private List<TeacherCourse> teachers = new ArrayList<TeacherCourse>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    private List<StudentCourse> students = new ArrayList<StudentCourse>();
 }

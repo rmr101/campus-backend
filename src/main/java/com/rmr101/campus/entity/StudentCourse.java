@@ -6,19 +6,17 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "teacher_course")//intermediate table of teach and course
-public class TeacherCourse {
-
+@Table(name = "student_course")//intermidiate table of student and course
+public class StudentCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="teacherId")
-    private Teacher teacher;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="courseId")
     private Course course;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="studentId")
+    private Student student;
 }
