@@ -12,7 +12,7 @@ public class StudentAssignment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private int score;
+    private float score;
     private boolean isSubmit;
 
     @ManyToOne(fetch=FetchType.LAZY)
