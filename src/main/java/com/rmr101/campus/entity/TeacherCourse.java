@@ -3,22 +3,22 @@ package com.rmr101.campus.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
 
-@Entity
 @Data
-@Table(name = "course_assignment")
-public class CourseAssignment {
+@Entity
+@Table(name = "teacher_course")//intermediate table of teach and course
+public class TeacherCourse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String title;
-    private String content;
-//    private Date dueDate;
-//    private String acceptanceCriteria;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="teacherId")
+    private Teacher teacher;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="courseId")
     private Course course;
+
 }
