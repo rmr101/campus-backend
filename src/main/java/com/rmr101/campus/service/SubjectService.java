@@ -1,8 +1,8 @@
 package com.rmr101.campus.service;
 
 import com.rmr101.campus.dto.*;
-import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.Subject;
+import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.SubjectMapper;
 import com.rmr101.campus.repository.SubjectRepository;
@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SubjectService {
@@ -37,13 +35,8 @@ public class SubjectService {
     }
 
     public SubjectDto getSubjectById(long id) {
-        Optional<Subject> optionalSubject = subjectRepository.findById(id);
-
-        if(optionalSubject.isPresent()){
-            Subject subject = optionalSubject.get();
-            return subjectMapper.toSubjectDto(subject);
-        }
-        return null;
+        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException());
+        return subjectMapper.toSubjectDto(subject);
     }
 
     public SubjectList getAllSubject() {
@@ -55,16 +48,12 @@ public class SubjectService {
     }
 
     public SubjectDetails getSubjectDetailsById(long id) {
-        Optional<Subject> optionalSubject = subjectRepository.findById(id);
+        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException());
 
-        if(optionalSubject.isPresent()){
-            SubjectDetails subjectDetails = new SubjectDetails();
-            Subject subject = optionalSubject.get();
-            subjectDetails.setSubjectDto(subjectMapper.toSubjectDto(subject));
-            subjectDetails.setCourseList(courseMapper.toCourseDto(subject.getCourses()));
-            return subjectDetails;
-        }
-        return null;
+        SubjectDetails subjectDetails = new SubjectDetails();
+        subjectDetails.setSubjectDto(subjectMapper.toSubjectDto(subject));
+        subjectDetails.setCourseList(courseMapper.toCourseDto(subject.getCourses()));
+        return subjectDetails;
     }
 
 }

@@ -2,8 +2,7 @@ package com.rmr101.campus.service;
 
 import com.rmr101.campus.dto.*;
 import com.rmr101.campus.entity.Course;
-import com.rmr101.campus.entity.CourseAssignment;
-import com.rmr101.campus.entity.Teacher;
+import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.TeacherMapper;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CourseService {
@@ -39,34 +37,25 @@ public class CourseService {
     }
 
     public CourseDto getCourseById(long id){
-        Optional<Course> optionalCourse = courseRepository.findById(id);
-
-        if(optionalCourse.isPresent()){
-            Course course = optionalCourse.get();
-            return courseMapper.toCourseDto(course);
-        }
-        return null;
+        Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException());
+        return courseMapper.toCourseDto(course);
     }
 
     public CourseDetails getCourseDetailsById(long id){
-        Optional<Course> optionalCourse = courseRepository.findById(id);
+        Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException());
 
-        if(optionalCourse.isPresent()){
-            CourseDetails courseDetails = new CourseDetails();
-            Course course = optionalCourse.get();
-            courseDetails.setCourseDto(courseMapper.toCourseDto(course));
-            courseDetails.setAssignmentList(courseAssignmentMapper.toCourseAssignmentDto(course.getAssignments()));
-            List<TeacherDto> teacherList = new ArrayList<TeacherDto>();
-            course.getTeachers().stream()
-                    .forEach( courseTeacher -> {
-                        TeacherDto teacherDto= teacherMapper.toTeacherDto(courseTeacher.getTeacher());
-                        teacherList.add(teacherDto);
-                    });
-            courseDetails.setTeachers(teacherList);
+        CourseDetails courseDetails = new CourseDetails();
+        courseDetails.setCourseDto(courseMapper.toCourseDto(course));
+        courseDetails.setAssignmentList(courseAssignmentMapper.toCourseAssignmentDto(course.getAssignments()));
+        List<TeacherDto> teacherList = new ArrayList<TeacherDto>();
+        course.getTeachers().stream()
+                .forEach( courseTeacher -> {
+                    TeacherDto teacherDto= teacherMapper.toTeacherDto(courseTeacher.getTeacher());
+                    teacherList.add(teacherDto);
+                });
+        courseDetails.setTeachers(teacherList);
 
-            return courseDetails;
-        }
-        return null;
+        return courseDetails;
     }
 
 //    public CourseList getCourseByName(String name){
