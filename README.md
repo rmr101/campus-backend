@@ -20,3 +20,9 @@ school management system backend
 - create database
  
    `create database campus;`
+
+## Use Swagger UI
+
+- Step1: Start application 
+
+- Step2: Access URL `http://localhost:8080/swagger-ui.html` in your browser
