@@ -5,10 +5,8 @@ import com.rmr101.campus.dto.StudentGetDto;
 import com.rmr101.campus.dto.StudentList;
 import com.rmr101.campus.dto.StudentPostDto;
 import com.rmr101.campus.dto.StudentPutDto;
-import com.rmr101.campus.exception.StudentIdNotFoundException;
 import com.rmr101.campus.service.StudentService;
 import io.swagger.annotations.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@Slf4j
 @RequestMapping("/students")
 public class StudentController {
 
@@ -68,12 +65,4 @@ public class StudentController {
     return "Student with ID" + " "+uuid.toString()+" " + "is successfully deleted";
   }
 
-
-  // 404 trying to handle specific error
-  @ExceptionHandler(StudentIdNotFoundException.class)
-  @ResponseStatus(value = HttpStatus.NOT_FOUND,reason = "No ID found with this ID")
-  public void StudentIdNotFound() {
-    //Can be customised later
-    log.error("Request raised an IdNotFoundException");
-  }
 }

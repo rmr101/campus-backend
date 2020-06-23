@@ -4,13 +4,12 @@ import com.rmr101.campus.dto.StudentGetDto;
 import com.rmr101.campus.dto.StudentPostDto;
 import com.rmr101.campus.dto.StudentPutDto;
 import com.rmr101.campus.entity.Student;
-import com.rmr101.campus.exception.StudentIdNotFoundException;
+import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.StudentMapper;
 import com.rmr101.campus.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -32,7 +31,7 @@ public class StudentService {
 
   public StudentGetDto getStudentByID(UUID uuid) {
       Student student =  studentRepository.findById(uuid).orElseThrow(()->
-          new StudentIdNotFoundException(uuid,new Date(),"No Student Found with this id: " + uuid.toString()));
+          new InvalidIdException());
     return studentMapper.studentToStudentGetDto(student);
   }
 
@@ -47,7 +46,7 @@ public class StudentService {
   public StudentGetDto updateStudent(UUID uuid,StudentPutDto studentPutDto) {
 
     Student student =  studentRepository.findById(uuid).orElseThrow(()->
-        new StudentIdNotFoundException(uuid,new Date(),"No Student Found with this id: " + uuid.toString()));
+        new InvalidIdException());
 
     student.setName(studentPutDto.getName());
 
@@ -57,7 +56,7 @@ public class StudentService {
   //Delete API
   public void deleteStudent(UUID uuid) {
     studentRepository.findById(uuid).orElseThrow(()->
-        new StudentIdNotFoundException(uuid,new Date(),"No Student Found with this id: " + uuid.toString()));
+        new InvalidIdException());
     studentRepository.deleteById(uuid);
   }
 }
