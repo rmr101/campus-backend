@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -32,4 +35,7 @@ public class GlobalExceptionHandler {
         log.error("Request raised a DataIntegrityViolationException");
         // Nothing to do
     }
+
+
+
 }
