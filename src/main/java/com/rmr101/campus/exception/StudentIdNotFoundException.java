@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No student found with this provided ID")
 @AllArgsConstructor
-public class IdNotFoundException extends RuntimeException{
+public class StudentIdNotFoundException extends RuntimeException{
 
   UUID invalid_Id;
   Date timestamp;
