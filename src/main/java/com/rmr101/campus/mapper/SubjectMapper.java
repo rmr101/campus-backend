@@ -1,7 +1,6 @@
 package com.rmr101.campus.mapper;
 
 import com.rmr101.campus.dto.SubjectDto;
-import com.rmr101.campus.dto.SubjectDto;
 import com.rmr101.campus.entity.Subject;
 import org.mapstruct.Mapper;
 

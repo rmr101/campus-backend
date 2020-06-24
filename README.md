@@ -2,7 +2,7 @@
 school management system backend
 
 
-## DataBase Congiguration
+## Database Configuration
 
 - Start docker image:
     
