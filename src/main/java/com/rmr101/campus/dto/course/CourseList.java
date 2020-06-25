@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class CourseList {
-    private List<CourseDto> courseList;
+    private List<CourseGetResponse> courseList;
 }

@@ -54,7 +54,8 @@ public class SubjectService {
 
         SubjectDetails subjectDetails = new SubjectDetails();
         subjectDetails.setSubjectDto(subjectMapper.toSubjectDto(subject));
-        subjectDetails.setCourseList(courseMapper.toCourseDto(subject.getCourses()));
+        subjectDetails.setCourseList(courseMapper.courseToCourseGetResponse(subject.getCourses()));
+
         return subjectDetails;
     }
 

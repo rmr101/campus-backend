@@ -1,6 +1,6 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.course.CourseDto;
+import com.rmr101.campus.dto.course.CourseGetResponse;
 import com.rmr101.campus.dto.teacher.TeacherDetails;
 import com.rmr101.campus.dto.teacher.TeacherPostResponse;
 import com.rmr101.campus.dto.teacher.TeacherPostRequest;
@@ -34,13 +34,11 @@ public class TeacherService {
         //set values
         teacherDetails.setUuid(uuid);
         teacherDetails.setName(teacher.getName());
-        List<CourseDto> courseList = new ArrayList<CourseDto>();
+        List<CourseGetResponse> courseList = new ArrayList<CourseGetResponse>();
         teacher.getCourses().stream()
-                .forEach( teacherCourse -> {
-                    System.out.println(teacherCourse.getCourse().getName());
-                    CourseDto courseDto= courseMapper.toCourseDto(teacherCourse.getCourse());
-                    courseList.add(courseDto);
-                });
+                .forEach( teacherCourse ->
+                    courseList.add(courseMapper.courseToCourseGetResponse(teacherCourse.getCourse()))
+                );
         teacherDetails.setCourseList(courseList);
         return teacherDetails;
     }
