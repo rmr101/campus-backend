@@ -2,9 +2,13 @@ package com.rmr101.campus.service;
 
 import com.rmr101.campus.dto.CourseDto;
 import com.rmr101.campus.dto.TeacherDetails;
+import com.rmr101.campus.dto.TeacherDto;
+import com.rmr101.campus.dto.TeacherGetDto;
+import com.rmr101.campus.dto.TeacherPostDto;
 import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
+import com.rmr101.campus.mapper.TeacherMapper;
 import com.rmr101.campus.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,9 @@ public class TeacherService {
 
     @Autowired
     private CourseMapper courseMapper;
+
+    @Autowired
+    private TeacherMapper teacherMapper;
 
     public TeacherDetails getTeacherDetails(String uuid){
         Teacher teacher = teacherRepository.findById(UUID.fromString(uuid)).orElseThrow(() -> new InvalidIdException());
@@ -39,4 +46,11 @@ public class TeacherService {
 
         return teacherDetails;
     }
+
+    //Post API
+    public TeacherGetDto addTeacher(TeacherPostDto teacherPostDto) {
+        Teacher teacher =  teacherMapper.teacherPostDtoToTeacher(teacherPostDto);
+        teacher.setUuid(UUID.randomUUID());
+        return teacherMapper.teacherToTeacherGetDto(teacherRepository.save(teacher));
+        }
 }

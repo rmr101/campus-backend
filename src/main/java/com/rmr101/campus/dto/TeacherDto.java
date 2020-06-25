@@ -2,9 +2,11 @@ package com.rmr101.campus.dto;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class TeacherDto {
-    private String uuid;
+    private UUID uuid;
     private String name;
     private String introduction;
 }
