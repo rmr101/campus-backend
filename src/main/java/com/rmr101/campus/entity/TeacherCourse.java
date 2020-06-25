@@ -14,11 +14,11 @@ public class TeacherCourse {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="teacherId")
+    @JoinColumn(name="teacherUuid", nullable = false)
     private Teacher teacher;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="courseId")
+    @JoinColumn(name="courseId", nullable = false)
     private Course course;
 
 }

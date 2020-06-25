@@ -19,6 +19,6 @@ public class CourseAssignment {
 //    private String acceptanceCriteria;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="courseId")
+    @JoinColumn(name="courseId", nullable = false)
     private Course course;
 }

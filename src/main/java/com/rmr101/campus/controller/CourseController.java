@@ -1,8 +1,8 @@
 package com.rmr101.campus.controller;
 
-import com.rmr101.campus.dto.CourseDetails;
-import com.rmr101.campus.dto.CourseDto;
-import com.rmr101.campus.dto.CourseList;
+import com.rmr101.campus.dto.course.CourseDetails;
+import com.rmr101.campus.dto.course.CourseDto;
+import com.rmr101.campus.dto.course.CourseList;
 import com.rmr101.campus.service.CourseService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

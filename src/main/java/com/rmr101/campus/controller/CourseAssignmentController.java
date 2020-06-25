@@ -1,8 +1,6 @@
 package com.rmr101.campus.controller;
 
-import com.rmr101.campus.dto.CourseAssignmentDto;
-import com.rmr101.campus.dto.CourseDto;
-import com.rmr101.campus.entity.CourseAssignment;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentDto;
 import com.rmr101.campus.service.CourseAssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

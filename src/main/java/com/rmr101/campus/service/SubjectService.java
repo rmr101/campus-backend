@@ -1,6 +1,8 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.*;
+import com.rmr101.campus.dto.subject.SubjectDetails;
+import com.rmr101.campus.dto.subject.SubjectDto;
+import com.rmr101.campus.dto.subject.SubjectList;
 import com.rmr101.campus.entity.Subject;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;

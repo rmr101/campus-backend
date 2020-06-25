@@ -23,7 +23,7 @@ public class Course {
     private String introduction;
 
     @ManyToOne
-    @JoinColumn(name = "subjectId")
+    @JoinColumn(name = "subjectId", nullable = false)
     private Subject subject;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "course")

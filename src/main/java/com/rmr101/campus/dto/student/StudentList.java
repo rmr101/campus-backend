@@ -1,4 +1,4 @@
-package com.rmr101.campus.dto;
+package com.rmr101.campus.dto.student;
 
 import lombok.Data;
 
@@ -6,5 +6,5 @@ import java.util.ArrayList;
 
 @Data
 public class StudentList {
-  ArrayList<StudentGetDto> studentList;
+    ArrayList<StudentGetResponse> studentList;
 }

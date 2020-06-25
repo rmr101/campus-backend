@@ -1,6 +1,6 @@
-package com.rmr101.campus.dto;
+package com.rmr101.campus.dto.subject;
 
-import com.rmr101.campus.entity.Subject;
+import com.rmr101.campus.dto.course.CourseDto;
 import lombok.Data;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.rmr101.campus.controller;
 
-import com.rmr101.campus.dto.StudentCourseDto;
-import com.rmr101.campus.entity.StudentCourse;
+import com.rmr101.campus.dto.studentcourse.StudentCourseDto;
 import com.rmr101.campus.service.StudentCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +14,8 @@ public class StudentCourseController {
     @Autowired
     private StudentCourseService studentCourseService;
 
-    @PostMapping
-    public StudentCourseDto courseEnrollment(@RequestBody StudentCourseDto studentCourseDto){
-        return studentCourseService.addStudentCourse(studentCourseDto);
-    }
+//    @PostMapping
+//    public StudentCourseDto courseEnrollment(@RequestBody StudentCourseDto studentCourseDto){
+//        return studentCourseService.addStudentCourse(studentCourseDto);
+//    }
 }

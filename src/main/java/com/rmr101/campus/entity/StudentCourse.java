@@ -13,10 +13,10 @@ public class StudentCourse {
     private long id;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="courseId")
+    @JoinColumn(name="courseId", nullable = false)
     private Course course;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="studentId")
+    @JoinColumn(name="studentUuid", nullable = false)
     private Student student;
 }

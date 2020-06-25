@@ -5,9 +5,6 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class UserDto {
+public class UserPostResponse {
     private UUID uuid;
-    private String username;
-    private String password;
-    private String role;
 }

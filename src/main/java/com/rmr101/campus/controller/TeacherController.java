@@ -1,9 +1,8 @@
 package com.rmr101.campus.controller;
 
-import com.rmr101.campus.dto.TeacherDetails;
-import com.rmr101.campus.dto.TeacherPostDto;
-import com.rmr101.campus.dto.TeacherGetDto;
-import com.rmr101.campus.dto.TeacherPutDto;
+import com.rmr101.campus.dto.teacher.TeacherDetails;
+import com.rmr101.campus.dto.teacher.TeacherPostRequest;
+import com.rmr101.campus.dto.teacher.TeacherPostResponse;
 import io.swagger.annotations.*;
 import com.rmr101.campus.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +17,17 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
-    @GetMapping("{id}")
-    public TeacherDetails getTeacherDetails(@PathVariable String id){
-        return teacherService.getTeacherDetails(id);
+    @GetMapping("{uuid}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public TeacherDetails getTeacherDetails(@PathVariable UUID uuid){
+        return teacherService.getTeacherDetails(uuid);
     }
 
     @PostMapping
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Add a teacher." ,
             notes = "Returns an object that contain the added teacher.")
-    public TeacherGetDto addTeacher(@RequestBody TeacherPostDto teacherPostDto){
-        return teacherService.addTeacher(teacherPostDto);
+    public TeacherPostResponse addTeacher(@RequestBody TeacherPostRequest teacherPostRequest){
+        return teacherService.addTeacher(teacherPostRequest);
     }
 }

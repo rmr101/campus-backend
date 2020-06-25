@@ -16,10 +16,10 @@ public class StudentAssignment {
     private boolean isSubmit;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="studentId")
+    @JoinColumn(name="studentUuid", nullable = false)
     private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="AssignmentId")
+    @JoinColumn(name="AssignmentId", nullable = false)
     private CourseAssignment assignment;
 }
