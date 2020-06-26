@@ -1,6 +1,7 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.*;
+import com.rmr101.campus.dto.course.*;
+import com.rmr101.campus.dto.teacher.TeacherDto;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;
@@ -28,29 +29,28 @@ public class CourseService {
     @Autowired
     private CourseAssignmentMapper courseAssignmentMapper;
 
-    public CourseList getAllCourses(){
-        CourseList courseList = new CourseList();
-        courseList.setCourseList(new ArrayList<CourseDto>());
+    public List<CourseGetResponse> getAllCourses(){
+        List<CourseGetResponse> courseList= new ArrayList<CourseGetResponse>();
         courseRepository.findAll()
-                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
+                .forEach(course -> courseList.add(courseMapper.courseToCourseGetResponse(course)));
         return courseList;
     }
 
-    public CourseDto getCourseById(long id){
+    public CoursePostResponse getCourseById(long id){
         Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException());
-        return courseMapper.toCourseDto(course);
+        return courseMapper.courseToCoursePostResponse(course);
     }
 
     public CourseDetails getCourseDetailsById(long id){
         Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException());
 
         CourseDetails courseDetails = new CourseDetails();
-        courseDetails.setCourseDto(courseMapper.toCourseDto(course));
+        courseDetails.setCourse(courseMapper.courseToCourseGetResponse(course));
         courseDetails.setAssignmentList(courseAssignmentMapper.toCourseAssignmentDto(course.getAssignments()));
         List<TeacherDto> teacherList = new ArrayList<TeacherDto>();
         course.getTeachers().stream()
                 .forEach( courseTeacher -> {
-                    TeacherDto teacherDto= teacherMapper.toTeacherDto(courseTeacher.getTeacher());
+                    TeacherDto teacherDto= teacherMapper.teacherToTeacherDto(courseTeacher.getTeacher());
                     teacherList.add(teacherDto);
                 });
         courseDetails.setTeachers(teacherList);
@@ -76,13 +76,11 @@ public class CourseService {
 //        return courseList;
 //    }
 
-    public CourseDto addCourse(CourseDto courseDto) {
-        Course coursePo = courseMapper.toCourse(courseDto);
-
-        courseRepository.save(coursePo);
-        System.out.println(coursePo);
-        courseDto.setId(coursePo.getId());
-        return courseDto;
+    //add a course
+    public CoursePostResponse addCourse(CoursePostRequest request) {
+        //validate subjectId???
+        Course course = courseMapper.coursePostRequestToCourse(request);
+        courseRepository.save(course);
+        return courseMapper.courseToCoursePostResponse(course);
     }
-
 }

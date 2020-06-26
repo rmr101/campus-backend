@@ -1,10 +1,7 @@
 package com.rmr101.campus.controller;
 
 
-import com.rmr101.campus.dto.StudentGetDto;
-import com.rmr101.campus.dto.StudentList;
-import com.rmr101.campus.dto.StudentPostDto;
-import com.rmr101.campus.dto.StudentPutDto;
+import com.rmr101.campus.dto.student.*;
 import com.rmr101.campus.service.StudentService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,52 +14,52 @@ import java.util.UUID;
 @RequestMapping("/students")
 public class StudentController {
 
-  @Autowired
-  private StudentService studentService;
+    @Autowired
+    private StudentService studentService;
 
-  @GetMapping
-  @ResponseStatus(value = HttpStatus.OK)
-  @ApiOperation(value = "Get all students." ,
-      notes = "Returns an object contains a list of students.")
-  public StudentList getAllStudents(){
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Get all students." ,
+            notes = "Returns an object contains a list of students.")
+    public StudentList getAllStudents(){
 
-    StudentList studentList = new StudentList();
-    studentList.setStudentList( studentService.getAllStudents());
+        StudentList studentList = new StudentList();
+        studentList.setStudentList(studentService.getAllStudents());
 
-    return studentList;
-  }
+        return studentList;
+    }
 
-  @GetMapping("/{uuid}")
-  @ResponseStatus(value = HttpStatus.OK)
-  @ApiOperation(value = "Get student by ID." ,
-      notes = "Returns an object that contain a the student with the specific ID.")
-  public StudentGetDto getStudentByID(@PathVariable UUID uuid){
-    return studentService.getStudentByID(uuid);
-  }
+    @GetMapping("/{uuid}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Get student by ID." ,
+            notes = "Returns an object that contain a the student with the specific ID.")
+    public StudentGetResponse getStudent(@PathVariable UUID uuid){
+        return studentService.getStudentByID(uuid);
+    }
 
-  @PostMapping
-  @ResponseStatus(value = HttpStatus.OK)
-  @ApiOperation(value = "Add a student." ,
-      notes = "Returns an object that contain the added student.")
-  public StudentGetDto addStudent(@RequestBody StudentPostDto studentPostDto){
-    return studentService.addStudent(studentPostDto);
-  }
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @ApiOperation(value = "Add a student." ,
+            notes = "Returns an object that contain the uuid of added student.")
+    public StudentPostResponse addStudent(@RequestBody StudentPostRequest request){
+        return studentService.addStudent(request);
+    }
 
-  @PutMapping("/{uuid}")
-  @ResponseStatus(value = HttpStatus.OK)
-  @ApiOperation(value = "Edit student." ,
-      notes = "Returns an object that contain the edited student.")
-  public StudentGetDto updateStudentByID(@PathVariable UUID uuid,@RequestBody StudentPutDto studentPutDto){
-    return studentService.updateStudent(uuid,studentPutDto);
-  }
+    @PutMapping("/{uuid}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Update information about the student given by uuid" ,
+            notes = "Returns null.")
+    public void updateStudent(@PathVariable UUID uuid,@RequestBody StudentPutRequest request){
+        studentService.updateStudent(uuid,request);
+    }
 
-  @DeleteMapping("/{uuid}")
-  @ResponseStatus(value = HttpStatus.OK)
-  @ApiOperation(value = "Add a student." ,
-      notes = "Returns an object that contain the added student.")
-  public String deleteStudentByID(@PathVariable UUID uuid){
-    studentService.deleteStudent(uuid);
-    return "Student with ID" + " "+uuid.toString()+" " + "is successfully deleted";
-  }
+    @DeleteMapping("/{uuid}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Add a student." ,
+            notes = "Returns an object that contain the added student uuid")
+    public String deleteStudent(@PathVariable UUID uuid){
+        studentService.deleteStudent(uuid);
+        return "Student with ID" + " "+uuid.toString()+" " + "is successfully deleted";
+    }
 
 }

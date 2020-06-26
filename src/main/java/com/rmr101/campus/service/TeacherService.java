@@ -1,10 +1,9 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.CourseDto;
-import com.rmr101.campus.dto.TeacherDetails;
-import com.rmr101.campus.dto.TeacherDto;
-import com.rmr101.campus.dto.TeacherGetDto;
-import com.rmr101.campus.dto.TeacherPostDto;
+import com.rmr101.campus.dto.course.CourseGetResponse;
+import com.rmr101.campus.dto.teacher.TeacherDetails;
+import com.rmr101.campus.dto.teacher.TeacherPostResponse;
+import com.rmr101.campus.dto.teacher.TeacherPostRequest;
 import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
@@ -28,29 +27,26 @@ public class TeacherService {
     @Autowired
     private TeacherMapper teacherMapper;
 
-    public TeacherDetails getTeacherDetails(String uuid){
-        Teacher teacher = teacherRepository.findById(UUID.fromString(uuid)).orElseThrow(() -> new InvalidIdException());
+    public TeacherDetails getTeacherDetails(UUID uuid){
+        Teacher teacher = teacherRepository.findById(uuid).orElseThrow(() -> new InvalidIdException());
         TeacherDetails teacherDetails = new TeacherDetails();
 
         //set values
         teacherDetails.setUuid(uuid);
         teacherDetails.setName(teacher.getName());
-        List<CourseDto> courseList = new ArrayList<CourseDto>();
+        List<CourseGetResponse> courseList = new ArrayList<CourseGetResponse>();
         teacher.getCourses().stream()
-                .forEach( teacherCourse -> {
-                    System.out.println(teacherCourse.getCourse().getName());
-                    CourseDto courseDto= courseMapper.toCourseDto(teacherCourse.getCourse());
-                    courseList.add(courseDto);
-                });
+                .forEach( teacherCourse ->
+                    courseList.add(courseMapper.courseToCourseGetResponse(teacherCourse.getCourse()))
+                );
         teacherDetails.setCourseList(courseList);
-
         return teacherDetails;
     }
 
     //Post API
-    public TeacherGetDto addTeacher(TeacherPostDto teacherPostDto) {
-        Teacher teacher =  teacherMapper.teacherPostDtoToTeacher(teacherPostDto);
-        teacher.setUuid(UUID.randomUUID());
-        return teacherMapper.teacherToTeacherGetDto(teacherRepository.save(teacher));
+    public TeacherPostResponse addTeacher(TeacherPostRequest teacherPostRequest) {
+        Teacher teacher =  teacherMapper.teacherPostRequestToTeacher(teacherPostRequest);
+        teacherRepository.save(teacher);
+        return teacherMapper.teacherToTeacherPostResponse(teacher);
         }
 }

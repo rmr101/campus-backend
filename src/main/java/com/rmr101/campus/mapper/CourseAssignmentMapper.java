@@ -1,6 +1,6 @@
 package com.rmr101.campus.mapper;
 
-import com.rmr101.campus.dto.CourseAssignmentDto;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentDto;
 import com.rmr101.campus.entity.CourseAssignment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

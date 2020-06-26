@@ -1,9 +1,0 @@
-package com.rmr101.campus.dto;
-
-import lombok.Data;
-
-@Data
-public class TeacherGetDto {
-    private String uuid;
-    private String name;
-}

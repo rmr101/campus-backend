@@ -1,6 +1,6 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.CourseAssignmentDto;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentDto;
 import com.rmr101.campus.entity.CourseAssignment;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;

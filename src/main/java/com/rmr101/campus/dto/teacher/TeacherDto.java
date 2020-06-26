@@ -1,4 +1,4 @@
-package com.rmr101.campus.dto;
+package com.rmr101.campus.dto.teacher;
 
 import lombok.Data;
 
