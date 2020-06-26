@@ -9,6 +9,7 @@ import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.TeacherMapper;
 import com.rmr101.campus.repository.TeacherRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
@@ -48,5 +50,15 @@ public class TeacherService {
         Teacher teacher =  teacherMapper.teacherPostRequestToTeacher(teacherPostRequest);
         teacherRepository.save(teacher);
         return teacherMapper.teacherToTeacherPostResponse(teacher);
-        }
+    }
+
+    protected  void addTeacher(UUID uuid,String firstName, String lastName){
+        Teacher teacher = new Teacher();
+        teacher.setUuid(uuid);
+        teacher.setFirstName(firstName);
+        teacher.setLastName(lastName);
+        teacherRepository.save(teacher);
+        log.debug("Teacher " + firstName +" "+lastName + " created with uuid: " + uuid);
+    }
+
 }
