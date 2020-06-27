@@ -36,6 +36,4 @@ public class GlobalExceptionHandler {
         // Nothing to do
     }
 
-
-
 }

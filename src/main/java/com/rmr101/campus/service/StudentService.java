@@ -54,7 +54,7 @@ public class StudentService {
     //Put API
     public void updateStudent(UUID uuid,StudentPutRequest request) {
         //validate uuid
-        studentRepository.findById(uuid).orElseThrow(()-> new InvalidIdException());
+        this.validateUuid(uuid);
 
         Student student = studentMapper.studentPutRequestToStudent(request);
         student.setUuid(uuid);
@@ -67,5 +67,9 @@ public class StudentService {
         studentRepository.findById(uuid).orElseThrow(()->
                 new InvalidIdException());
         studentRepository.deleteById(uuid);
+    }
+
+    protected Student validateUuid(UUID studentUuid){
+        return studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException());
     }
 }

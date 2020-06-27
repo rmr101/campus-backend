@@ -5,5 +5,5 @@ import org.aspectj.bridge.Message;
 
 @Data
 public class InvalidIdException extends RuntimeException{
-    private String message = "Id not Found";
+    private String errorMessage = "Id not Found";
 }

@@ -16,7 +16,9 @@ public class Subject {
     @Column(name="ID")
     private long id;
 
+    @Column(unique = true)
     private String name;
+
     private String introduction;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "subject")
