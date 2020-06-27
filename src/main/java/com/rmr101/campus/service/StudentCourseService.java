@@ -3,6 +3,7 @@ package com.rmr101.campus.service;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostResponse;
 import com.rmr101.campus.entity.StudentCourse;
+import com.rmr101.campus.exception.RecordAlreadyExistException;
 import com.rmr101.campus.mapper.StudentCourseMapper;
 import com.rmr101.campus.repository.StudentCourseRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -32,14 +33,13 @@ public class StudentCourseService {
         studentService.validateUuid(request.getStudentUuid());
 
         //duplicate check
-        StudentCourse course = this.checkDuplicate(request.getStudentUuid(),request.getCourseId());
-        if(course != null) {
-            log.debug("Course already exist,id = " + course.getId());
-            return studentCourseMapper.studentCourseToStudentCoursePostResponse(course);
+        if(this.checkDuplicate(request.getStudentUuid(),request.getCourseId()) != null) {
+            log.debug("Course already exist");
+            throw new RecordAlreadyExistException();
         }
 
         log.debug("About to save course : "+ request.getCourseId() +" to student: " + request.getStudentUuid());
-        course = studentCourseMapper.studentCoursePostRequestToStudentCourse(request);
+        StudentCourse course  = studentCourseMapper.studentCoursePostRequestToStudentCourse(request);
         studentCourseRepository.save(course);
         return studentCourseMapper.studentCourseToStudentCoursePostResponse(course);
     }
