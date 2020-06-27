@@ -19,12 +19,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @PostMapping
-//    @ResponseStatus(value = HttpStatus.CREATED)
-//    public UserPostResponse addUser(@RequestBody UserPostRequest request){
-//        return userService.addUser(request);
-//    }
-
     @PostMapping("/teachers")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Add a teacher in the system")
@@ -41,7 +35,8 @@ public class UserController {
 
     @PutMapping("{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateUser(@RequestBody UserPutRequest request, @PathVariable UUID uuid){
+    @ApiOperation(value = "Change password of a user")
+    public void changePassword(@RequestBody UserPutRequest request, @PathVariable UUID uuid){
         userService.updateUser(request, uuid);
     }
 }

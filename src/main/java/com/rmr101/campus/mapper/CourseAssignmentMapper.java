@@ -1,6 +1,8 @@
 package com.rmr101.campus.mapper;
 
-import com.rmr101.campus.dto.courseassignment.CourseAssignmentDto;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
 import com.rmr101.campus.entity.CourseAssignment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,15 +13,13 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CourseAssignmentMapper {
 
-    @Mappings({
-            @Mapping(source = "course.id", target = "courseId")
-    })
-    public CourseAssignmentDto toCourseAssignmentDto(CourseAssignment courseAssignment);
+    public CourseAssignmentGetResponse courseAssignmentToCourseAssignmentGetResponse(CourseAssignment courseAssignment);
 
-    public List<CourseAssignmentDto> toCourseAssignmentDto(List<CourseAssignment> courseAssignmentList);
+    public CourseAssignmentPostResponse courseAssignmentToCourseAssignmentPostResponse(CourseAssignment courseAssignment);
 
-    @Mappings({
-            @Mapping(source = "courseId", target = "course.id")
-    })
-    public CourseAssignment toCourseAssignment(CourseAssignmentDto courseAssignmentDto);
+    public CourseAssignment courseAssignmentPostRequesttoCourseAssignment(CourseAssignmentPostRequest courseAssignmentPostRequest);
+
+
+//    public List<CourseAssignmentDto> toCourseAssignmentDto(List<CourseAssignment> courseAssignmentList);
+
 }

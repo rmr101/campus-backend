@@ -1,7 +1,11 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.courseassignment.CourseAssignmentDto;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
 import com.rmr101.campus.entity.CourseAssignment;
+import com.rmr101.campus.entity.Teacher;
+import com.rmr101.campus.entity.TeacherCourse;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;
 import com.rmr101.campus.repository.CourseAssignmentRepository;
@@ -17,16 +21,25 @@ public class CourseAssignmentService {
     @Autowired
     private CourseAssignmentMapper courseAssignmentMapper;
 
-    public CourseAssignmentDto getCourseAssignmentById(long id) {
+    @Autowired
+    private TeacherCourseService teacherCourseService;
+
+    public CourseAssignmentGetResponse getCourseAssignmentById(long id) {
         CourseAssignment courseAssignment = courseAssignmentRepository.findById(id).orElseThrow(() -> new InvalidIdException());
-        return courseAssignmentMapper.toCourseAssignmentDto(courseAssignment);
+        return courseAssignmentMapper.courseAssignmentToCourseAssignmentGetResponse(courseAssignment);
     }
 
-    public CourseAssignmentDto addAssignmentCourse(CourseAssignmentDto courseAssignmentDto) {
-        CourseAssignment courseAssignment = courseAssignmentMapper.toCourseAssignment(courseAssignmentDto);
+    public CourseAssignmentPostResponse addAssignment(CourseAssignmentPostRequest request) {
+        //validate and get teacherCourse
+        TeacherCourse teacherCourse = teacherCourseService.getTeacherCourseById(request.getTeacherCourseId());
 
-        courseAssignmentRepository.save(courseAssignment);
-        courseAssignmentDto.setId(courseAssignment.getId());
-        return courseAssignmentDto;
+        CourseAssignment assignment = courseAssignmentMapper.courseAssignmentPostRequesttoCourseAssignment(request);
+        assignment.setCourse(teacherCourse.getCourse());
+        assignment.setTeacher(teacherCourse.getTeacher());
+        assignment.setPublisher(teacherCourse.getTeacher().getName());
+
+        courseAssignmentRepository.save(assignment);
+        //todo:send a message to add assignment to each student related to the course
+        return courseAssignmentMapper.courseAssignmentToCourseAssignmentPostResponse(assignment);
     }
 }
