@@ -15,7 +15,10 @@ public class Teacher {
     @Column(length = 16)
     private UUID uuid; //uuid
 
+    private String firstName;
+    private String lastName;
     private String name;
+
     private String introduction;
 
     @OneToMany(cascade = CascadeType.ALL,

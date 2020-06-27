@@ -83,4 +83,8 @@ public class CourseService {
         courseRepository.save(course);
         return courseMapper.courseToCoursePostResponse(course);
     }
+
+    protected Course validateId(long courseId){
+        return courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException());
+    }
 }

@@ -2,15 +2,18 @@ package com.rmr101.campus.service;
 
 import com.rmr101.campus.dto.student.*;
 import com.rmr101.campus.entity.Student;
+import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.StudentMapper;
 import com.rmr101.campus.repository.StudentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class StudentService {
 
     @Autowired
@@ -39,10 +42,19 @@ public class StudentService {
         return studentMapper.studentToStudentPostResponse(student);
     }
 
+    protected  void addStudent(UUID uuid,String firstName, String lastName){
+        Student student = new Student();
+        student.setUuid(uuid);
+        student.setFirstName(firstName);
+        student.setLastName(lastName);
+        studentRepository.save(student);
+        log.debug("Student: " + firstName +" "+lastName + " created with uuid:" + uuid);
+    }
+
     //Put API
     public void updateStudent(UUID uuid,StudentPutRequest request) {
         //validate uuid
-        studentRepository.findById(uuid).orElseThrow(()-> new InvalidIdException());
+        this.validateUuid(uuid);
 
         Student student = studentMapper.studentPutRequestToStudent(request);
         student.setUuid(uuid);
@@ -55,5 +67,9 @@ public class StudentService {
         studentRepository.findById(uuid).orElseThrow(()->
                 new InvalidIdException());
         studentRepository.deleteById(uuid);
+    }
+
+    protected Student validateUuid(UUID studentUuid){
+        return studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException());
     }
 }

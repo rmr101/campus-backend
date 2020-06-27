@@ -15,6 +15,8 @@ public class Student {
     @Column(length = 16)
     private UUID uuid; //uuid
 
+    private String firstName;
+    private String lastName;
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")

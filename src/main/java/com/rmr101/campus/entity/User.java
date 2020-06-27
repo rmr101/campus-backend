@@ -18,13 +18,13 @@ public class User {
     @Column(length = 16)
     private UUID uuid;
 
-    @Column(length = 64)
-    private String username;
+    @Column(length = 64, unique = true)
+    private String email;
 
     private String password;
 
-    @Column(length = 64)
-    private String number; //student number,teacher numner or staff number
+    @Column(length = 64, unique = true)
+    private String campusId; //student number,teacher numner or staff number
 
     private boolean isActive;
 

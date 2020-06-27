@@ -36,6 +36,11 @@ public class GlobalExceptionHandler {
         // Nothing to do
     }
 
-
+    // 409
+    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Record already exist")
+    @ExceptionHandler(RecordAlreadyExistException.class)
+    public void recordExist() {
+        log.error("Request raised a RecordAlreadyExistException");
+    }
 
 }
