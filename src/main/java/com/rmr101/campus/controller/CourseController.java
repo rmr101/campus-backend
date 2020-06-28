@@ -1,6 +1,8 @@
 package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.course.*;
+import com.rmr101.campus.entity.Teacher;
+import com.rmr101.campus.entity.TeacherCourse;
 import com.rmr101.campus.service.CourseService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,5 @@ public class CourseController {
     public CoursePostResponse addCourse(@RequestBody CoursePostRequest request){
         return courseService.addCourse(request);
     }
-
 
 }

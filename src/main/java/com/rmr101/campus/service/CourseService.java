@@ -46,7 +46,7 @@ public class CourseService {
 
         CourseDetails courseDetails = new CourseDetails();
         courseDetails.setCourse(courseMapper.courseToCourseGetResponse(course));
-        courseDetails.setAssignmentList(courseAssignmentMapper.toCourseAssignmentDto(course.getAssignments()));
+//        courseDetails.setAssignmentList(courseAssignmentMapper.toCourseAssignmentDto(course.getAssignments()));
         List<TeacherDto> teacherList = new ArrayList<TeacherDto>();
         course.getTeachers().stream()
                 .forEach( courseTeacher -> {

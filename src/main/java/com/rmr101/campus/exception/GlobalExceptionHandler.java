@@ -21,6 +21,13 @@ public class GlobalExceptionHandler {
         log.error("Request raised a IllegalArgumentException");
     }
 
+    // 401
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Not Authorized")
+    @ExceptionHandler(UnauthorizedException.class)
+    public void unauthorized() {
+        log.error("Request raised a UnauthorizedException");
+    }
+
     //404
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Invalid Id")
     @ExceptionHandler(InvalidIdException.class)

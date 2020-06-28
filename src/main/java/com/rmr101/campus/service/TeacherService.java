@@ -61,4 +61,7 @@ public class TeacherService {
         log.debug("Teacher " + firstName +" "+lastName + " created with uuid: " + uuid);
     }
 
+    protected Teacher validateUuid(UUID teacherUuid) {
+        return teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException());
+    }
 }
