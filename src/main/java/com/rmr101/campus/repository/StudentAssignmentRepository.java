@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface StudentAssignmentRepository extends CrudRepository<StudentAssignment, Long> {
     public List<StudentAssignment> findByStudentUuid(UUID uuid);
-    public List<StudentAssignment> findByAssignmentId(long id);
+    public List<StudentAssignment> findByAssignmentId(long AssignmentId);
 }

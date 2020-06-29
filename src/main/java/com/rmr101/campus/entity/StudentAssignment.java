@@ -13,7 +13,8 @@ public class StudentAssignment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private boolean isSubmit;
+    private boolean isSubmitted;
+    private String answer;
     private String attachmentUrl;
 
     private boolean isScored;

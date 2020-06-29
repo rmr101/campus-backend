@@ -5,9 +5,12 @@ import com.rmr101.campus.entity.StudentCourse;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface StudentCourseRepository extends CrudRepository<StudentCourse,Long> {
     public StudentCourse findByStudentUuidAndCourseId(UUID studentId, long courseId);
+    public List<StudentCourse> findByCourseId(long courseId);
+    public List<StudentCourse> findByStudentUuid(UUID studentId);
 }

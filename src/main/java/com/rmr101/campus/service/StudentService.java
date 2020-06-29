@@ -1,15 +1,22 @@
 package com.rmr101.campus.service;
 
+import com.rmr101.campus.dto.course.CourseGetResponse;
 import com.rmr101.campus.dto.student.*;
+import com.rmr101.campus.dto.studentAssignment.StudentAssignmentGetResponse;
+import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.Student;
+import com.rmr101.campus.entity.StudentAssignment;
 import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.exception.InvalidIdException;
+import com.rmr101.campus.mapper.CourseMapper;
+import com.rmr101.campus.mapper.StudentAssignmentMapper;
 import com.rmr101.campus.mapper.StudentMapper;
 import com.rmr101.campus.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,6 +29,12 @@ public class StudentService {
     @Autowired
     private StudentMapper studentMapper;
 
+    @Autowired
+    private CourseMapper courseMapper;
+
+    @Autowired
+    private StudentAssignmentMapper studentAssignmentMapper;
+
     //Get API
     public ArrayList<StudentGetResponse> getAllStudents(){
         ArrayList<StudentGetResponse> studentList= new ArrayList<StudentGetResponse>();
@@ -30,9 +43,40 @@ public class StudentService {
         return studentList;
     }
 
-    public StudentGetResponse getStudentByID(UUID uuid) {
+    public StudentGetDetails getStudentDetailsByID(UUID uuid, String detail) {
         Student student =  studentRepository.findById(uuid).orElseThrow(()-> new InvalidIdException());
-        return studentMapper.studentToStudentGetResponse(student);
+        StudentGetDetails studentDetails = new StudentGetDetails();
+        studentDetails.setStudentInfo(studentMapper.studentToStudentGetResponse(student));
+
+        if(detail != null) {
+            if (detail.equals("courses")) {
+                List<Course> courseList = new ArrayList<Course>();
+                student.getCourses().forEach(
+                        (studentCourse) -> courseList.add(studentCourse.getCourse()));
+                studentDetails.setCourseList(
+                        courseMapper.courseToCourseGetResponse(courseList));
+                return studentDetails;
+            }
+
+            if (detail.equals("assignments")) {
+                studentDetails.setAssignmentList(
+                        studentAssignmentMapper.studentAssignmentToStudentAssignmentGetResponse(student.getAssignments()));
+                return studentDetails;
+            }
+
+            if (detail.equals("all")) {
+                List<Course> courseList = new ArrayList<Course>();
+                student.getCourses().forEach(
+                        (studentCourse) -> courseList.add(studentCourse.getCourse()));
+                studentDetails.setCourseList(
+                        courseMapper.courseToCourseGetResponse(courseList));
+                studentDetails.setAssignmentList(
+                        studentAssignmentMapper.studentAssignmentToStudentAssignmentGetResponse(student.getAssignments()));
+                return studentDetails;
+            }
+        }
+
+        return studentDetails;
     }
 
     //Post API
