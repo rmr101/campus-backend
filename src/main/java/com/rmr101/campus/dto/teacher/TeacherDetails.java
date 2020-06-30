@@ -10,5 +10,6 @@ import java.util.UUID;
 public class TeacherDetails {
     private UUID uuid;
     private String name;
+    private String title;
     private List<CourseGetResponse> courseList;
 }

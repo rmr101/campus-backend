@@ -1,8 +1,10 @@
 package com.rmr101.campus.controller;
 
+import com.rmr101.campus.dto.course.CourseList;
 import com.rmr101.campus.dto.teacher.TeacherDetails;
 import com.rmr101.campus.dto.teacher.TeacherPostRequest;
 import com.rmr101.campus.dto.teacher.TeacherPostResponse;
+import com.rmr101.campus.service.TeacherCourseService;
 import io.swagger.annotations.*;
 import com.rmr101.campus.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +19,21 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
+    @Autowired
+    private TeacherCourseService teacherCourseService;
+
     @GetMapping("{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
     public TeacherDetails getTeacherDetails(@PathVariable UUID uuid){
         return teacherService.getTeacherDetails(uuid);
     }
 
-    @PostMapping
-    @ResponseStatus(value = HttpStatus.CREATED)
-    @ApiOperation(value = "Add a teacher." ,
-            notes = "Returns an object that contain the added teacher.")
-    public TeacherPostResponse addTeacher(@RequestBody TeacherPostRequest teacherPostRequest){
-        return teacherService.addTeacher(teacherPostRequest);
+    @GetMapping("/{uuid}/courses")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation( value = "Get list of courses for a selected teacher base on uuid")
+    public CourseList getMyCourses(@PathVariable UUID uuid){
+        CourseList courseList = new CourseList();
+      //  courseList.setCourseList(studentCourseService.getCoursesByStudent(uuid));
+        return courseList;
     }
 }

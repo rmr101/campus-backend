@@ -1,7 +1,13 @@
 package com.rmr101.campus.controller;
 
 
+import com.rmr101.campus.dto.course.CourseList;
 import com.rmr101.campus.dto.student.*;
+import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
+import com.rmr101.campus.dto.studentcourse.StudentCoursePostRequest;
+import com.rmr101.campus.dto.studentcourse.StudentCoursePostResponse;
+import com.rmr101.campus.service.StudentAssignmentService;
+import com.rmr101.campus.service.StudentCourseService;
 import com.rmr101.campus.service.StudentService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +22,12 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private StudentCourseService studentCourseService;
+
+    @Autowired
+    private StudentAssignmentService studentAssignmentService;
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
@@ -33,8 +45,9 @@ public class StudentController {
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Get student by ID." ,
             notes = "Returns an object that contain a the student with the specific ID.")
-    public StudentGetResponse getStudent(@PathVariable UUID uuid){
-        return studentService.getStudentByID(uuid);
+    public StudentGetDetails getStudentDetails(@PathVariable UUID uuid,
+                                               @RequestParam(required = false) String detail){
+        return studentService.getStudentDetailsByID(uuid,detail);
     }
 
     @PostMapping
@@ -62,4 +75,19 @@ public class StudentController {
         return "Student with ID" + " "+uuid.toString()+" " + "is successfully deleted";
     }
 
+    @PostMapping("{uuid}/assignments/{assignmentId}")
+    @ApiOperation(value = "update the assignment by student",notes = "Role: student")
+    public void submitAssignment(@RequestBody StudentAssignmentStudentPutRequest request,
+                                 @PathVariable UUID studentUuid,
+                                 @PathVariable long assignmentId){
+        studentAssignmentService.updateAssignmentByStudent(studentUuid, request);
+    }
+
+    //course enrollment
+    @PostMapping("/{uuid}/courses")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @ApiOperation( value = "Add a selected course id for a selected student base on uuid")
+    public StudentCoursePostResponse enrollCourse(@RequestBody StudentCoursePostRequest request){
+        return studentCourseService.addCourse(request);
+    }
 }

@@ -16,6 +16,7 @@ public class CourseAssignment {
     private long id;
 
     private String publisher;
+    private String courseName;
     private String title;
     private String content;
 
