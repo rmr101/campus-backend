@@ -113,7 +113,7 @@ public class StudentService {
         studentRepository.deleteById(uuid);
     }
 
-    protected Student validateUuid(UUID studentUuid){
+    public Student validateUuid(UUID studentUuid){
         return studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException());
     }
 }
