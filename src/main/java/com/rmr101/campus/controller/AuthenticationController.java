@@ -2,11 +2,13 @@ package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.authentication.AuthenticationRequest;
 import com.rmr101.campus.dto.authentication.AuthenticationResponse;
+import com.rmr101.campus.entity.User;
 import com.rmr101.campus.jwt.JwtUtil;
+import com.rmr101.campus.repository.UserRepository;
 import com.rmr101.campus.service.CampusUserDetailService;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,6 +27,9 @@ public class AuthenticationController {
     private CampusUserDetailService campusUserDetailService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @PostMapping
@@ -37,6 +42,10 @@ public class AuthenticationController {
 
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        return new AuthenticationResponse(jwt);
+        //todo: second call to database for the same record ,can be refactored
+        User user = userRepository.findByCampusId(request.getUsername())
+                .orElseThrow(() ->new BadCredentialsException("Username not existed"));
+
+        return new AuthenticationResponse(jwt,user.getRole(),user.getUuid());
     }
 }
