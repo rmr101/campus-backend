@@ -52,7 +52,7 @@ public class TeacherService {
         return teacherMapper.teacherToTeacherPostResponse(teacher);
     }
 
-    protected  void addTeacher(UUID uuid,String firstName, String lastName){
+    public void addTeacher(UUID uuid, String firstName, String lastName){
         Teacher teacher = new Teacher();
         teacher.setUuid(uuid);
         teacher.setFirstName(firstName);
@@ -61,7 +61,7 @@ public class TeacherService {
         log.debug("Teacher " + firstName +" "+lastName + " created with uuid: " + uuid);
     }
 
-    protected Teacher validateUuid(UUID teacherUuid) {
+    public Teacher validateUuid(UUID teacherUuid) {
         return teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException());
     }
 }

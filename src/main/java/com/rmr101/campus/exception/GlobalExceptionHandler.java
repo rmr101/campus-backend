@@ -3,6 +3,7 @@ package com.rmr101.campus.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,6 +27,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public void unauthorized() {
         log.error("Request raised a UnauthorizedException");
+    }
+
+    // 401
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Bad Credentials")
+    @ExceptionHandler(BadCredentialsException.class)
+    public void loginFail() {
+        log.error("Request raised a BadCredentialsException caused by incorrect username or password");
     }
 
     //404
