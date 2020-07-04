@@ -3,6 +3,7 @@ package com.rmr101.campus.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,12 +37,19 @@ public class GlobalExceptionHandler {
         log.error("Request raised a BadCredentialsException caused by incorrect username or password");
     }
 
-    //404
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Invalid Id")
-    @ExceptionHandler(InvalidIdException.class)
-    public void invalidId() {
-        log.error("Request raised a InvalidIdException");
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Bad Credentials")
+    @ExceptionHandler()
+    public ResponseEntity handleException(InvalidIdException e) {
+        log.error("Request raised a BadCredentialsException caused by incorrect username or password");
+        return new ResponseEntity<>(e.getErrorMessage(),HttpStatus.UNAUTHORIZED);
     }
+
+    //404
+//    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Invalid Id")
+//    @ExceptionHandler(InvalidIdException.class)
+//    public void invalidId() {
+//        log.error("Request raised a InvalidIdException");
+//    }
 
     // 409
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Data integrity violation")

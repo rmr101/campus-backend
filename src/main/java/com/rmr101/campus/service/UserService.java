@@ -1,11 +1,8 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.user.UserDto;
 import com.rmr101.campus.dto.user.UserPostRequest;
 import com.rmr101.campus.dto.user.UserPostResponse;
-import com.rmr101.campus.dto.user.UserPutRequest;
-import com.rmr101.campus.entity.Student;
-import com.rmr101.campus.entity.Subject;
+import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.User;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.UserMapper;
@@ -47,16 +44,16 @@ public class UserService {
         return response;
     }
 
-    public void updateUser(UserPutRequest userPutRequest, UUID uuid) {
-        //validate uuid
-        User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException());
-
-        //set value
-        user.setPassword(userPutRequest.getPassword());
-
-        //save
-        userRepository.save(user);
-    }
+//    public void updateUser(UserChangePasswordRequest userChangePasswordRequest, UUID uuid) {
+//        //validate uuid
+//        User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException());
+//
+//        //set value
+//        user.setPassword(userChangePasswordRequest.getPassword());
+//
+//        //save
+//        userRepository.save(user);
+//    }
 
     //create a new user
     private UserPostResponse addUser(UserPostRequest userPostRequest, String role) {

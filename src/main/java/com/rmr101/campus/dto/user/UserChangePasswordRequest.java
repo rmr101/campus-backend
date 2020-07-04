@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class UserPutRequest {
+public class UserChangePasswordRequest {
     private String password;
 }

@@ -1,12 +1,10 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.course.CourseGetResponse;
+
 import com.rmr101.campus.dto.student.*;
-import com.rmr101.campus.dto.studentAssignment.StudentAssignmentGetResponse;
+import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.Student;
-import com.rmr101.campus.entity.StudentAssignment;
-import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.StudentAssignmentMapper;
@@ -98,7 +96,7 @@ public class StudentService {
         log.debug("Student: " + firstName +" "+lastName + " created with uuid:" + uuid);
     }
 
-    public void changePassword(UUID uuid,StudentChangePasswordResquest request) {
+    public void changePassword(UUID uuid, UserChangePasswordRequest request) {
         userService.changePassword(uuid, request.getPassword());
     }
 

@@ -4,6 +4,7 @@ import com.rmr101.campus.dto.course.CourseGetResponse;
 import com.rmr101.campus.dto.teacher.TeacherDetails;
 import com.rmr101.campus.dto.teacher.TeacherPostResponse;
 import com.rmr101.campus.dto.teacher.TeacherPostRequest;
+import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
@@ -28,6 +29,13 @@ public class TeacherService {
 
     @Autowired
     private TeacherMapper teacherMapper;
+
+    @Autowired
+    private UserService userService;
+
+    public void changePassword(UUID uuid, UserChangePasswordRequest request) {
+        userService.changePassword(uuid, request.getPassword());
+    }
 
     public TeacherDetails getTeacherDetails(UUID uuid){
         Teacher teacher = teacherRepository.findById(uuid).orElseThrow(() -> new InvalidIdException());

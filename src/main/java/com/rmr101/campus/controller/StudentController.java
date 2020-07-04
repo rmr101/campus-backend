@@ -6,6 +6,7 @@ import com.rmr101.campus.dto.student.*;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostResponse;
+import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.service.StudentAssignmentService;
 import com.rmr101.campus.service.StudentCourseService;
 import com.rmr101.campus.service.StudentService;
@@ -63,7 +64,7 @@ public class StudentController {
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Change password" ,
             notes = "Returns null.")
-    public void changePassword(@PathVariable UUID uuid,@RequestBody StudentChangePasswordResquest request){
+    public void changePassword(@PathVariable UUID uuid,@RequestBody UserChangePasswordRequest request){
         studentService.changePassword(uuid,request);
     }
 

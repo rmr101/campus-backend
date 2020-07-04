@@ -2,7 +2,7 @@ package com.rmr101.campus;
 
 import com.rmr101.campus.dto.user.UserPostRequest;
 import com.rmr101.campus.dto.user.UserPostResponse;
-import com.rmr101.campus.dto.user.UserPutRequest;
+import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.User;
 import com.rmr101.campus.mapper.UserMapper;
 import com.rmr101.campus.repository.UserRepository;
@@ -62,7 +62,7 @@ public class UserServiceTest {
 
     @Test
     public void updateUser(){
-        UserPutRequest request = new UserPutRequest();
+        UserChangePasswordRequest request = new UserChangePasswordRequest();
         String password = "password";
         request.setPassword(password);
 
@@ -72,7 +72,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
-        userService.updateUser(request,uuid);
+        userService.changePassword(uuid,request.getPassword());
 
         assertEquals(password, user.getPassword());
     }
