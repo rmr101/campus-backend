@@ -43,11 +43,11 @@ public class StudentAssignmentService {
         StudentAssignment assignment = studentAssignmentRepository.findById(request.getId())
                 .orElseThrow(()-> new InvalidIdException());
 
-        assignment.setAnswer(request.getAnswer());
         assignment.setAttachmentUrl(request.getAttachmentUrl());
-        assignment.setSubmitted(request.isSubmitted());
+        assignment.setSubmitted(true);
 
         studentAssignmentRepository.save(assignment);
+        //todo:inform teacher
     }
 
     //updated by teacher

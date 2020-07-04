@@ -18,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/students")
+@Api(description = "Operations issued by student")
 public class StudentController {
 
     @Autowired
@@ -29,64 +30,64 @@ public class StudentController {
     @Autowired
     private StudentAssignmentService studentAssignmentService;
 
-    @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Get all students." ,
-            notes = "Returns an object contains a list of students.")
-    public StudentList getAllStudents(){
-
-        StudentList studentList = new StudentList();
-        studentList.setStudentList(studentService.getAllStudents());
-
-        return studentList;
-    }
+//    @GetMapping
+//    @ResponseStatus(value = HttpStatus.OK)
+//    @ApiOperation(value = "Get all students." ,
+//            notes = "Returns an object contains a list of students.")
+//    public StudentList getAllStudents(){
+//
+//        StudentList studentList = new StudentList();
+//        studentList.setStudentList(studentService.getAllStudents());
+//
+//        return studentList;
+//    }
 
     @GetMapping("/{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Get student by ID." ,
+    @ApiOperation(value = "Get student details by uuid." ,
             notes = "Returns an object that contain a the student with the specific ID.")
     public StudentGetDetails getStudentDetails(@PathVariable UUID uuid,
                                                @RequestParam(required = false) String detail){
         return studentService.getStudentDetailsByID(uuid,detail);
     }
 
-    @PostMapping
-    @ResponseStatus(value = HttpStatus.CREATED)
-    @ApiOperation(value = "Add a student." ,
-            notes = "Returns an object that contain the uuid of added student.")
-    public StudentPostResponse addStudent(@RequestBody StudentPostRequest request){
-        return studentService.addStudent(request);
-    }
+//    @PostMapping
+//    @ResponseStatus(value = HttpStatus.CREATED)
+//    @ApiOperation(value = "Add a student." ,
+//            notes = "Returns an object that contain the uuid of added student.")
+//    public StudentPostResponse addStudent(@RequestBody StudentPostRequest request){
+//        return studentService.addStudent(request);
+//    }
 
     @PutMapping("/{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Update information about the student given by uuid" ,
+    @ApiOperation(value = "Change password" ,
             notes = "Returns null.")
-    public void updateStudent(@PathVariable UUID uuid,@RequestBody StudentPutRequest request){
-        studentService.updateStudent(uuid,request);
+    public void changePassword(@PathVariable UUID uuid,@RequestBody StudentChangePasswordResquest request){
+        studentService.changePassword(uuid,request);
     }
 
-    @DeleteMapping("/{uuid}")
-    @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Add a student." ,
-            notes = "Returns an object that contain the added student uuid")
-    public String deleteStudent(@PathVariable UUID uuid){
-        studentService.deleteStudent(uuid);
-        return "Student with ID" + " "+uuid.toString()+" " + "is successfully deleted";
-    }
 
-    @PostMapping("{uuid}/assignments/{assignmentId}")
-    @ApiOperation(value = "update the assignment by student",notes = "Role: student")
+//    @DeleteMapping("/{uuid}")
+//    @ResponseStatus(value = HttpStatus.OK)
+//    @ApiOperation(value = "Add a student." ,
+//            notes = "Returns an object that contain the added student uuid")
+//    public String deleteStudent(@PathVariable UUID uuid){
+//        studentService.deleteStudent(uuid);
+//        return "Student with ID" + " "+uuid.toString()+" " + "is successfully deleted";
+//    }
+
+    @PostMapping("{uuid}/assignments")
+    @ApiOperation(value = "submit an assignment,request = {id:student assignmentId, attachmentUrl:url of your file}",notes = "Role: student")
     public void submitAssignment(@RequestBody StudentAssignmentStudentPutRequest request,
-                                 @PathVariable UUID studentUuid,
-                                 @PathVariable long assignmentId){
+                                 @PathVariable UUID studentUuid){
         studentAssignmentService.updateAssignmentByStudent(studentUuid, request);
     }
 
     //course enrollment
     @PostMapping("/{uuid}/courses")
     @ResponseStatus(value = HttpStatus.CREATED)
-    @ApiOperation( value = "Add a selected course id for a selected student base on uuid")
+    @ApiOperation( value = "Enroll a course")
     public StudentCoursePostResponse enrollCourse(@RequestBody StudentCoursePostRequest request){
         return studentCourseService.addCourse(request);
     }

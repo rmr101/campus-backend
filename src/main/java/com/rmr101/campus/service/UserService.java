@@ -88,4 +88,10 @@ public class UserService {
         return campusId;
     }
 
+    public void changePassword(UUID uuid, String password){
+        User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException());
+        user.setPassword(password);
+        userRepository.save(user);
+    }
+
 }

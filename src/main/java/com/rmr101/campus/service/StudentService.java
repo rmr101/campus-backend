@@ -27,6 +27,9 @@ public class StudentService {
     private StudentRepository studentRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private StudentMapper studentMapper;
 
     @Autowired
@@ -95,16 +98,20 @@ public class StudentService {
         log.debug("Student: " + firstName +" "+lastName + " created with uuid:" + uuid);
     }
 
-    //Put API
-    public void updateStudent(UUID uuid,StudentPutRequest request) {
-        //validate uuid
-        this.validateUuid(uuid);
-
-        Student student = studentMapper.studentPutRequestToStudent(request);
-        student.setUuid(uuid);
-
-        studentRepository.save(student);
+    public void changePassword(UUID uuid,StudentChangePasswordResquest request) {
+        userService.changePassword(uuid, request.getPassword());
     }
+
+    //Put API
+//    public void updateStudent(UUID uuid,StudentPutRequest request) {
+//        //validate uuid
+//        this.validateUuid(uuid);
+//
+//        Student student = studentMapper.studentPutRequestToStudent(request);
+//        student.setUuid(uuid);
+//
+//        studentRepository.save(student);
+//    }
 
     //Delete API
     public void deleteStudent(UUID uuid) {
