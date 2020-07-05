@@ -21,7 +21,7 @@ public class CampusUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException{
         com.rmr101.campus.entity.User user = userRepository.findByCampusId(userName)
-                .orElseThrow(() -> new BadCredentialsException("Username:" + userName + "not existed"));
+                .orElseThrow(() -> new BadCredentialsException("Username doesn't exist."));
 
         return new User(user.getCampusId(),
                 user.getPassword(),

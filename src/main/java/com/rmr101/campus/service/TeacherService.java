@@ -38,7 +38,7 @@ public class TeacherService {
     }
 
     public TeacherDetails getTeacherDetails(UUID uuid){
-        Teacher teacher = teacherRepository.findById(uuid).orElseThrow(() -> new InvalidIdException());
+        Teacher teacher = teacherRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("Teacher uuid doesn't exist"));
         TeacherDetails teacherDetails = new TeacherDetails();
 
         //set values
@@ -70,6 +70,6 @@ public class TeacherService {
     }
 
     public Teacher validateUuid(UUID teacherUuid) {
-        return teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException());
+        return teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException("Teacher uuid doesn't exist"));
     }
 }

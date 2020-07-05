@@ -45,7 +45,7 @@ public class StudentService {
     }
 
     public StudentGetDetails getStudentDetailsByID(UUID uuid, String detail) {
-        Student student =  studentRepository.findById(uuid).orElseThrow(()-> new InvalidIdException());
+        Student student =  studentRepository.findById(uuid).orElseThrow(()-> new InvalidIdException("Student uuid doesn't exist."));
         StudentGetDetails studentDetails = new StudentGetDetails();
         studentDetails.setStudentInfo(studentMapper.studentToStudentGetResponse(student));
 
@@ -119,6 +119,6 @@ public class StudentService {
     }
 
     public Student validateUuid(UUID studentUuid){
-        return studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException());
+        return studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException("Student uuid doesn't exist."));
     }
 }

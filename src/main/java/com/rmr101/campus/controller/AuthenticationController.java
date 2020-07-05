@@ -44,7 +44,7 @@ public class AuthenticationController {
 
         //todo: second call to database for the same record ,can be refactored
         User user = userRepository.findByCampusId(request.getUsername())
-                .orElseThrow(() ->new BadCredentialsException("Username not existed"));
+                .orElseThrow(() ->new BadCredentialsException("Username doesn't exist."));
 
         return new AuthenticationResponse(jwt,user.getRole(),user.getUuid());
     }

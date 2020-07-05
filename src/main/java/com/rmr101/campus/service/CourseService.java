@@ -37,12 +37,12 @@ public class CourseService {
     }
 
     public CoursePostResponse getCourseById(long id){
-        Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException());
+        Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
         return courseMapper.courseToCoursePostResponse(course);
     }
 
     public CourseDetails getCourseDetailsById(long id){
-        Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException());
+        Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
 
         CourseDetails courseDetails = new CourseDetails();
         courseDetails.setCourse(courseMapper.courseToCourseGetResponse(course));
@@ -85,6 +85,6 @@ public class CourseService {
     }
 
     protected Course validateId(long courseId){
-        return courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException());
+        return courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
     }
 }

@@ -86,7 +86,7 @@ public class UserService {
     }
 
     public void changePassword(UUID uuid, String password){
-        User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException());
+        User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
         user.setPassword(password);
         userRepository.save(user);
     }

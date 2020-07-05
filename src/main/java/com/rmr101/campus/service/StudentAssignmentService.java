@@ -41,7 +41,7 @@ public class StudentAssignmentService {
     public void updateAssignmentByStudent(UUID studentUuid,StudentAssignmentStudentPutRequest request){
         //validate
         StudentAssignment assignment = studentAssignmentRepository.findById(request.getId())
-                .orElseThrow(()-> new InvalidIdException());
+                .orElseThrow(()-> new InvalidIdException("The student doesn't have this assignment"));
 
         assignment.setAttachmentUrl(request.getAttachmentUrl());
         assignment.setSubmitted(true);

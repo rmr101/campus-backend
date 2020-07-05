@@ -50,6 +50,6 @@ public class TeacherCourseService {
     }
 
     protected TeacherCourse getTeacherCourseById(long id){
-        return teacherCourseRepository.findById(id).orElseThrow(() -> new InvalidIdException());
+        return teacherCourseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The teacher doesn't teach this course."));
     }
 }

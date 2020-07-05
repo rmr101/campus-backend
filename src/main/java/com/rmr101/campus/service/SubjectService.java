@@ -37,7 +37,7 @@ public class SubjectService {
     }
 
     public SubjectDto getSubjectById(long id) {
-        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException());
+        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
         return subjectMapper.toSubjectDto(subject);
     }
 
@@ -50,7 +50,7 @@ public class SubjectService {
     }
 
     public SubjectDetails getSubjectDetailsById(long id) {
-        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException());
+        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
 
         SubjectDetails subjectDetails = new SubjectDetails();
         subjectDetails.setSubjectDto(subjectMapper.toSubjectDto(subject));

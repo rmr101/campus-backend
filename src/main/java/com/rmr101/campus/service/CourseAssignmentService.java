@@ -64,6 +64,6 @@ public class CourseAssignmentService {
     }
 
     protected CourseAssignment validateId( long id){
-        return courseAssignmentRepository.findById(id).orElseThrow(()-> new InvalidIdException());
+        return courseAssignmentRepository.findById(id).orElseThrow(()-> new InvalidIdException("The course doesn't have this assignment"));
     }
 }
