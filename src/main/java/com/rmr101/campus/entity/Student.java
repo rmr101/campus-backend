@@ -18,6 +18,7 @@ public class Student {
     private String firstName;
     private String lastName;
     private String name;
+    private String avatar;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
     private List<StudentCourse> courses = new ArrayList<StudentCourse>();

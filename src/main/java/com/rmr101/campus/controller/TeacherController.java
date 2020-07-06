@@ -1,8 +1,9 @@
 package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.course.CourseList;
+import com.rmr101.campus.dto.student.StudentGetDetails;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
-import com.rmr101.campus.dto.teacher.TeacherDetails;
+import com.rmr101.campus.dto.teacher.TeacherGetDetails;
 import com.rmr101.campus.dto.teacher.TeacherPostRequest;
 import com.rmr101.campus.dto.teacher.TeacherPostResponse;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
@@ -27,9 +28,13 @@ public class TeacherController {
 
     @GetMapping("{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
-    public TeacherDetails getTeacherDetails(@PathVariable UUID uuid){
-        return teacherService.getTeacherDetails(uuid);
+    @ApiOperation(value = "Get teacher details by uuid." ,
+            notes = "Returns an object that contain a the student with the specific ID.")
+    public TeacherGetDetails getTeacherDetails(@PathVariable UUID uuid,
+                                               @RequestParam(required = false) String detail){
+        return teacherService.getTeacherDetailsByID(uuid,detail);
     }
+
 
     @GetMapping("/{uuid}/courses")
     @ResponseStatus(value = HttpStatus.OK)

@@ -7,10 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface StudentMapper {
-
-//  @Mapping(target = "uuid", expression = "java(student.getUuid().toString())")
-//  StudentGetDto studentToStudentGetDto(Student student);
-
+    @Mapping(target = "name", expression = "java( student.getFirstName()+ ' ' + student.getLastName() )")
     StudentGetResponse studentToStudentGetResponse(Student student);
 
     Student studentPostRequestToStudent(StudentPostRequest studentPostRequest);

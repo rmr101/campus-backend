@@ -1,7 +1,7 @@
 package com.rmr101.campus.service;
 
 import com.rmr101.campus.dto.course.*;
-import com.rmr101.campus.dto.teacher.TeacherDto;
+import com.rmr101.campus.dto.teacher.TeacherGetResponse;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;
@@ -47,11 +47,11 @@ public class CourseService {
         CourseDetails courseDetails = new CourseDetails();
         courseDetails.setCourse(courseMapper.courseToCourseGetResponse(course));
 //        courseDetails.setAssignmentList(courseAssignmentMapper.toCourseAssignmentDto(course.getAssignments()));
-        List<TeacherDto> teacherList = new ArrayList<TeacherDto>();
+        List<TeacherGetResponse> teacherList = new ArrayList<TeacherGetResponse>();
         course.getTeachers().stream()
                 .forEach( courseTeacher -> {
-                    TeacherDto teacherDto= teacherMapper.teacherToTeacherDto(courseTeacher.getTeacher());
-                    teacherList.add(teacherDto);
+                    TeacherGetResponse teacherGetResponse = teacherMapper.teacherToTeacherGetResponse(courseTeacher.getTeacher());
+                    teacherList.add(teacherGetResponse);
                 });
         courseDetails.setTeachers(teacherList);
 

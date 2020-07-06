@@ -1,10 +1,10 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.course.CourseGetResponse;
-import com.rmr101.campus.dto.teacher.TeacherDetails;
+import com.rmr101.campus.dto.teacher.TeacherGetDetails;
 import com.rmr101.campus.dto.teacher.TeacherPostResponse;
 import com.rmr101.campus.dto.teacher.TeacherPostRequest;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
+import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
@@ -37,19 +37,22 @@ public class TeacherService {
         userService.changePassword(uuid, request);
     }
 
-    public TeacherDetails getTeacherDetails(UUID uuid){
+    public TeacherGetDetails getTeacherDetailsByID(UUID uuid, String detail) {
         Teacher teacher = teacherRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("Teacher uuid doesn't exist"));
-        TeacherDetails teacherDetails = new TeacherDetails();
+        TeacherGetDetails teacherDetails = new TeacherGetDetails();
+        teacherDetails.setTeacherInfo(teacherMapper.teacherToTeacherGetResponse(teacher));
 
-        //set values
-        teacherDetails.setUuid(uuid);
-        teacherDetails.setName(teacher.getName());
-        List<CourseGetResponse> courseList = new ArrayList<CourseGetResponse>();
-        teacher.getCourses().stream()
-                .forEach( teacherCourse ->
-                    courseList.add(courseMapper.courseToCourseGetResponse(teacherCourse.getCourse()))
+        if(detail != null){
+            if(detail.equals("courses")){
+                List<Course> courseList = new ArrayList<Course>();
+                teacher.getCourses().forEach(
+                        (teacherCourse -> courseList.add(teacherCourse.getCourse())));
+                teacherDetails.setCourseList(
+                        courseMapper.courseToCourseGetResponse(courseList)
                 );
-        teacherDetails.setCourseList(courseList);
+                return teacherDetails;
+            }
+        }
         return teacherDetails;
     }
 
@@ -72,4 +75,5 @@ public class TeacherService {
     public Teacher validateUuid(UUID teacherUuid) {
         return teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException("Teacher uuid doesn't exist"));
     }
+
 }

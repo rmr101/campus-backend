@@ -19,6 +19,7 @@ public class Teacher {
     private String firstName;
     private String lastName;
     private String name;
+    private String avatar;
 
     private String introduction;
 
@@ -26,8 +27,4 @@ public class Teacher {
             fetch = FetchType.LAZY,
             mappedBy = "teacher")
     private List<TeacherCourse> courses = new ArrayList<TeacherCourse>();
-
-    public String getName(){
-        return this.firstName + " " + this.lastName;
-    }
 }
