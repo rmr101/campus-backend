@@ -2,7 +2,6 @@ package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.user.UserPostRequest;
 import com.rmr101.campus.dto.user.UserPostResponse;
-import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +31,10 @@ public class UserController {
         return userService.addStudent(request);
     }
 
-    @PutMapping("{uuid}")
+    @PutMapping("{uuid}/password")
     @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Change password of a user")
-    public void changePassword(@RequestBody UserChangePasswordRequest request, @PathVariable UUID uuid){
-        userService.changePassword(uuid,request.getPassword());
+    @ApiOperation(value = "reset password for a user")
+    public void resetPassword(@PathVariable UUID uuid){
+        userService.resetPassword(uuid);
     }
 }

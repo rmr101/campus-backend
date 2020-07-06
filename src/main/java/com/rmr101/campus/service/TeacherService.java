@@ -34,7 +34,7 @@ public class TeacherService {
     private UserService userService;
 
     public void changePassword(UUID uuid, UserChangePasswordRequest request) {
-        userService.changePassword(uuid, request.getPassword());
+        userService.changePassword(uuid, request);
     }
 
     public TeacherDetails getTeacherDetails(UUID uuid){

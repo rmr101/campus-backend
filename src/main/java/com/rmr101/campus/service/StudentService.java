@@ -97,7 +97,7 @@ public class StudentService {
     }
 
     public void changePassword(UUID uuid, UserChangePasswordRequest request) {
-        userService.changePassword(uuid, request.getPassword());
+        userService.changePassword(uuid, request);
     }
 
     //Put API

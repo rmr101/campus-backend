@@ -5,13 +5,14 @@ import com.rmr101.campus.dto.user.UserPostResponse;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.User;
 import com.rmr101.campus.exception.InvalidIdException;
+import com.rmr101.campus.exception.UnauthorizedException;
 import com.rmr101.campus.mapper.UserMapper;
 import com.rmr101.campus.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -30,6 +31,12 @@ public class UserService {
     @Autowired
     private TeacherService teacherService;
 
+    @Autowired
+    private PasswordEncodeService passwordEncodeService;
+
+    @Autowired
+    private IdGenerateService idGenerateService;
+
     public UserPostResponse addTeacher(UserPostRequest request) {
         UserPostResponse response =  this.addUser(request,"TEACHER");
         //todo:send a message to create new student
@@ -44,16 +51,16 @@ public class UserService {
         return response;
     }
 
-//    public void updateUser(UserChangePasswordRequest userChangePasswordRequest, UUID uuid) {
-//        //validate uuid
-//        User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException());
-//
-//        //set value
-//        user.setPassword(userChangePasswordRequest.getPassword());
-//
-//        //save
-//        userRepository.save(user);
-//    }
+    public void addAdmin(String username, String password) {
+//        User user = userMapper.userPostRquestToUser(request);
+        User user = new User();
+        user.setActive(true);
+        user.setRole("ADMIN");
+        user.setCampusId(username);
+        user.setPassword(passwordEncodeService.encodePassword(password));
+        userRepository.save(user);
+//        return userMapper.userToUserPostResponse(user);
+    }
 
     //create a new user
     private UserPostResponse addUser(UserPostRequest userPostRequest, String role) {
@@ -62,32 +69,31 @@ public class UserService {
         user.setActive(true);
         user.setRole(role);
 
-        String campusId = generateCampusId(role);
+        String campusId = idGenerateService.generateCampusId(role);
         log.debug("Generated campus id is" + campusId);
         //todo:check if duplicated should try n time and throw exception
-        if(userRepository.findByCampusId(campusId) != null){
+        if(userRepository.findByCampusId(campusId).isPresent()){
             log.debug("Campus id is duplicated");
-            campusId = generateCampusId(role);  //should be validate again ...
+            campusId = idGenerateService.generateCampusId(role);  //should be validate again ...
         }
         user.setCampusId(campusId);
-        user.setPassword(campusId);
+        user.setPassword(passwordEncodeService.encodePassword(campusId));
 
         userRepository.save(user);
         return userMapper.userToUserPostResponse(user);
     }
 
-    private String generateCampusId(String role){
-        Random rand = new Random();
-        String campusId = role.substring(0,1);//get the first letter of role
-        for (int i = 0; i < 8; i++){
-            campusId += rand.nextInt(10);
-        }
-        return campusId;
+    public void resetPassword(UUID uuid){
+        User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
+        user.setPassword(passwordEncodeService.encodePassword(user.getCampusId()));
+        userRepository.save(user);
     }
 
-    public void changePassword(UUID uuid, String password){
+    public void changePassword(UUID uuid, UserChangePasswordRequest request){
         User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
-        user.setPassword(password);
+        if(!passwordEncodeService.matchPassword(request.getCurrentPassword(),user.getPassword()))
+            throw new UnauthorizedException("Current password wrong!");
+        user.setPassword(passwordEncodeService.encodePassword(request.getNewPassword()));
         userRepository.save(user);
     }
 

@@ -60,21 +60,26 @@ public class UserServiceTest {
         assertEquals(uuid,response.getUuid());
     }
 
+//    @Test
+//    public void updateUser(){
+//        UserChangePasswordRequest request = new UserChangePasswordRequest();
+//        String password = "password";
+//        request.setPassword(password);
+//
+//        User user = new User();
+//        UUID uuid = UUID.fromString("f17f8578-2605-4c2d-bdfd-261443107c08");
+//        user.setUuid(uuid);
+//        Mockito.when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
+//        Mockito.when(userRepository.save(user)).thenReturn(user);
+//
+//        userService.changePassword(uuid,request.getPassword());
+//
+//        assertEquals(password, user.getPassword());
+//    }
+
     @Test
-    public void updateUser(){
-        UserChangePasswordRequest request = new UserChangePasswordRequest();
-        String password = "password";
-        request.setPassword(password);
-
-        User user = new User();
-        UUID uuid = UUID.fromString("f17f8578-2605-4c2d-bdfd-261443107c08");
-        user.setUuid(uuid);
-        Mockito.when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
-        Mockito.when(userRepository.save(user)).thenReturn(user);
-
-        userService.changePassword(uuid,request.getPassword());
-
-        assertEquals(password, user.getPassword());
+    public void addAdmin(){
+        userService.addAdmin("jessie","123456");
     }
 
 }

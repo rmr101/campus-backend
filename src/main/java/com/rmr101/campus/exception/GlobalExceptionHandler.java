@@ -69,10 +69,10 @@ public class GlobalExceptionHandler {
     public ApiErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         log.error("Request raised a InvalidIdException reason= " + ex.getMessage());
         ApiErrorResponse response =new ApiErrorResponse.ApiErrorResponseBuilder()
-                .withStatus(HttpStatus.NOT_FOUND)
+                .withStatus(HttpStatus.CONFLICT)
                 .withError_code("409")
-                .withMessage(ex.getMessage())
-                .withDetail(ex.getLocalizedMessage())
+//                .withMessage(ex.getMessage())
+//                .withDetail(ex.getLocalizedMessage())
                 .build();
         return response;
     }
