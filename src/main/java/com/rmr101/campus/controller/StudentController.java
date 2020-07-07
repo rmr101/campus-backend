@@ -7,6 +7,7 @@ import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutReques
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostResponse;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
+import com.rmr101.campus.entity.Student;
 import com.rmr101.campus.service.StudentAssignmentService;
 import com.rmr101.campus.service.StudentCourseService;
 import com.rmr101.campus.service.StudentService;
@@ -62,12 +63,19 @@ public class StudentController {
 
     @PutMapping("/{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Update Personal info" ,
+            notes = "Returns null.")
+    public void updateInfo(@PathVariable UUID uuid,@RequestBody StudentUpdateRequest request){
+        studentService.updateStudent(uuid,request);
+    }
+
+    @PutMapping("/{uuid}/password")
+    @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Change password" ,
             notes = "Returns null.")
     public void changePassword(@PathVariable UUID uuid,@RequestBody UserChangePasswordRequest request){
         studentService.changePassword(uuid,request);
     }
-
 
 //    @DeleteMapping("/{uuid}")
 //    @ResponseStatus(value = HttpStatus.OK)

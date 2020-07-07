@@ -30,7 +30,7 @@ public class CourseAssignment {
     @JoinColumn(name="courseId", nullable = false)
     private Course course;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="teacherUuid", nullable = false)
-    private Teacher teacher;
+//    @ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name="teacherUuid", nullable = false)
+//    private Teacher teacher;
 }

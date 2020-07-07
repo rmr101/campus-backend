@@ -3,6 +3,7 @@ package com.rmr101.campus.service;
 import com.rmr101.campus.dto.teacher.TeacherGetDetails;
 import com.rmr101.campus.dto.teacher.TeacherPostResponse;
 import com.rmr101.campus.dto.teacher.TeacherPostRequest;
+import com.rmr101.campus.dto.teacher.TeacherUpdateRequest;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.Teacher;
@@ -56,11 +57,12 @@ public class TeacherService {
         return teacherDetails;
     }
 
-    //Post API
-    public TeacherPostResponse addTeacher(TeacherPostRequest teacherPostRequest) {
-        Teacher teacher =  teacherMapper.teacherPostRequestToTeacher(teacherPostRequest);
+    public void updateTeacher(UUID uuid, TeacherUpdateRequest request) {
+        //validate uuid
+        this.validateUuid(uuid);
+        Teacher teacher = teacherMapper.teacherUpdateRequestToTeacher(request);
+        teacher.setUuid(uuid);
         teacherRepository.save(teacher);
-        return teacherMapper.teacherToTeacherPostResponse(teacher);
     }
 
     public void addTeacher(UUID uuid, String firstName, String lastName){
@@ -75,5 +77,6 @@ public class TeacherService {
     public Teacher validateUuid(UUID teacherUuid) {
         return teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException("Teacher uuid doesn't exist"));
     }
+
 
 }

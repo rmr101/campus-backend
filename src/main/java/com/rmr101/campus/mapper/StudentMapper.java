@@ -13,6 +13,6 @@ public interface StudentMapper {
     Student studentPostRequestToStudent(StudentPostRequest studentPostRequest);
     StudentPostResponse studentToStudentPostResponse(Student student);
 
-    Student studentPutRequestToStudent(StudentPutRequest studentPutRequest);
+    Student studentUpdateRequestToStudent(StudentUpdateRequest studentUpdateRequest);
 
 }

@@ -2,10 +2,12 @@ package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.course.CourseList;
 import com.rmr101.campus.dto.student.StudentGetDetails;
+import com.rmr101.campus.dto.student.StudentUpdateRequest;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
 import com.rmr101.campus.dto.teacher.TeacherGetDetails;
 import com.rmr101.campus.dto.teacher.TeacherPostRequest;
 import com.rmr101.campus.dto.teacher.TeacherPostResponse;
+import com.rmr101.campus.dto.teacher.TeacherUpdateRequest;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.service.TeacherCourseService;
 import com.rmr101.campus.service.UserService;
@@ -35,17 +37,15 @@ public class TeacherController {
         return teacherService.getTeacherDetailsByID(uuid,detail);
     }
 
-
-    @GetMapping("/{uuid}/courses")
+    @PutMapping("/{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation( value = "Get list of courses for a selected teacher base on uuid")
-    public CourseList getMyCourses(@PathVariable UUID uuid){
-        CourseList courseList = new CourseList();
-      //  courseList.setCourseList(studentCourseService.getCoursesByStudent(uuid));
-        return courseList;
+    @ApiOperation(value = "Update Personal info" ,
+            notes = "Returns null.")
+    public void updateInfo(@PathVariable UUID uuid,@RequestBody TeacherUpdateRequest request){
+        teacherService.updateTeacher(uuid,request);
     }
 
-    @PutMapping("/{uuid}")
+    @PutMapping("/{uuid}/password")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Change password" ,
             notes = "Returns null.")

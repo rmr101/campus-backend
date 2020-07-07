@@ -24,7 +24,7 @@ public class CourseAssignmentService {
     private CourseAssignmentMapper courseAssignmentMapper;
 
     @Autowired
-    private TeacherCourseService teacherCourseService;
+    private CourseService courseService;
 
     @Autowired
     private StudentCourseService studentCourseService;
@@ -36,25 +36,23 @@ public class CourseAssignmentService {
         return courseAssignmentMapper.courseAssignmentToCourseAssignmentGetResponse(this.validateId(id));
     }
 
-    public CourseAssignmentPostResponse addAssignment(CourseAssignmentPostRequest request) {
-        //validate and get teacherCourse
-        TeacherCourse teacherCourse = teacherCourseService.getTeacherCourseById(request.getTeacherCourseId());
+    public CourseAssignmentPostResponse addAssignment(CourseAssignmentPostRequest request, long courseId) {
+        //validate and get course
+        Course course = courseService.validateId(courseId);
 
         CourseAssignment assignment = courseAssignmentMapper.courseAssignmentPostRequestToCourseAssignment(request);
-        assignment.setCourse(teacherCourse.getCourse());
-        assignment.setCourseName(teacherCourse.getCourse().getName());
-        assignment.setTeacher(teacherCourse.getTeacher());
-        assignment.setPublisher(teacherCourse.getTeacher().getName());
+        assignment.setCourse(course);
+        assignment.setCourseName(course.getName());
 
         courseAssignmentRepository.save(assignment);
         log.debug("Succeed in saving an assignment in course_assignment table");
 
+
         //todo:send a message to add assignment to each student related to the course
         //todo:here is an sync implementation
-        List<StudentCourse> studentList = studentCourseService.getListByCourse(teacherCourse.getCourse().getId());
-        log.debug("Succeed in getting student list");
 
-        studentList.forEach((studentCourse) ->
+        log.debug("About to save an assignment for every enrolled student");
+        course.getStudents().forEach((studentCourse) ->
                 studentAssignmentService.addAssignment(
                         studentCourse.getStudent().getUuid(),
                         assignment.getId()

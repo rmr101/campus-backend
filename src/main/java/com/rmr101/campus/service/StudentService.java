@@ -100,15 +100,15 @@ public class StudentService {
     }
 
     //Put API
-//    public void updateStudent(UUID uuid,StudentPutRequest request) {
-//        //validate uuid
-//        this.validateUuid(uuid);
-//
-//        Student student = studentMapper.studentPutRequestToStudent(request);
-//        student.setUuid(uuid);
-//
-//        studentRepository.save(student);
-//    }
+    public void updateStudent(UUID uuid, StudentUpdateRequest request) {
+        //validate uuid
+        this.validateUuid(uuid);
+
+        Student student = studentMapper.studentUpdateRequestToStudent(request);
+        student.setUuid(uuid);
+
+        studentRepository.save(student);
+    }
 
     //Delete API
     public void deleteStudent(UUID uuid) {
@@ -120,4 +120,5 @@ public class StudentService {
     public Student validateUuid(UUID studentUuid){
         return studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException("Student uuid doesn't exist."));
     }
+
 }

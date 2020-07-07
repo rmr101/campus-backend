@@ -66,7 +66,7 @@ public class CourseController {
     @ApiOperation(value = "publish an assignment ----Role:teacher")
     public CourseAssignmentPostResponse publishAssignment(@RequestBody CourseAssignmentPostRequest request,
                                                           @PathVariable long courseId){
-        return courseAssignmentService.addAssignment(request);
+        return courseAssignmentService.addAssignment(request, courseId);
     }
 
     @GetMapping("{courseId}/assignments/{assignmentId}")
