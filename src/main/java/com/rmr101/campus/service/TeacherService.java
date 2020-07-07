@@ -1,15 +1,18 @@
 package com.rmr101.campus.service;
 
+import com.rmr101.campus.dto.studentAssignment.StudentAssignmentTeacherPutRequest;
 import com.rmr101.campus.dto.teacher.TeacherGetDetails;
 import com.rmr101.campus.dto.teacher.TeacherPostResponse;
 import com.rmr101.campus.dto.teacher.TeacherPostRequest;
 import com.rmr101.campus.dto.teacher.TeacherUpdateRequest;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.Course;
+import com.rmr101.campus.entity.StudentAssignment;
 import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.TeacherMapper;
+import com.rmr101.campus.repository.StudentAssignmentRepository;
 import com.rmr101.campus.repository.TeacherRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ import java.util.UUID;
 public class TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private StudentAssignmentRepository studentAssignmentRepository;
 
     @Autowired
     private CourseMapper courseMapper;
@@ -63,6 +69,17 @@ public class TeacherService {
         Teacher teacher = teacherMapper.teacherUpdateRequestToTeacher(request);
         teacher.setUuid(uuid);
         teacherRepository.save(teacher);
+    }
+
+    public void reviewAssignment(long assignmentId, StudentAssignmentTeacherPutRequest request) {
+        StudentAssignment assignment = studentAssignmentRepository.findById(assignmentId)
+                .orElseThrow(()-> new InvalidIdException("The student doesn't have this assignment"));
+
+        assignment.setAttachmentUrl(request.getComment());
+        assignment.setScore(request.getScore());
+        assignment.setScored(true);
+
+        studentAssignmentRepository.save(assignment);
     }
 
     public void addTeacher(UUID uuid, String firstName, String lastName){

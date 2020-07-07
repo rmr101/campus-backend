@@ -1,5 +1,6 @@
 package com.rmr101.campus.service;
 
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetDetails;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
@@ -32,8 +33,16 @@ public class CourseAssignmentService {
     @Autowired
     private StudentAssignmentService studentAssignmentService;
 
-    public CourseAssignmentGetResponse getCourseAssignmentById(long id) {
-        return courseAssignmentMapper.courseAssignmentToCourseAssignmentGetResponse(this.validateId(id));
+    public CourseAssignmentGetDetails getAssignmentDetails(long assignmentId) {
+        CourseAssignment assignment = courseAssignmentRepository.findById(assignmentId).orElseThrow(
+                () -> new InvalidIdException("Assignment id doesn't exist."));
+
+        CourseAssignmentGetDetails assignmentDetails = new CourseAssignmentGetDetails();
+        assignmentDetails.setAssignment(courseAssignmentMapper.courseAssignmentToCourseAssignmentGetResponse(assignment));
+        assignmentDetails.setStudentAssignmentList(
+                studentAssignmentService.getAssignmentListByAssignment(assignmentId));
+
+        return assignmentDetails;
     }
 
     public CourseAssignmentPostResponse addAssignment(CourseAssignmentPostRequest request, long courseId) {

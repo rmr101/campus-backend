@@ -4,6 +4,7 @@ import com.rmr101.campus.dto.course.CourseList;
 import com.rmr101.campus.dto.student.StudentGetDetails;
 import com.rmr101.campus.dto.student.StudentUpdateRequest;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
+import com.rmr101.campus.dto.studentAssignment.StudentAssignmentTeacherPutRequest;
 import com.rmr101.campus.dto.teacher.TeacherGetDetails;
 import com.rmr101.campus.dto.teacher.TeacherPostRequest;
 import com.rmr101.campus.dto.teacher.TeacherPostResponse;
@@ -52,5 +53,15 @@ public class TeacherController {
     public void changePassword(@PathVariable UUID uuid,@RequestBody UserChangePasswordRequest request){
         teacherService.changePassword(uuid,request);
     }
+
+    @PutMapping("/assignments/{assignmentId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "review and score an assignment submitted by student" ,
+            notes = "Returns null.")
+    public void reviewAssignment(@PathVariable long assignmentId,
+                                 @RequestBody StudentAssignmentTeacherPutRequest request){
+        teacherService.reviewAssignment(assignmentId,request);
+    }
+
 
 }

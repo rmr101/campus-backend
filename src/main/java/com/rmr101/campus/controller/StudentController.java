@@ -53,14 +53,6 @@ public class StudentController {
         return studentService.getStudentDetailsByID(uuid,detail);
     }
 
-//    @PostMapping
-//    @ResponseStatus(value = HttpStatus.CREATED)
-//    @ApiOperation(value = "Add a student." ,
-//            notes = "Returns an object that contain the uuid of added student.")
-//    public StudentPostResponse addStudent(@RequestBody StudentPostRequest request){
-//        return studentService.addStudent(request);
-//    }
-
     @PutMapping("/{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Update Personal info" ,
@@ -86,11 +78,11 @@ public class StudentController {
 //        return "Student with ID" + " "+uuid.toString()+" " + "is successfully deleted";
 //    }
 
-    @PostMapping("{uuid}/assignments")
-    @ApiOperation(value = "submit an assignment,request = {id:student assignmentId, attachmentUrl:url of your file}",notes = "Role: student")
+    @PostMapping("/assignments/{assignmentId}")
+    @ApiOperation(value = "submit an assignment",notes = "Role: student")
     public void submitAssignment(@RequestBody StudentAssignmentStudentPutRequest request,
-                                 @PathVariable UUID studentUuid){
-        studentAssignmentService.updateAssignmentByStudent(studentUuid, request);
+                                 @PathVariable long assignmentId){
+        studentAssignmentService.submitAssignment(assignmentId, request);
     }
 
     //course enrollment

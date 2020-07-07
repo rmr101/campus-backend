@@ -1,6 +1,7 @@
 package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.course.*;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetDetails;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
@@ -72,8 +73,7 @@ public class CourseController {
     }
 
     @GetMapping("{courseId}/assignments/{assignmentId}")
-    public CourseAssignmentGetResponse getCourseAssignmentById(@PathVariable long courseId,
-                                                               @PathVariable long assignmentId){
-        return courseAssignmentService.getCourseAssignmentById(assignmentId);
+    public CourseAssignmentGetDetails getCourseAssignmentById(@PathVariable long assignmentId){
+        return courseAssignmentService.getAssignmentDetails(assignmentId);
     }
 }
