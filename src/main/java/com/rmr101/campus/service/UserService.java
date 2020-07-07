@@ -4,6 +4,7 @@ import com.rmr101.campus.dto.user.UserPostRequest;
 import com.rmr101.campus.dto.user.UserPostResponse;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.User;
+import com.rmr101.campus.exception.AccessDeniedException;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.exception.UnauthorizedException;
 import com.rmr101.campus.mapper.UserMapper;
@@ -92,7 +93,7 @@ public class UserService {
     public void changePassword(UUID uuid, UserChangePasswordRequest request){
         User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
         if(!passwordEncodeService.matchPassword(request.getCurrentPassword(),user.getPassword()))
-            throw new UnauthorizedException("Current password wrong!");
+            throw new AccessDeniedException("Current password wrong!");
         user.setPassword(passwordEncodeService.encodePassword(request.getNewPassword()));
         userRepository.save(user);
     }

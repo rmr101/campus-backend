@@ -56,6 +56,19 @@ public class GlobalExceptionHandler {
         return response;
     }
 
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ApiErrorResponse handleAccessDeniedException(AccessDeniedException ex) {
+        log.error("Request raised a AccessDeniedException reason= " + ex.getDetail());
+        ApiErrorResponse response =new ApiErrorResponse.ApiErrorResponseBuilder()
+                .withStatus(HttpStatus.FORBIDDEN)
+                .withError_code("403")
+                .withMessage(ex.getErrorMessage())
+                .withDetail(ex.getDetail())
+                .build();
+        return response;
+    }
+
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(InvalidIdException.class)
     public ApiErrorResponse handleInvalidIdException(InvalidIdException ex) {
