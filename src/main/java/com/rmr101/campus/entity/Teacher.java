@@ -14,6 +14,7 @@ public class Teacher {
     @Id
     @Column(length = 16)
     private UUID uuid; //uuid
+    private boolean isActive = true;
 
     private String title;
     private String firstName;

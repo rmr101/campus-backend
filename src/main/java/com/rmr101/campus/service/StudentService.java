@@ -4,6 +4,7 @@ import com.rmr101.campus.dto.student.*;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.Student;
+import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.StudentAssignmentMapper;
@@ -80,11 +81,11 @@ public class StudentService {
     }
 
     //Post API
-    public StudentPostResponse addStudent(StudentPostRequest request) {
-        Student student =  studentMapper.studentPostRequestToStudent(request);
-        studentRepository.save(student);
-        return studentMapper.studentToStudentPostResponse(student);
-    }
+//    public StudentPostResponse addStudent(StudentPostRequest request) {
+//        Student student =  studentMapper.studentPostRequestToStudent(request);
+//        studentRepository.save(student);
+//        return studentMapper.studentToStudentPostResponse(student);
+//    }
 
     protected  void addStudent(UUID uuid,String firstName, String lastName){
         Student student = new Student();
@@ -121,4 +122,9 @@ public class StudentService {
         return studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException("Student uuid doesn't exist."));
     }
 
+    public void setStudentInactive(UUID studentUuid){
+        Student student = studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException("Student uuid doesn't exist."));
+        student.setActive(false);
+        studentRepository.save(student);
+    }
 }

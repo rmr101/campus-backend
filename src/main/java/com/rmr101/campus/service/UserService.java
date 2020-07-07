@@ -53,14 +53,12 @@ public class UserService {
     }
 
     public void addAdmin(String username, String password) {
-//        User user = userMapper.userPostRquestToUser(request);
         User user = new User();
         user.setActive(true);
         user.setRole("ADMIN");
         user.setCampusId(username);
         user.setPassword(passwordEncodeService.encodePassword(password));
         userRepository.save(user);
-//        return userMapper.userToUserPostResponse(user);
     }
 
     //create a new user
@@ -98,4 +96,20 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void deleteUser(UUID uuid) {
+        User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
+        user.setActive(false);
+        userRepository.save(user);
+
+        switch (user.getRole()){
+            case "TEACHER":
+                teacherService.setTeacherInactive(uuid);
+                break;
+            case "STUDENT":
+                studentService.setStudentInactive(uuid);
+                break;
+            default:
+                //todo:throw an exception
+        }
+    }
 }

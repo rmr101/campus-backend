@@ -18,6 +18,7 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
+    boolean isOpen = true;
 
     private String name;
     private String introduction;

@@ -95,5 +95,10 @@ public class TeacherService {
         return teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException("Teacher uuid doesn't exist"));
     }
 
+    public void setTeacherInactive(UUID teacherUuid){
+        Teacher teacher = teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException("Teacher uuid doesn't exist"));
+        teacher.setActive(false);
+        teacherRepository.save(teacher);
+    }
 
 }

@@ -37,4 +37,11 @@ public class UserController {
     public void resetPassword(@PathVariable UUID uuid){
         userService.resetPassword(uuid);
     }
+
+    @DeleteMapping("{uuid}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "delete a user")
+    public void deleteUser(@PathVariable UUID uuid){
+        userService.deleteUser(uuid);
+    }
 }

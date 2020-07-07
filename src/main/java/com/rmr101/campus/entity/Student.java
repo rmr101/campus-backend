@@ -14,6 +14,7 @@ public class Student {
     @Id
     @Column(length = 16)
     private UUID uuid; //uuid
+    private boolean isActive = true;
 
     private String firstName;
     private String lastName;
