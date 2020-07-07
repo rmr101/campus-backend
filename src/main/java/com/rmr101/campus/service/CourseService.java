@@ -6,6 +6,7 @@ import com.rmr101.campus.dto.student.StudentGetResponse;
 import com.rmr101.campus.dto.teacher.TeacherGetResponse;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.StudentCourse;
+import com.rmr101.campus.entity.Subject;
 import com.rmr101.campus.exception.BadParameterException;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;
@@ -26,6 +27,9 @@ public class CourseService {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private SubjectService subjectService;
 
     @Autowired
     private CourseMapper courseMapper;
@@ -105,28 +109,25 @@ public class CourseService {
         return courseDetails;
     }
 
-//    public CourseList getCourseByName(String name){
-//        CourseList courseList = new CourseList();
-//        courseRepository.findByName(name)
-//                .stream()
-//                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
-//
-//        return courseList;
-//    }
-//
-//    public CourseList getCourseBySubjectId(int id){
-//        CourseList courseList = new CourseList();
-//        courseRepository.findBySubjectId(id)
-//                .stream()
-//                .forEach(po -> courseList.getCourseList().add(courseMapper.toCourseDto(po)));
-//
-//        return courseList;
-//    }
+    public List<CourseGetResponse> findCoursesBy(String courseName, String courseCode) {
+        if(courseCode != null){
+            //todo:find by courseCode;
+            return null;
+        }
+        if(courseName != null){
+            List<Course> courseList = courseRepository.findByNameLike("%" + courseName + "%");
+            return courseMapper.courseToCourseGetResponse(courseList);
+        }
+        return null;
+    }
 
     //add a course
     public CoursePostResponse addCourse(CoursePostRequest request) {
         //validate subjectId???
+        Subject subject = subjectService.validateId(request.getSubjectId());
+
         Course course = courseMapper.coursePostRequestToCourse(request);
+        course.setSubject(subject);
         courseRepository.save(course);
         return courseMapper.courseToCoursePostResponse(course);
     }
@@ -134,4 +135,5 @@ public class CourseService {
     public Course validateId(long courseId){
         return courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
     }
+
 }

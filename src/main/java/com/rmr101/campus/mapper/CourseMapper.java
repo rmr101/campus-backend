@@ -13,9 +13,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CourseMapper {
 
-    @Mappings({
-            @Mapping(source = "subjectId", target = "subject.id")
-    })
+//    @Mappings({
+//            @Mapping(source = "subjectId", target = "subject.id")
+//    })
     public Course coursePostRequestToCourse(CoursePostRequest coursePostRequest);
 
     public CoursePostResponse courseToCoursePostResponse(Course course);

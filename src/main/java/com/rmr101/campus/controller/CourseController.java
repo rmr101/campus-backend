@@ -10,6 +10,7 @@ import com.rmr101.campus.service.CourseAssignmentService;
 import com.rmr101.campus.service.CourseService;
 import com.rmr101.campus.service.TeacherCourseService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,10 +31,11 @@ public class CourseController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Get all courses, returns an object contains a list of courses")
-    public CourseList getAllCourses(){
+    @ApiOperation(value = "Find courses by query(name/code)")
+    public CourseList findCoursesBy(@RequestParam(required = false) String name,
+                                   @RequestParam(required = false) String code){
         CourseList courseList = new CourseList();
-        courseList.setCourseList(courseService.getAllCourses());
+        courseList.setCourseList(courseService.findCoursesBy(name,code));
         return courseList;
     }
 
