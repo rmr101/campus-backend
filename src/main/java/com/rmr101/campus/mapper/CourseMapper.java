@@ -20,9 +20,6 @@ public interface CourseMapper {
 
     public CoursePostResponse courseToCoursePostResponse(Course course);
 
-    @Mappings({
-            @Mapping(source = "subject.id", target = "subjectId")
-    })
     public CourseGetResponse courseToCourseGetResponse(Course course);
 
     public List<CourseGetResponse> courseToCourseGetResponse(List<Course> courseList);

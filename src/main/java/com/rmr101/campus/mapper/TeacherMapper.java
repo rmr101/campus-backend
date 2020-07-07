@@ -8,14 +8,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface TeacherMapper {
 
-    TeacherPostResponse teacherToTeacherPostResponse(Teacher teacher);
+    public TeacherPostResponse teacherToTeacherPostResponse(Teacher teacher);
 
-    Teacher teacherPostRequestToTeacher(TeacherPostRequest teacherPostRequest);
+    public Teacher teacherPostRequestToTeacher(TeacherPostRequest teacherPostRequest);
 
     @Mapping(target = "name", expression = "java( teacher.getFirstName()+ ' ' + teacher.getLastName() )")
-    TeacherGetResponse teacherToTeacherGetResponse(Teacher teacher);
+    public TeacherGetResponse teacherToTeacherGetResponse(Teacher teacher);
 
 }

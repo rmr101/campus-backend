@@ -1,6 +1,6 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.subject.SubjectDetails;
+import com.rmr101.campus.dto.subject.SubjectGetDetails;
 import com.rmr101.campus.dto.subject.SubjectDto;
 import com.rmr101.campus.dto.subject.SubjectList;
 import com.rmr101.campus.entity.Subject;
@@ -49,10 +49,10 @@ public class SubjectService {
         return subjectList;
     }
 
-    public SubjectDetails getSubjectDetailsById(long id) {
+    public SubjectGetDetails getSubjectDetailsById(long id) {
         Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
 
-        SubjectDetails subjectDetails = new SubjectDetails();
+        SubjectGetDetails subjectDetails = new SubjectGetDetails();
         subjectDetails.setSubjectDto(subjectMapper.toSubjectDto(subject));
         subjectDetails.setCourseList(courseMapper.courseToCourseGetResponse(subject.getCourses()));
 

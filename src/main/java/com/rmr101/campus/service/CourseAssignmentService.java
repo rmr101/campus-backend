@@ -40,7 +40,7 @@ public class CourseAssignmentService {
         //validate and get teacherCourse
         TeacherCourse teacherCourse = teacherCourseService.getTeacherCourseById(request.getTeacherCourseId());
 
-        CourseAssignment assignment = courseAssignmentMapper.courseAssignmentPostRequesttoCourseAssignment(request);
+        CourseAssignment assignment = courseAssignmentMapper.courseAssignmentPostRequestToCourseAssignment(request);
         assignment.setCourse(teacherCourse.getCourse());
         assignment.setCourseName(teacherCourse.getCourse().getName());
         assignment.setTeacher(teacherCourse.getTeacher());

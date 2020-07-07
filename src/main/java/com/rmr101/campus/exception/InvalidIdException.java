@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class InvalidIdException extends RuntimeException{
     private String errorMessage = "Id not Found";
-    private String detial;
+    private String detail;
 
-    public InvalidIdException(String detial) {
-        this.detial = detial;
+    public InvalidIdException(String detail) {
+        this.detail = detail;
     }
 
     public InvalidIdException() {

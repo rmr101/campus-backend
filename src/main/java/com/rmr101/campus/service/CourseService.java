@@ -1,13 +1,19 @@
 package com.rmr101.campus.service;
 
 import com.rmr101.campus.dto.course.*;
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
+import com.rmr101.campus.dto.student.StudentGetResponse;
 import com.rmr101.campus.dto.teacher.TeacherGetResponse;
 import com.rmr101.campus.entity.Course;
+import com.rmr101.campus.entity.StudentCourse;
+import com.rmr101.campus.exception.BadParameterException;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;
 import com.rmr101.campus.mapper.CourseMapper;
+import com.rmr101.campus.mapper.StudentMapper;
 import com.rmr101.campus.mapper.TeacherMapper;
 import com.rmr101.campus.repository.CourseRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CourseService {
 
     @Autowired
@@ -27,6 +34,9 @@ public class CourseService {
     private TeacherMapper teacherMapper;
 
     @Autowired
+    private StudentMapper studentMapper;
+
+    @Autowired
     private CourseAssignmentMapper courseAssignmentMapper;
 
     public List<CourseGetResponse> getAllCourses(){
@@ -36,25 +46,62 @@ public class CourseService {
         return courseList;
     }
 
-    public CoursePostResponse getCourseById(long id){
+    public CourseGetDetails getCourseDetailsById(long id, String detail){
         Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
-        return courseMapper.courseToCoursePostResponse(course);
-    }
-
-    public CourseDetails getCourseDetailsById(long id){
-        Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
-
-        CourseDetails courseDetails = new CourseDetails();
+        CourseGetDetails courseDetails = new CourseGetDetails();
         courseDetails.setCourse(courseMapper.courseToCourseGetResponse(course));
-//        courseDetails.setAssignmentList(courseAssignmentMapper.toCourseAssignmentDto(course.getAssignments()));
-        List<TeacherGetResponse> teacherList = new ArrayList<TeacherGetResponse>();
-        course.getTeachers().stream()
-                .forEach( courseTeacher -> {
-                    TeacherGetResponse teacherGetResponse = teacherMapper.teacherToTeacherGetResponse(courseTeacher.getTeacher());
-                    teacherList.add(teacherGetResponse);
-                });
-        courseDetails.setTeachers(teacherList);
 
+        if(detail != null){
+            List<TeacherGetResponse> teacherList;
+            List<StudentGetResponse> studentList;
+            switch (detail){
+                case "teachers":
+                    teacherList = new ArrayList<TeacherGetResponse>();
+                    course.getTeachers().stream()
+                            .forEach( courseTeacher -> {
+                                TeacherGetResponse teacherGetResponse = teacherMapper.teacherToTeacherGetResponse(courseTeacher.getTeacher());
+                                teacherList.add(teacherGetResponse);
+                            });
+                    courseDetails.setTeacherList(teacherList);
+                    break;
+
+                case "students":
+                    studentList = new ArrayList<StudentGetResponse>();
+                    course.getStudents().stream()
+                            .forEach(courseStudent -> {
+                                StudentGetResponse studentGetResponse = studentMapper.studentToStudentGetResponse(courseStudent.getStudent());
+                                studentList.add(studentGetResponse);
+                            });
+                    courseDetails.setStudentList(studentList);
+                    break;
+
+                case "assignments":
+                    courseDetails.setAssignmentList(courseAssignmentMapper.courseAssignmentToCourseAssignmentGetResponse(course.getAssignments()));
+                    break;
+
+                case "all":
+                    teacherList = new ArrayList<TeacherGetResponse>();
+                    course.getTeachers().stream()
+                            .forEach( courseTeacher -> {
+                                TeacherGetResponse teacherGetResponse = teacherMapper.teacherToTeacherGetResponse(courseTeacher.getTeacher());
+                                teacherList.add(teacherGetResponse);
+                            });
+                    courseDetails.setTeacherList(teacherList);
+
+                    studentList = new ArrayList<StudentGetResponse>();
+                    course.getStudents().stream()
+                            .forEach(courseStudent -> {
+                                StudentGetResponse studentGetResponse = studentMapper.studentToStudentGetResponse(courseStudent.getStudent());
+                                studentList.add(studentGetResponse);
+                            });
+                    courseDetails.setStudentList(studentList);
+
+                    courseDetails.setAssignmentList(courseAssignmentMapper.courseAssignmentToCourseAssignmentGetResponse(course.getAssignments()));
+                    break;
+                default:
+                    throw new BadParameterException("The value: '" + detail + "' of parameter detail is illegal");
+            }
+        }
         return courseDetails;
     }
 
@@ -84,7 +131,7 @@ public class CourseService {
         return courseMapper.courseToCoursePostResponse(course);
     }
 
-    protected Course validateId(long courseId){
+    public Course validateId(long courseId){
         return courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
     }
 }

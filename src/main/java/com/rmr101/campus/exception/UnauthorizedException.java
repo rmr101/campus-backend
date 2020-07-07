@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class UnauthorizedException extends RuntimeException{
     private String errorMessage = "Action not authorized";
-    private String detial;
+    private String detail;
 
-    public UnauthorizedException(String detial) {
-        this.detial = detial;
+    public UnauthorizedException(String detail) {
+        this.detail = detail;
     }
 
     public UnauthorizedException() {

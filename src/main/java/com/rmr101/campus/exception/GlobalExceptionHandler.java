@@ -10,22 +10,35 @@ import org.springframework.web.bind.annotation.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    //400
+    //todo:is this necesary????
 //    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Illegal argument received")
 //    @ExceptionHandler(IllegalArgumentException.class)
 //    public void illegalArgument() {
 //        log.error("Request raised a IllegalArgumentException");
 //    }
 
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadParameterException.class)
+    public ApiErrorResponse BadParameterException(BadParameterException ex) {
+        log.error("Request raised a BadParameterException reason= " + ex.getDetail());
+        ApiErrorResponse response =new ApiErrorResponse.ApiErrorResponseBuilder()
+                .withStatus(HttpStatus.BAD_REQUEST)
+                .withError_code("400")
+                .withMessage(ex.getErrorMessage())
+                .withDetail(ex.getDetail())
+                .build();
+        return response;
+    }
+
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedException.class)
     public ApiErrorResponse handleUnauthorizedException(UnauthorizedException ex) {
-        log.error("Request raised a InvalidIdException reason= " + ex.getDetial());
+        log.error("Request raised a InvalidIdException reason= " + ex.getDetail());
         ApiErrorResponse response =new ApiErrorResponse.ApiErrorResponseBuilder()
                 .withStatus(HttpStatus.UNAUTHORIZED)
                 .withError_code("401")
                 .withMessage(ex.getErrorMessage())
-                .withDetail(ex.getDetial())
+                .withDetail(ex.getDetail())
                 .build();
         return response;
     }
@@ -46,12 +59,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(InvalidIdException.class)
     public ApiErrorResponse handleInvalidIdException(InvalidIdException ex) {
-        log.error("Request raised a InvalidIdException reason= " + ex.getDetial());
+        log.error("Request raised a InvalidIdException reason= " + ex.getDetail());
         ApiErrorResponse response =new ApiErrorResponse.ApiErrorResponseBuilder()
                 .withStatus(HttpStatus.NOT_FOUND)
                 .withError_code("404")
                 .withMessage(ex.getErrorMessage())
-                .withDetail(ex.getDetial())
+                .withDetail(ex.getDetail())
                 .build();
         return response;
     }
@@ -80,12 +93,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.CONFLICT)
     @ExceptionHandler(RecordAlreadyExistException.class)
     public ApiErrorResponse handleRecordAlreadyExistException(RecordAlreadyExistException ex) {
-        log.error("Request raised a RecordAlreadyExistException, reason = " + ex.getDetial());
+        log.error("Request raised a RecordAlreadyExistException, reason = " + ex.getDetail());
         ApiErrorResponse response =new ApiErrorResponse.ApiErrorResponseBuilder()
                 .withStatus(HttpStatus.CONFLICT)
                 .withError_code("409")
                 .withMessage(ex.getErrorMessage())
-                .withDetail(ex.getDetial())
+                .withDetail(ex.getDetail())
                 .build();
         return response;
     }

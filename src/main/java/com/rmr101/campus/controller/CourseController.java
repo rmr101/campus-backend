@@ -6,8 +6,6 @@ import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostResponse;
-import com.rmr101.campus.entity.Teacher;
-import com.rmr101.campus.entity.TeacherCourse;
 import com.rmr101.campus.service.CourseAssignmentService;
 import com.rmr101.campus.service.CourseService;
 import com.rmr101.campus.service.TeacherCourseService;
@@ -49,9 +47,11 @@ public class CourseController {
 
     @GetMapping("{courseId}")
     @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Get the course and a list of assignments related to the course given by id")
-    public CourseDetails getCourseDetailsById(@PathVariable long id){
-        return courseService.getCourseDetailsById(id);
+    @ApiOperation(value = "Get the course and a list of assignments related to the course given by id",
+            notes = "optional parameter detail : students, teachers, assignments and all")
+    public CourseGetDetails getCourseDetailsById(@PathVariable long courseId,
+                                                 @RequestParam(required = false) String detail){
+        return courseService.getCourseDetailsById(courseId,detail);
     }
 
     @PostMapping("{courseId}/teachers")
