@@ -41,14 +41,14 @@ public class UserService {
     public UserPostResponse addTeacher(UserPostRequest request) {
         UserPostResponse response =  this.addUser(request,"TEACHER");
         //todo:send a message to create new student
-        teacherService.addTeacher(response.getUuid(),request.getFirstName(),request.getLastName());
+        teacherService.addTeacher(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
         return response;
     }
 
     public UserPostResponse addStudent(UserPostRequest request) {
         UserPostResponse response = this.addUser(request,"STUDENT");
         //todo:send a message to create new student
-        studentService.addStudent(response.getUuid(),request.getFirstName(),request.getLastName());
+        studentService.addStudent(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
         return response;
     }
 

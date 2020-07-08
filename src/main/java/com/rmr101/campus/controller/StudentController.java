@@ -6,6 +6,7 @@ import com.rmr101.campus.dto.student.*;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostResponse;
+import com.rmr101.campus.dto.teacher.TeacherList;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.Student;
 import com.rmr101.campus.service.StudentAssignmentService;
@@ -44,6 +45,16 @@ public class StudentController {
 //        return studentList;
 //    }
 
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Find student by query(name/code)")
+    public StudentList findStudentBy(@RequestParam(required = false) String name,
+                                     @RequestParam(required = false) String campusId){
+        StudentList studentList = new StudentList();
+        studentList.setStudentList(studentService.findStudentBy(name,campusId));
+        return studentList;
+    }
+
     @GetMapping("/{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Get student details by uuid." ,
@@ -68,15 +79,6 @@ public class StudentController {
     public void changePassword(@PathVariable UUID uuid,@RequestBody UserChangePasswordRequest request){
         studentService.changePassword(uuid,request);
     }
-
-//    @DeleteMapping("/{uuid}")
-//    @ResponseStatus(value = HttpStatus.OK)
-//    @ApiOperation(value = "Add a student." ,
-//            notes = "Returns an object that contain the added student uuid")
-//    public String deleteStudent(@PathVariable UUID uuid){
-//        studentService.deleteStudent(uuid);
-//        return "Student with ID" + " "+uuid.toString()+" " + "is successfully deleted";
-//    }
 
     @PostMapping("/assignments/{assignmentId}")
     @ApiOperation(value = "submit an assignment",notes = "Role: student")

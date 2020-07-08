@@ -14,7 +14,7 @@ public class StudentAssignment {
     private long id;
 
     private boolean isSubmitted;
-    private String answer;
+//    private String answer;
     private String attachmentUrl;
 
     private boolean isScored;

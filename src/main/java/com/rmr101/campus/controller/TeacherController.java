@@ -1,17 +1,13 @@
 package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.course.CourseList;
-import com.rmr101.campus.dto.student.StudentGetDetails;
-import com.rmr101.campus.dto.student.StudentUpdateRequest;
-import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
+import com.rmr101.campus.dto.student.StudentList;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentTeacherPutRequest;
 import com.rmr101.campus.dto.teacher.TeacherGetDetails;
-import com.rmr101.campus.dto.teacher.TeacherPostRequest;
-import com.rmr101.campus.dto.teacher.TeacherPostResponse;
+import com.rmr101.campus.dto.teacher.TeacherList;
 import com.rmr101.campus.dto.teacher.TeacherUpdateRequest;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.service.TeacherCourseService;
-import com.rmr101.campus.service.UserService;
 import io.swagger.annotations.*;
 import com.rmr101.campus.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +24,16 @@ public class TeacherController {
 
     @Autowired
     private TeacherCourseService teacherCourseService;
+
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Find teacher by query(name/code)")
+    public TeacherList findTeacherBy(@RequestParam(required = false) String name,
+                                     @RequestParam(required = false) String campusId){
+        TeacherList teacherList = new TeacherList();
+        teacherList.setTeacherList(teacherService.findTeacherBy(name,campusId));
+        return teacherList;
+    }
 
     @GetMapping("{uuid}")
     @ResponseStatus(value = HttpStatus.OK)

@@ -22,4 +22,5 @@ public interface TeacherMapper {
     @Mapping(target = "name", expression = "java( teacher.getFirstName()+ ' ' + teacher.getLastName() )")
     public TeacherGetResponse teacherToTeacherGetResponse(Teacher teacher);
 
+    public List<TeacherGetResponse> teacherToTeacherGetResponse(List<Teacher> teacher);
 }

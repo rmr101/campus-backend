@@ -1,14 +1,12 @@
 package com.rmr101.campus.service;
 
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentTeacherPutRequest;
-import com.rmr101.campus.dto.teacher.TeacherGetDetails;
-import com.rmr101.campus.dto.teacher.TeacherPostResponse;
-import com.rmr101.campus.dto.teacher.TeacherPostRequest;
-import com.rmr101.campus.dto.teacher.TeacherUpdateRequest;
+import com.rmr101.campus.dto.teacher.*;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.StudentAssignment;
 import com.rmr101.campus.entity.Teacher;
+import com.rmr101.campus.exception.BadParameterException;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.TeacherMapper;
@@ -20,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -39,6 +38,38 @@ public class TeacherService {
 
     @Autowired
     private UserService userService;
+
+    public List<TeacherGetResponse> findTeacherBy(String name, String campusId) {
+        if(campusId != null){
+            List<TeacherGetResponse> teacherList = new ArrayList<TeacherGetResponse>();
+            Optional<Teacher> teacher = teacherRepository.findByCampusId(campusId);
+            if(teacher.isPresent()){
+                teacherList.add(teacherMapper.teacherToTeacherGetResponse(teacher.get()));
+                return teacherList;
+            }
+            return teacherList;
+        }
+        if(name != null){
+            String firstName, lastName;
+            String[] keywords = name.split("\\s+");
+            switch(keywords.length){
+                case 1:
+                    firstName = lastName = "%" + keywords[0] + "%";
+                    break;
+                case 2:
+                    firstName = "%" + keywords[0] + "%";
+                    lastName = "%" + keywords[1] + "%";
+                    break;
+                default:
+                    throw new BadParameterException("Value of Parameter name is valid!");
+            }
+
+            List<Teacher> resultTeachers =
+                    teacherRepository.findByFirstNameLikeOrLastNameLike(firstName,lastName);
+            return teacherMapper.teacherToTeacherGetResponse(resultTeachers);
+        }
+        return null;
+    }
 
     public void changePassword(UUID uuid, UserChangePasswordRequest request) {
         userService.changePassword(uuid, request);
@@ -82,9 +113,10 @@ public class TeacherService {
         studentAssignmentRepository.save(assignment);
     }
 
-    public void addTeacher(UUID uuid, String firstName, String lastName){
+    public void addTeacher(UUID uuid, String campusId, String firstName, String lastName){
         Teacher teacher = new Teacher();
         teacher.setUuid(uuid);
+        teacher.setCampusId(campusId);
         teacher.setFirstName(firstName);
         teacher.setLastName(lastName);
         teacherRepository.save(teacher);
