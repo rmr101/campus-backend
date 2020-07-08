@@ -45,16 +45,6 @@ public class StudentController {
 //        return studentList;
 //    }
 
-    @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Find student by query(name/code)")
-    public StudentList findStudentBy(@RequestParam(required = false) String name,
-                                     @RequestParam(required = false) String campusId){
-        StudentList studentList = new StudentList();
-        studentList.setStudentList(studentService.findStudentBy(name,campusId));
-        return studentList;
-    }
-
     @GetMapping("/{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Get student details by uuid." ,

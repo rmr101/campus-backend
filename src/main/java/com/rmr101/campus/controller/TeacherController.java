@@ -25,16 +25,6 @@ public class TeacherController {
     @Autowired
     private TeacherCourseService teacherCourseService;
 
-    @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Find teacher by query(name/code)")
-    public TeacherList findTeacherBy(@RequestParam(required = false) String name,
-                                     @RequestParam(required = false) String campusId){
-        TeacherList teacherList = new TeacherList();
-        teacherList.setTeacherList(teacherService.findTeacherBy(name,campusId));
-        return teacherList;
-    }
-
     @GetMapping("{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Get teacher details by uuid." ,

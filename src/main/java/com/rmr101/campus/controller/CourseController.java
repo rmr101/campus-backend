@@ -30,15 +30,15 @@ public class CourseController {
     @Autowired
     private TeacherCourseService teacherCourseService;
 
-    @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Find courses by query(name/code)")
-    public CourseList findCoursesBy(@RequestParam(required = false) String name,
-                                   @RequestParam(required = false) String code){
-        CourseList courseList = new CourseList();
-        courseList.setCourseList(courseService.findCoursesBy(name,code));
-        return courseList;
-    }
+//    @GetMapping
+//    @ResponseStatus(value = HttpStatus.OK)
+//    @ApiOperation(value = "Find courses by query(name/code)")
+//    public CourseList findCoursesBy(@RequestParam(required = false) String name,
+//                                   @RequestParam(required = false) String code){
+//        CourseList courseList = new CourseList();
+//        courseList.setCourseList(courseService.findCoursesBy(name,code));
+//        return courseList;
+//    }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
