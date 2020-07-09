@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class StudentAssignmentTeacherPutRequest {
+
     private float score;
     private String comment;
 }

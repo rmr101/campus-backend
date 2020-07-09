@@ -15,6 +15,7 @@ import com.rmr101.campus.service.StudentService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -58,7 +59,7 @@ public class StudentController {
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Update Personal info" ,
             notes = "Returns null.")
-    public void updateInfo(@PathVariable UUID uuid,@RequestBody StudentUpdateRequest request){
+    public void updateInfo(@PathVariable UUID uuid,@Validated @RequestBody StudentUpdateRequest request){
         studentService.updateStudent(uuid,request);
     }
 
@@ -66,13 +67,13 @@ public class StudentController {
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Change password" ,
             notes = "Returns null.")
-    public void changePassword(@PathVariable UUID uuid,@RequestBody UserChangePasswordRequest request){
+    public void changePassword(@PathVariable UUID uuid,@Validated @RequestBody UserChangePasswordRequest request){
         studentService.changePassword(uuid,request);
     }
 
-    @PostMapping("/assignments/{assignmentId}")
+    @PutMapping("/assignments/{assignmentId}")
     @ApiOperation(value = "submit an assignment",notes = "Role: student")
-    public void submitAssignment(@RequestBody StudentAssignmentStudentPutRequest request,
+    public void submitAssignment(@Validated @RequestBody StudentAssignmentStudentPutRequest request,
                                  @PathVariable long assignmentId){
         studentAssignmentService.submitAssignment(assignmentId, request);
     }

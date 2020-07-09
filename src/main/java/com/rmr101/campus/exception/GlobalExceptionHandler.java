@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -19,13 +20,26 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadParameterException.class)
-    public ApiErrorResponse BadParameterException(BadParameterException ex) {
+    public ApiErrorResponse handleBadParameterException(BadParameterException ex) {
         log.error("Request raised a BadParameterException reason= " + ex.getDetail());
         ApiErrorResponse response =new ApiErrorResponse.ApiErrorResponseBuilder()
                 .withStatus(HttpStatus.BAD_REQUEST)
                 .withError_code("400")
                 .withMessage(ex.getErrorMessage())
                 .withDetail(ex.getDetail())
+                .build();
+        return response;
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        log.error("Request raised a MethodArgumentNotValidException reason= " + ex.getMessage());
+        ApiErrorResponse response =new ApiErrorResponse.ApiErrorResponseBuilder()
+                .withStatus(HttpStatus.BAD_REQUEST)
+                .withError_code("400")
+                .withMessage("Valid method arguments")
+                .withDetail(ex.getParameter().toString())
                 .build();
         return response;
     }
