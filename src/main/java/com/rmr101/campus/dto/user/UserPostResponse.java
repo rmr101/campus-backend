@@ -7,4 +7,5 @@ import java.util.UUID;
 @Data
 public class UserPostResponse {
     private UUID uuid;
+    private String campusId;
 }

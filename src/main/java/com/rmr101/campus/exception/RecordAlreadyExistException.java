@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class RecordAlreadyExistException extends RuntimeException{
     private String errorMessage = "Record already exist";
-    private String detial;
+    private String detail;
 
-    public RecordAlreadyExistException(String detial) {
-        this.detial = detial;
+    public RecordAlreadyExistException(String detail) {
+        this.detail = detail;
     }
 
     public RecordAlreadyExistException() {

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 @Data
 public class TeacherGetResponse {
+    private UUID uuid;
     private String title;
     private String name;
     private String introduction;

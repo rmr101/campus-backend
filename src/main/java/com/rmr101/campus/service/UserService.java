@@ -4,6 +4,7 @@ import com.rmr101.campus.dto.user.UserPostRequest;
 import com.rmr101.campus.dto.user.UserPostResponse;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.User;
+import com.rmr101.campus.exception.AccessDeniedException;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.exception.UnauthorizedException;
 import com.rmr101.campus.mapper.UserMapper;
@@ -40,26 +41,24 @@ public class UserService {
     public UserPostResponse addTeacher(UserPostRequest request) {
         UserPostResponse response =  this.addUser(request,"TEACHER");
         //todo:send a message to create new student
-        teacherService.addTeacher(response.getUuid(),request.getFirstName(),request.getLastName());
+        teacherService.addTeacher(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
         return response;
     }
 
     public UserPostResponse addStudent(UserPostRequest request) {
         UserPostResponse response = this.addUser(request,"STUDENT");
         //todo:send a message to create new student
-        studentService.addStudent(response.getUuid(),request.getFirstName(),request.getLastName());
+        studentService.addStudent(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
         return response;
     }
 
     public void addAdmin(String username, String password) {
-//        User user = userMapper.userPostRquestToUser(request);
         User user = new User();
         user.setActive(true);
         user.setRole("ADMIN");
         user.setCampusId(username);
         user.setPassword(passwordEncodeService.encodePassword(password));
         userRepository.save(user);
-//        return userMapper.userToUserPostResponse(user);
     }
 
     //create a new user
@@ -92,9 +91,25 @@ public class UserService {
     public void changePassword(UUID uuid, UserChangePasswordRequest request){
         User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
         if(!passwordEncodeService.matchPassword(request.getCurrentPassword(),user.getPassword()))
-            throw new UnauthorizedException("Current password wrong!");
+            throw new AccessDeniedException("Current password wrong!");
         user.setPassword(passwordEncodeService.encodePassword(request.getNewPassword()));
         userRepository.save(user);
     }
 
+    public void deleteUser(UUID uuid) {
+        User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
+        user.setActive(false);
+        userRepository.save(user);
+
+        switch (user.getRole()){
+            case "TEACHER":
+                teacherService.setTeacherInactive(uuid);
+                break;
+            case "STUDENT":
+                studentService.setStudentInactive(uuid);
+                break;
+            default:
+                //todo:throw an exception
+        }
+    }
 }

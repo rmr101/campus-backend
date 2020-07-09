@@ -1,6 +1,6 @@
 package com.rmr101.campus.controller;
 
-import com.rmr101.campus.dto.subject.SubjectDetails;
+import com.rmr101.campus.dto.subject.SubjectGetDetails;
 import com.rmr101.campus.dto.subject.SubjectDto;
 import com.rmr101.campus.dto.subject.SubjectList;
 import com.rmr101.campus.service.SubjectService;
@@ -31,7 +31,7 @@ public class SubjectController {
 
     @GetMapping("{id}")
     @ApiOperation(value = "Get the subject and a course list related to the subject given by id")
-    public SubjectDetails getCourseListBySubjectId(@PathVariable long id){
+    public SubjectGetDetails getCourseListBySubjectId(@PathVariable long id){
         return subjectService.getSubjectDetailsById(id);
     }
 }

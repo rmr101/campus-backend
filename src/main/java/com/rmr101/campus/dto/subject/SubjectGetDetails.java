@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class SubjectDetails {
+public class SubjectGetDetails {
     private SubjectDto subjectDto;
     private List<CourseGetResponse> courseList;
 }

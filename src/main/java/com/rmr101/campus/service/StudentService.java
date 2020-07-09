@@ -1,9 +1,12 @@
 package com.rmr101.campus.service;
 
 import com.rmr101.campus.dto.student.*;
+import com.rmr101.campus.dto.teacher.TeacherGetResponse;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.Student;
+import com.rmr101.campus.entity.Teacher;
+import com.rmr101.campus.exception.BadParameterException;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.StudentAssignmentMapper;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -41,6 +45,38 @@ public class StudentService {
         studentRepository.findAll().forEach(student ->
                 studentList.add(studentMapper.studentToStudentGetResponse(student)));
         return studentList;
+    }
+
+    public List<StudentGetResponse> findStudentBy(String name, String campusId) {
+        if(campusId != null){
+            List<StudentGetResponse> studentList = new ArrayList<StudentGetResponse>();
+            Optional<Student> student = studentRepository.findByCampusId(campusId);
+            if(student.isPresent()){
+                studentList.add(studentMapper.studentToStudentGetResponse(student.get()));
+                return studentList;
+            }
+            return studentList;
+        }
+        if(name != null){
+            String firstName, lastName;
+            String[] keywords = name.split("\\s+");
+            switch(keywords.length){
+                case 1:
+                    firstName = lastName = "%" + keywords[0] + "%";
+                    break;
+                case 2:
+                    firstName = "%" + keywords[0] + "%";
+                    lastName = "%" + keywords[1] + "%";
+                    break;
+                default:
+                    throw new BadParameterException("Value of Parameter name is valid!");
+            }
+
+            List<Student> resultStudents =
+                    studentRepository.findByFirstNameLikeOrLastNameLike(firstName,lastName);
+            return studentMapper.studentToStudentGetResponse(resultStudents);
+        }
+        return null;
     }
 
     public StudentGetDetails getStudentDetailsByID(UUID uuid, String detail) {
@@ -80,15 +116,16 @@ public class StudentService {
     }
 
     //Post API
-    public StudentPostResponse addStudent(StudentPostRequest request) {
-        Student student =  studentMapper.studentPostRequestToStudent(request);
-        studentRepository.save(student);
-        return studentMapper.studentToStudentPostResponse(student);
-    }
+//    public StudentPostResponse addStudent(StudentPostRequest request) {
+//        Student student =  studentMapper.studentPostRequestToStudent(request);
+//        studentRepository.save(student);
+//        return studentMapper.studentToStudentPostResponse(student);
+//    }
 
-    protected  void addStudent(UUID uuid,String firstName, String lastName){
+    protected  void addStudent(UUID uuid, String campusId, String firstName, String lastName){
         Student student = new Student();
         student.setUuid(uuid);
+        student.setCampusId(campusId);
         student.setFirstName(firstName);
         student.setLastName(lastName);
         studentRepository.save(student);
@@ -100,15 +137,15 @@ public class StudentService {
     }
 
     //Put API
-//    public void updateStudent(UUID uuid,StudentPutRequest request) {
-//        //validate uuid
-//        this.validateUuid(uuid);
-//
-//        Student student = studentMapper.studentPutRequestToStudent(request);
-//        student.setUuid(uuid);
-//
-//        studentRepository.save(student);
-//    }
+    public void updateStudent(UUID uuid, StudentUpdateRequest request) {
+        //validate uuid
+        this.validateUuid(uuid);
+
+        Student student = studentMapper.studentUpdateRequestToStudent(request);
+        student.setUuid(uuid);
+
+        studentRepository.save(student);
+    }
 
     //Delete API
     public void deleteStudent(UUID uuid) {
@@ -119,5 +156,11 @@ public class StudentService {
 
     public Student validateUuid(UUID studentUuid){
         return studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException("Student uuid doesn't exist."));
+    }
+
+    public void setStudentInactive(UUID studentUuid){
+        Student student = studentRepository.findById(studentUuid).orElseThrow(()-> new InvalidIdException("Student uuid doesn't exist."));
+        student.setActive(false);
+        studentRepository.save(student);
     }
 }

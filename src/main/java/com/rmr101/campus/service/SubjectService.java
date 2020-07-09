@@ -1,6 +1,6 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.subject.SubjectDetails;
+import com.rmr101.campus.dto.subject.SubjectGetDetails;
 import com.rmr101.campus.dto.subject.SubjectDto;
 import com.rmr101.campus.dto.subject.SubjectList;
 import com.rmr101.campus.entity.Subject;
@@ -25,7 +25,6 @@ public class SubjectService {
     @Autowired
     private CourseMapper courseMapper;
 
-
     public SubjectDto addSubject(SubjectDto subjectDto) {
         Subject subjectPo = subjectMapper.toSubject(subjectDto);
 
@@ -36,10 +35,10 @@ public class SubjectService {
         return subjectDto;
     }
 
-    public SubjectDto getSubjectById(long id) {
-        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
-        return subjectMapper.toSubjectDto(subject);
-    }
+//    public SubjectDto getSubjectById(long id) {
+//        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
+//        return subjectMapper.toSubjectDto(subject);
+//    }
 
     public SubjectList getAllSubject() {
         SubjectList subjectList = new SubjectList();
@@ -49,15 +48,17 @@ public class SubjectService {
         return subjectList;
     }
 
-    public SubjectDetails getSubjectDetailsById(long id) {
+    public SubjectGetDetails getSubjectDetailsById(long id) {
         Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
 
-        SubjectDetails subjectDetails = new SubjectDetails();
+        SubjectGetDetails subjectDetails = new SubjectGetDetails();
         subjectDetails.setSubjectDto(subjectMapper.toSubjectDto(subject));
         subjectDetails.setCourseList(courseMapper.courseToCourseGetResponse(subject.getCourses()));
 
         return subjectDetails;
     }
-
+    public Subject validateId(long id){
+        return subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
+    }
 }
 

@@ -53,7 +53,7 @@ public class UserServiceTest {
         user.setUuid(uuid);
         Mockito.when(userRepository.findByCampusId(Mockito.anyString())).thenReturn(null);
         Mockito.when(userRepository.save(user)).thenReturn(user);
-        Mockito.doNothing().when(teacherService).addTeacher(uuid, request.getFirstName(),request.getLastName());
+//        Mockito.doNothing().when(teacherService).addTeacher(uuid, request.getFirstName(),request.getLastName());
 
         UserPostResponse response = userService.addTeacher(request);
 

@@ -1,5 +1,6 @@
 package com.rmr101.campus.service;
 
+import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetDetails;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
@@ -24,7 +25,7 @@ public class CourseAssignmentService {
     private CourseAssignmentMapper courseAssignmentMapper;
 
     @Autowired
-    private TeacherCourseService teacherCourseService;
+    private CourseService courseService;
 
     @Autowired
     private StudentCourseService studentCourseService;
@@ -32,29 +33,35 @@ public class CourseAssignmentService {
     @Autowired
     private StudentAssignmentService studentAssignmentService;
 
-    public CourseAssignmentGetResponse getCourseAssignmentById(long id) {
-        return courseAssignmentMapper.courseAssignmentToCourseAssignmentGetResponse(this.validateId(id));
+    public CourseAssignmentGetDetails getAssignmentDetails(long assignmentId) {
+        CourseAssignment assignment = courseAssignmentRepository.findById(assignmentId).orElseThrow(
+                () -> new InvalidIdException("Assignment id doesn't exist."));
+
+        CourseAssignmentGetDetails assignmentDetails = new CourseAssignmentGetDetails();
+        assignmentDetails.setAssignment(courseAssignmentMapper.courseAssignmentToCourseAssignmentGetResponse(assignment));
+        assignmentDetails.setStudentAssignmentList(
+                studentAssignmentService.getAssignmentListByAssignment(assignmentId));
+
+        return assignmentDetails;
     }
 
-    public CourseAssignmentPostResponse addAssignment(CourseAssignmentPostRequest request) {
-        //validate and get teacherCourse
-        TeacherCourse teacherCourse = teacherCourseService.getTeacherCourseById(request.getTeacherCourseId());
+    public CourseAssignmentPostResponse addAssignment(CourseAssignmentPostRequest request, long courseId) {
+        //validate and get course
+        Course course = courseService.validateId(courseId);
 
-        CourseAssignment assignment = courseAssignmentMapper.courseAssignmentPostRequesttoCourseAssignment(request);
-        assignment.setCourse(teacherCourse.getCourse());
-        assignment.setCourseName(teacherCourse.getCourse().getName());
-        assignment.setTeacher(teacherCourse.getTeacher());
-        assignment.setPublisher(teacherCourse.getTeacher().getName());
+        CourseAssignment assignment = courseAssignmentMapper.courseAssignmentPostRequestToCourseAssignment(request);
+        assignment.setCourse(course);
+        assignment.setCourseName(course.getName());
 
         courseAssignmentRepository.save(assignment);
         log.debug("Succeed in saving an assignment in course_assignment table");
 
+
         //todo:send a message to add assignment to each student related to the course
         //todo:here is an sync implementation
-        List<StudentCourse> studentList = studentCourseService.getListByCourse(teacherCourse.getCourse().getId());
-        log.debug("Succeed in getting student list");
 
-        studentList.forEach((studentCourse) ->
+        log.debug("About to save an assignment for every enrolled student");
+        course.getStudents().forEach((studentCourse) ->
                 studentAssignmentService.addAssignment(
                         studentCourse.getStudent().getUuid(),
                         assignment.getId()

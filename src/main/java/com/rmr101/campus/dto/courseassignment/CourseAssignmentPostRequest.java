@@ -11,5 +11,5 @@ public class CourseAssignmentPostRequest {
     private String content;
     private Date dueDate;
     private String acceptanceCriteria;
-    private long teacherCourseId;
+    private String publisher;
 }

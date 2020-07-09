@@ -32,22 +32,26 @@ public class StudentAssignmentService {
     @Autowired
     private CourseAssignmentService courseAssignmentService;
 
-    public List<StudentAssignmentGetResponse> getAssignmentList(UUID studentUuid) {
+    public List<StudentAssignmentGetResponse> getAssignmentListByStudent(UUID studentUuid) {
         List<StudentAssignment> assignmentsList = studentAssignmentRepository.findByStudentUuid(studentUuid);
         return studentAssignmentMapper.studentAssignmentToStudentAssignmentGetResponse(assignmentsList);
     }
 
+    public List<StudentAssignmentGetResponse> getAssignmentListByAssignment(Long assignmentId) {
+        List<StudentAssignment> assignmentsList = studentAssignmentRepository.findByAssignmentId(assignmentId);
+        return studentAssignmentMapper.studentAssignmentToStudentAssignmentGetResponse(assignmentsList);
+    }
+
     //updated by student
-    public void updateAssignmentByStudent(UUID studentUuid,StudentAssignmentStudentPutRequest request){
+    public void submitAssignment(long assignmentId,StudentAssignmentStudentPutRequest request){
         //validate
-        StudentAssignment assignment = studentAssignmentRepository.findById(request.getId())
+        StudentAssignment assignment = studentAssignmentRepository.findById(assignmentId)
                 .orElseThrow(()-> new InvalidIdException("The student doesn't have this assignment"));
 
         assignment.setAttachmentUrl(request.getAttachmentUrl());
         assignment.setSubmitted(true);
 
         studentAssignmentRepository.save(assignment);
-        //todo:inform teacher
     }
 
     //updated by teacher

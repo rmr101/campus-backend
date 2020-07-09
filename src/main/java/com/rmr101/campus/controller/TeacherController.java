@@ -1,18 +1,18 @@
 package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.course.CourseList;
-import com.rmr101.campus.dto.student.StudentGetDetails;
-import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
+import com.rmr101.campus.dto.student.StudentList;
+import com.rmr101.campus.dto.studentAssignment.StudentAssignmentTeacherPutRequest;
 import com.rmr101.campus.dto.teacher.TeacherGetDetails;
-import com.rmr101.campus.dto.teacher.TeacherPostRequest;
-import com.rmr101.campus.dto.teacher.TeacherPostResponse;
+import com.rmr101.campus.dto.teacher.TeacherList;
+import com.rmr101.campus.dto.teacher.TeacherUpdateRequest;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.service.TeacherCourseService;
-import com.rmr101.campus.service.UserService;
 import io.swagger.annotations.*;
 import com.rmr101.campus.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -35,22 +35,30 @@ public class TeacherController {
         return teacherService.getTeacherDetailsByID(uuid,detail);
     }
 
-
-    @GetMapping("/{uuid}/courses")
+    @PutMapping("/{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation( value = "Get list of courses for a selected teacher base on uuid")
-    public CourseList getMyCourses(@PathVariable UUID uuid){
-        CourseList courseList = new CourseList();
-      //  courseList.setCourseList(studentCourseService.getCoursesByStudent(uuid));
-        return courseList;
+    @ApiOperation(value = "Update Personal info" ,
+            notes = "Returns null.")
+    public void updateInfo(@PathVariable UUID uuid,@Validated @RequestBody TeacherUpdateRequest request){
+        teacherService.updateTeacher(uuid,request);
     }
 
-    @PutMapping("/{uuid}")
+    @PutMapping("/{uuid}/password")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Change password" ,
             notes = "Returns null.")
-    public void changePassword(@PathVariable UUID uuid,@RequestBody UserChangePasswordRequest request){
+    public void changePassword(@PathVariable UUID uuid,@Validated @RequestBody UserChangePasswordRequest request){
         teacherService.changePassword(uuid,request);
     }
+
+    @PutMapping("/assignments/{assignmentId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "review and score an assignment submitted by student" ,
+            notes = "Returns null.")
+    public void reviewAssignment(@PathVariable long assignmentId,
+                                 @Validated @RequestBody StudentAssignmentTeacherPutRequest request){
+        teacherService.reviewAssignment(assignmentId,request);
+    }
+
 
 }

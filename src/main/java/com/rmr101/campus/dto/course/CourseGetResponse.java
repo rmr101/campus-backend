@@ -1,5 +1,6 @@
 package com.rmr101.campus.dto.course;
 
+import com.rmr101.campus.dto.subject.SubjectDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -11,5 +12,5 @@ public class CourseGetResponse {
     private long id;
     private String name;
     private String introduction;
-    private long subjectId;
+    private SubjectDto subject;
 }

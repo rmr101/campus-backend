@@ -6,13 +6,16 @@ import com.rmr101.campus.dto.student.*;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostResponse;
+import com.rmr101.campus.dto.teacher.TeacherList;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
+import com.rmr101.campus.entity.Student;
 import com.rmr101.campus.service.StudentAssignmentService;
 import com.rmr101.campus.service.StudentCourseService;
 import com.rmr101.campus.service.StudentService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -52,37 +55,27 @@ public class StudentController {
         return studentService.getStudentDetailsByID(uuid,detail);
     }
 
-//    @PostMapping
-//    @ResponseStatus(value = HttpStatus.CREATED)
-//    @ApiOperation(value = "Add a student." ,
-//            notes = "Returns an object that contain the uuid of added student.")
-//    public StudentPostResponse addStudent(@RequestBody StudentPostRequest request){
-//        return studentService.addStudent(request);
-//    }
-
     @PutMapping("/{uuid}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Update Personal info" ,
+            notes = "Returns null.")
+    public void updateInfo(@PathVariable UUID uuid,@Validated @RequestBody StudentUpdateRequest request){
+        studentService.updateStudent(uuid,request);
+    }
+
+    @PutMapping("/{uuid}/password")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Change password" ,
             notes = "Returns null.")
-    public void changePassword(@PathVariable UUID uuid,@RequestBody UserChangePasswordRequest request){
+    public void changePassword(@PathVariable UUID uuid,@Validated @RequestBody UserChangePasswordRequest request){
         studentService.changePassword(uuid,request);
     }
 
-
-//    @DeleteMapping("/{uuid}")
-//    @ResponseStatus(value = HttpStatus.OK)
-//    @ApiOperation(value = "Add a student." ,
-//            notes = "Returns an object that contain the added student uuid")
-//    public String deleteStudent(@PathVariable UUID uuid){
-//        studentService.deleteStudent(uuid);
-//        return "Student with ID" + " "+uuid.toString()+" " + "is successfully deleted";
-//    }
-
-    @PostMapping("{uuid}/assignments")
-    @ApiOperation(value = "submit an assignment,request = {id:student assignmentId, attachmentUrl:url of your file}",notes = "Role: student")
-    public void submitAssignment(@RequestBody StudentAssignmentStudentPutRequest request,
-                                 @PathVariable UUID studentUuid){
-        studentAssignmentService.updateAssignmentByStudent(studentUuid, request);
+    @PutMapping("/assignments/{assignmentId}")
+    @ApiOperation(value = "submit an assignment",notes = "Role: student")
+    public void submitAssignment(@Validated @RequestBody StudentAssignmentStudentPutRequest request,
+                                 @PathVariable long assignmentId){
+        studentAssignmentService.submitAssignment(assignmentId, request);
     }
 
     //course enrollment

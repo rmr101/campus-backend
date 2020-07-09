@@ -2,9 +2,9 @@ package com.rmr101.campus.dto.student;
 
 import lombok.Data;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class StudentList {
-    ArrayList<StudentGetResponse> studentList;
+    private List<StudentGetResponse> studentList;
 }
