@@ -8,7 +8,6 @@ import lombok.Data;
 public class StudentAssignmentGetResponse {
     private long id;
     private boolean isSubmitted;
-    private String answer;
     private String attachmentUrl;
     private boolean isScored;
     private float score;

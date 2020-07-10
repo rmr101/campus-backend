@@ -3,6 +3,7 @@ package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.course.CourseList;
 import com.rmr101.campus.dto.student.*;
+import com.rmr101.campus.dto.studentAssignment.StudentAssignmentGetResponse;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostResponse;
@@ -69,6 +70,12 @@ public class StudentController {
             notes = "Returns null.")
     public void changePassword(@PathVariable UUID uuid,@Validated @RequestBody UserChangePasswordRequest request){
         studentService.changePassword(uuid,request);
+    }
+
+    @GetMapping("/assignments/{assignmentId}")
+    @ApiOperation(value = "get an assignment by id",notes = "Role: student")
+    public StudentAssignmentGetResponse getAssignment(@PathVariable long assignmentId){
+        return studentAssignmentService.getAssignment(assignmentId);
     }
 
     @PutMapping("/assignments/{assignmentId}")
