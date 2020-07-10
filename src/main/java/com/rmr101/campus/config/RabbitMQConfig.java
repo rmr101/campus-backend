@@ -1,9 +1,6 @@
 package com.rmr101.campus.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,8 +10,8 @@ public class RabbitMQConfig {
 
     public static final String CAMPUS_EXCHANGE = "campus";
     @Bean("CAMPUS_EXCHANGE")
-    public TopicExchange exchange(){
-        return new TopicExchange(CAMPUS_EXCHANGE);
+    public DirectExchange exchange(){
+        return new DirectExchange(CAMPUS_EXCHANGE);
     }
 
     //person add queue
@@ -26,7 +23,7 @@ public class RabbitMQConfig {
     }
     @Bean
     public Binding bindingAddQueue(@Qualifier("personAddQueue") Queue queue,
-                            TopicExchange exchange){
+                                   DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(PERSON_ADD_ROUTINGKEY);
     }
 
@@ -39,7 +36,7 @@ public class RabbitMQConfig {
     }
     @Bean
     public Binding bindingDeleteQueue(@Qualifier("PersonDeleteQueue") Queue queue,
-                              TopicExchange exchange){
+                                      DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(PERSON_DELETE_ROUTINGKEY);
     }
 }
