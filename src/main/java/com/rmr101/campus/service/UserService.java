@@ -6,12 +6,15 @@ import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.User;
 import com.rmr101.campus.exception.AccessDeniedException;
 import com.rmr101.campus.exception.InvalidIdException;
-import com.rmr101.campus.exception.UnauthorizedException;
+import com.rmr101.campus.global.CampusRole;
 import com.rmr101.campus.mapper.UserMapper;
+import com.rmr101.campus.message.PersonAddMessage;
+import com.rmr101.campus.message.PersonAddSender;
+import com.rmr101.campus.message.PersonDeleteMessage;
+import com.rmr101.campus.message.PersonDeleteSender;
 import com.rmr101.campus.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -26,11 +29,11 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private StudentService studentService;
-
-    @Autowired
-    private TeacherService teacherService;
+//    @Autowired
+//    private StudentService studentService;
+//
+//    @Autowired
+//    private TeacherService teacherService;
 
     @Autowired
     private PasswordEncodeService passwordEncodeService;
@@ -38,24 +41,46 @@ public class UserService {
     @Autowired
     private IdGenerateService idGenerateService;
 
-    public UserPostResponse addTeacher(UserPostRequest request) {
-        UserPostResponse response =  this.addUser(request,"TEACHER");
-        //todo:send a message to create new student
-        teacherService.addTeacher(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
+    @Autowired
+    private PersonAddSender personAddSender;
+
+    @Autowired
+    private PersonDeleteSender personDeleteSender;
+
+    public UserPostResponse addTeacher(UserPostRequest request){
+        UserPostResponse response =  this.addUser(request,CampusRole.teacher);
+
+        //send a message to create new teacher
+        personAddSender.sendMessage(
+                new PersonAddMessage(CampusRole.teacher,
+                        response.getUuid(),
+                        response.getCampusId(),
+                        request.getFirstName(),
+                        request.getLastName()));
+        log.debug("Send a message to TeacherService for adding a new TEACHER ---->");
+//        teacherService.addTeacher(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
         return response;
     }
 
     public UserPostResponse addStudent(UserPostRequest request) {
-        UserPostResponse response = this.addUser(request,"STUDENT");
-        //todo:send a message to create new student
-        studentService.addStudent(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
+        UserPostResponse response = this.addUser(request, CampusRole.student);
+
+        //send a message to create new student
+        personAddSender.sendMessage(
+                new PersonAddMessage(CampusRole.student,
+                        response.getUuid(),
+                        response.getCampusId(),
+                        request.getFirstName(),
+                        request.getLastName()));
+        log.debug("Send a message to TeacherService for adding a new STUDENT ---->");
+//        studentService.addStudent(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
         return response;
     }
 
     public void addAdmin(String username, String password) {
         User user = new User();
         user.setActive(true);
-        user.setRole("ADMIN");
+        user.setRole(CampusRole.admin);
         user.setCampusId(username);
         user.setPassword(passwordEncodeService.encodePassword(password));
         userRepository.save(user);
@@ -100,16 +125,18 @@ public class UserService {
         User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
         user.setActive(false);
         userRepository.save(user);
+        log.debug("Send a message to TeacherService/StudentService for delete a " + user.getRole() + "---->");
+        personDeleteSender.sendMessage(new PersonDeleteMessage(user.getRole(), uuid));
 
-        switch (user.getRole()){
-            case "TEACHER":
-                teacherService.setTeacherInactive(uuid);
-                break;
-            case "STUDENT":
-                studentService.setStudentInactive(uuid);
-                break;
-            default:
-                //todo:throw an exception
-        }
+//        switch (user.getRole()){
+//            case CampusRole.teacher:
+//                teacherService.setTeacherInactive(uuid);
+//                break;
+//            case CampusRole.student:
+//                studentService.setStudentInactive(uuid);
+//                break;
+//            default:
+//                //todo:throw an exception
+//        }
     }
 }

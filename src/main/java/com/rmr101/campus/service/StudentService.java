@@ -122,7 +122,7 @@ public class StudentService {
 //        return studentMapper.studentToStudentPostResponse(student);
 //    }
 
-    protected  void addStudent(UUID uuid, String campusId, String firstName, String lastName){
+    public  void addStudent(UUID uuid, String campusId, String firstName, String lastName){
         Student student = new Student();
         student.setUuid(uuid);
         student.setCampusId(campusId);
