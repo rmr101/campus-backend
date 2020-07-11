@@ -42,12 +42,6 @@ public class StudentAssignmentService {
         return studentAssignmentMapper.studentAssignmentToStudentAssignmentGetResponse(assignmentsList);
     }
 
-    public StudentAssignmentGetResponse getAssignment(long assignmentId) {
-        StudentAssignment assignment = studentAssignmentRepository.findById(assignmentId)
-                .orElseThrow(()-> new InvalidIdException("The student doesn't have this assignment"));
-        return studentAssignmentMapper.studentAssignmentToStudentAssignmentGetResponse(assignment);
-    }
-
     //updated by student
     public void submitAssignment(long assignmentId,StudentAssignmentStudentPutRequest request){
         //validate
@@ -90,6 +84,5 @@ public class StudentAssignmentService {
         log.debug("Succeed in saving");
         return assignment;
     }
-
 
 }

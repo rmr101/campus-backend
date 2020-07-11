@@ -19,9 +19,17 @@ public class Course {
     @Column(name = "id")
     private long id;
     boolean isOpen = true;
+    private long yearSemester;
+
+    @Column(length = 10, unique = true)
+    private String courseCode;
 
     private String name;
     private String introduction;
+    private String location;
+    private String learningOutcome;
+    private String workLoad;
+    private String assessment;
 
     @ManyToOne
     @JoinColumn(name = "subjectId", nullable = false)

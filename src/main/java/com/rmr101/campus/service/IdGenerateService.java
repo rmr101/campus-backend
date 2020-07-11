@@ -1,5 +1,7 @@
 package com.rmr101.campus.service;
 
+import com.rmr101.campus.entity.Subject;
+import com.rmr101.campus.repository.SubjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -15,4 +17,10 @@ public class IdGenerateService {
         }
         return campusId;
     }
+
+//    public String generateCourseCode(long subjectId, long yearSemester){
+//        Subject subject = SubjectRepository.findById(subjectId);
+//        String courseCode = subject.getSubjectCode();
+//        return
+//    }
 }

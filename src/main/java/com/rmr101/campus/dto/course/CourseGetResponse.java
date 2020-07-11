@@ -6,11 +6,20 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
+
 @Data
 //@AllArgsConstructor
 public class CourseGetResponse {
     private long id;
     private String name;
     private String introduction;
+    private String location;
+    private String learningOutcome;
+    private String workLoad;
+    private String assessment;
+    private String courseCode;
+    private long yearSemester;
+
     private SubjectDto subject;
 }

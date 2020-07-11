@@ -8,6 +8,7 @@ import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.StudentCourse;
 import com.rmr101.campus.entity.Subject;
 import com.rmr101.campus.exception.BadParameterException;
+import com.rmr101.campus.exception.InvalidCourseCodeException;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;
 import com.rmr101.campus.mapper.CourseMapper;
@@ -111,8 +112,8 @@ public class CourseService {
 
     public List<CourseGetResponse> findCoursesBy(String courseName, String courseCode) {
         if(courseCode != null){
-            //todo:find by courseCode;
-            return null;
+            List<Course> courseList = courseRepository.findByCourseCodeLike("%" + courseCode + "%");
+            return courseMapper.courseToCourseGetResponse(courseList);
         }
         if(courseName != null){
             List<Course> courseList = courseRepository.findByNameLike("%" + courseName + "%");
@@ -128,6 +129,10 @@ public class CourseService {
 
         Course course = courseMapper.coursePostRequestToCourse(request);
         course.setSubject(subject);
+        subject.setCounter(subject.getCounter()+1);
+        String courseCode = subject.getSubjectCode() + request.getYearSemester() + String.format("%03d", subject.getCounter());
+        course.setCourseCode(courseCode);
+        course.setYearSemester(request.getYearSemester());
         courseRepository.save(course);
         return courseMapper.courseToCoursePostResponse(course);
     }
@@ -136,4 +141,8 @@ public class CourseService {
         return courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
     }
 
+    public CourseGetDetails getCourseDetailsByCourseCode(String courseCode,String detail){
+        Course course = courseRepository.findByCourseCode(courseCode);
+        return getCourseDetailsById(course.getId(), detail);
+    }
 }

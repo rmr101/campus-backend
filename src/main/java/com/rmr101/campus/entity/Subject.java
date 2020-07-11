@@ -19,7 +19,12 @@ public class Subject {
     @Column(unique = true)
     private String name;
 
+    @Column(length = 3, unique = true)
+    private String subjectCode;
+
     private String introduction;
+    private int counter;
+
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "subject")
     private List<Course> courses = new ArrayList<Course>();

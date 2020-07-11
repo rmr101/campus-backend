@@ -7,6 +7,7 @@ import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostResponse;
+import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.service.CourseAssignmentService;
 import com.rmr101.campus.service.CourseService;
 import com.rmr101.campus.service.TeacherCourseService;
@@ -30,15 +31,15 @@ public class CourseController {
     @Autowired
     private TeacherCourseService teacherCourseService;
 
-//    @GetMapping
-//    @ResponseStatus(value = HttpStatus.OK)
-//    @ApiOperation(value = "Find courses by query(name/code)")
-//    public CourseList findCoursesBy(@RequestParam(required = false) String name,
-//                                   @RequestParam(required = false) String code){
-//        CourseList courseList = new CourseList();
-//        courseList.setCourseList(courseService.findCoursesBy(name,code));
-//        return courseList;
-//    }
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Find courses by query(name/code)")
+    public CourseList findCoursesBy(@RequestParam(required = false) String name,
+                                   @RequestParam(required = false) String code){
+        CourseList courseList = new CourseList();
+        courseList.setCourseList(courseService.findCoursesBy(name,code));
+        return courseList;
+    }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -48,13 +49,21 @@ public class CourseController {
         return courseService.addCourse(request);
     }
 
-    @GetMapping("{courseId}")
+    @GetMapping("/{courseId}")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Get the course and a list of assignments related to the course given by id",
             notes = "optional parameter detail : students, teachers, assignments and all")
     public CourseGetDetails getCourseDetailsById(@PathVariable long courseId,
                                                  @RequestParam(required = false) String detail){
         return courseService.getCourseDetailsById(courseId,detail);
+    }
+    @GetMapping("/code/{courseCode}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "Get the course and a list of assignments related to the course given by course code",
+            notes = "optional parameter detail : students, teachers, assignments and all")
+    public CourseGetDetails getCourseDetailsByCourseCode(@PathVariable String courseCode,
+                                                 @RequestParam(required = false) String detail){
+        return courseService.getCourseDetailsByCourseCode(courseCode,detail);
     }
 
     @PostMapping("{courseId}/teachers")

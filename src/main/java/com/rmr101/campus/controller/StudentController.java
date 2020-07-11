@@ -3,7 +3,6 @@ package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.course.CourseList;
 import com.rmr101.campus.dto.student.*;
-import com.rmr101.campus.dto.studentAssignment.StudentAssignmentGetResponse;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostResponse;
@@ -16,7 +15,6 @@ import com.rmr101.campus.service.StudentService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -60,7 +58,7 @@ public class StudentController {
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Update Personal info" ,
             notes = "Returns null.")
-    public void updateInfo(@PathVariable UUID uuid,@Validated @RequestBody StudentUpdateRequest request){
+    public void updateInfo(@PathVariable UUID uuid,@RequestBody StudentUpdateRequest request){
         studentService.updateStudent(uuid,request);
     }
 
@@ -68,19 +66,13 @@ public class StudentController {
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Change password" ,
             notes = "Returns null.")
-    public void changePassword(@PathVariable UUID uuid,@Validated @RequestBody UserChangePasswordRequest request){
+    public void changePassword(@PathVariable UUID uuid,@RequestBody UserChangePasswordRequest request){
         studentService.changePassword(uuid,request);
     }
 
-    @GetMapping("/assignments/{assignmentId}")
-    @ApiOperation(value = "get an assignment by id",notes = "Role: student")
-    public StudentAssignmentGetResponse getAssignment(@PathVariable long assignmentId){
-        return studentAssignmentService.getAssignment(assignmentId);
-    }
-
-    @PutMapping("/assignments/{assignmentId}")
+    @PostMapping("/assignments/{assignmentId}")
     @ApiOperation(value = "submit an assignment",notes = "Role: student")
-    public void submitAssignment(@Validated @RequestBody StudentAssignmentStudentPutRequest request,
+    public void submitAssignment(@RequestBody StudentAssignmentStudentPutRequest request,
                                  @PathVariable long assignmentId){
         studentAssignmentService.submitAssignment(assignmentId, request);
     }

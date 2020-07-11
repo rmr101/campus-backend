@@ -12,7 +12,6 @@ import io.swagger.annotations.*;
 import com.rmr101.campus.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -39,7 +38,7 @@ public class TeacherController {
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Update Personal info" ,
             notes = "Returns null.")
-    public void updateInfo(@PathVariable UUID uuid,@Validated @RequestBody TeacherUpdateRequest request){
+    public void updateInfo(@PathVariable UUID uuid,@RequestBody TeacherUpdateRequest request){
         teacherService.updateTeacher(uuid,request);
     }
 
@@ -47,7 +46,7 @@ public class TeacherController {
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Change password" ,
             notes = "Returns null.")
-    public void changePassword(@PathVariable UUID uuid,@Validated @RequestBody UserChangePasswordRequest request){
+    public void changePassword(@PathVariable UUID uuid,@RequestBody UserChangePasswordRequest request){
         teacherService.changePassword(uuid,request);
     }
 
@@ -56,9 +55,7 @@ public class TeacherController {
     @ApiOperation(value = "review and score an assignment submitted by student" ,
             notes = "Returns null.")
     public void reviewAssignment(@PathVariable long assignmentId,
-                                 @Validated @RequestBody StudentAssignmentTeacherPutRequest request){
+                                 @RequestBody StudentAssignmentTeacherPutRequest request){
         teacherService.reviewAssignment(assignmentId,request);
     }
-
-
 }
