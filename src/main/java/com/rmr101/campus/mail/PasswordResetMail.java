@@ -7,7 +7,6 @@ import org.apache.catalina.User;
 @AllArgsConstructor
 public class PasswordResetMail implements UserMail {
     private String receiverAddress;
-    private String password;
 
     public String getSenderAddress(){
         return AwsMailConfig.FROM;
@@ -21,7 +20,8 @@ public class PasswordResetMail implements UserMail {
     }
 
     public String getText(){
-        String body = "Your new password is : " + password + "\n";
+        String body = "Your password has been reset successfully! \n"
+                +"For security reason , please change your password as soon as posible! \n";
         return body;
     }
 }

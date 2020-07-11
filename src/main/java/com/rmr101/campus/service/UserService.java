@@ -130,8 +130,7 @@ public class UserService {
         userRepository.save(user);
         try {
             emailSenderService.sendEmail(new PasswordResetMail(
-                    "jessiehan.au@gmail.com",
-                    user.getCampusId()));
+                    "jessiehan.au@gmail.com"));
         }catch (Exception ex){
             log.error("The email was not sent. Error message: " + ex.getMessage());
         }
