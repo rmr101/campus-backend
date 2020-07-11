@@ -18,7 +18,8 @@ public class User {
     @Column(length = 16)
     private UUID uuid;
 
-    @Column(length = 64, unique = true)
+//    @Column(length = 64, unique = true) todo: in production environment this should be unique
+    @Column(length = 64)
     private String email;
 
     private String password;

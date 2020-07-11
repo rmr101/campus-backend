@@ -7,6 +7,8 @@ import com.rmr101.campus.entity.User;
 import com.rmr101.campus.exception.AccessDeniedException;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.global.CampusRole;
+import com.rmr101.campus.mail.PasswordResetMail;
+import com.rmr101.campus.mail.UserCreatedtMail;
 import com.rmr101.campus.mapper.UserMapper;
 import com.rmr101.campus.message.PersonAddMessage;
 import com.rmr101.campus.message.PersonAddSender;
@@ -47,6 +49,9 @@ public class UserService {
     @Autowired
     private PersonDeleteSender personDeleteSender;
 
+    @Autowired
+    private EmailSenderService emailSenderService;
+
     public UserPostResponse addTeacher(UserPostRequest request){
         UserPostResponse response =  this.addUser(request,CampusRole.teacher);
 
@@ -58,7 +63,19 @@ public class UserService {
                         request.getFirstName(),
                         request.getLastName()));
         log.debug("Send a message to TeacherService for adding a new TEACHER ---->");
-//        teacherService.addTeacher(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
+        //        teacherService.addTeacher(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
+
+        try {
+            emailSenderService.sendEmail(new UserCreatedtMail(
+                    "jessiehan.au@gmail.com",
+                    response.getCampusId(),
+                    response.getCampusId(),
+                    request.getFirstName() + " " + request.getLastName()));
+        }catch (Exception ex){
+            log.error("The email was not sent. Error message: " + ex.getMessage());
+        }
+        log.debug("User created mail was sent!");
+
         return response;
     }
 
@@ -111,6 +128,14 @@ public class UserService {
         User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
         user.setPassword(passwordEncodeService.encodePassword(user.getCampusId()));
         userRepository.save(user);
+        try {
+            emailSenderService.sendEmail(new PasswordResetMail(
+                    "jessiehan.au@gmail.com",
+                    user.getCampusId()));
+        }catch (Exception ex){
+            log.error("The email was not sent. Error message: " + ex.getMessage());
+        }
+        log.debug("Password reset mail was sent!");
     }
 
     public void changePassword(UUID uuid, UserChangePasswordRequest request){
