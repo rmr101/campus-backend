@@ -18,7 +18,7 @@ public class StudentAssignment {
     private String attachmentUrl;
 
     private boolean isScored;
-    private float score;
+    private int score;
     private String comment;
 
     @ManyToOne(fetch=FetchType.LAZY)

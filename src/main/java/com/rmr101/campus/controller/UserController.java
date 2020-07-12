@@ -6,6 +6,7 @@ import com.rmr101.campus.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -20,14 +21,14 @@ public class UserController {
     @PostMapping("/teachers")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Add a teacher in the system")
-    public UserPostResponse addTeacher(@RequestBody UserPostRequest request){
+    public UserPostResponse addTeacher(@Validated @RequestBody UserPostRequest request){
         return userService.addTeacher(request);
     }
 
     @PostMapping("/students")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Add a student in the system")
-    public UserPostResponse addStudent(@RequestBody UserPostRequest request){
+    public UserPostResponse addStudent(@Validated @RequestBody UserPostRequest request){
         return userService.addStudent(request);
     }
 

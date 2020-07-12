@@ -106,7 +106,7 @@ public class TeacherService {
         StudentAssignment assignment = studentAssignmentRepository.findById(assignmentId)
                 .orElseThrow(()-> new InvalidIdException("The student doesn't have this assignment"));
 
-        assignment.setAttachmentUrl(request.getComment());
+        assignment.setComment(request.getComment());
         assignment.setScore(request.getScore());
         assignment.setScored(true);
 

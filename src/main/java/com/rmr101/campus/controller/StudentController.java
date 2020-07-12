@@ -89,7 +89,7 @@ public class StudentController {
     @PostMapping("/{uuid}/courses")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation( value = "Enroll a course")
-    public StudentCoursePostResponse enrollCourse(@RequestBody StudentCoursePostRequest request){
+    public StudentCoursePostResponse enrollCourse(@Validated @RequestBody StudentCoursePostRequest request){
         return studentCourseService.addCourse(request);
     }
 }

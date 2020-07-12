@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -44,7 +45,7 @@ public class CourseController {
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Add a new course ----Role:admin")
-    public CoursePostResponse addCourse(@RequestBody CoursePostRequest request){
+    public CoursePostResponse addCourse(@Validated @RequestBody CoursePostRequest request){
         return courseService.addCourse(request);
     }
 
@@ -60,14 +61,14 @@ public class CourseController {
     @PostMapping("{courseId}/teachers")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation( value = "Add a teacher to selected course ----Role:admin")
-    public TeacherCoursePostResponse addTeacherToCourse(@RequestBody TeacherCoursePostRequest request){
+    public TeacherCoursePostResponse addTeacherToCourse(@Validated @RequestBody TeacherCoursePostRequest request){
         return teacherCourseService.addCourse(request);
     }
 
     @PostMapping("{courseId}/assignments")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "publish an assignment ----Role:teacher")
-    public CourseAssignmentPostResponse publishAssignment(@RequestBody CourseAssignmentPostRequest request,
+    public CourseAssignmentPostResponse publishAssignment(@Validated @RequestBody CourseAssignmentPostRequest request,
                                                           @PathVariable long courseId){
         return courseAssignmentService.addAssignment(request, courseId);
     }

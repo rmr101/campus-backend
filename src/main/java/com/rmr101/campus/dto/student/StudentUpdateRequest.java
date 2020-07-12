@@ -6,6 +6,6 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class StudentUpdateRequest {
-    @NotNull(message = "Avatar URl can't be null")
+    @NotNull(message = "Avatar can't be null")
     private String avatar;
 }

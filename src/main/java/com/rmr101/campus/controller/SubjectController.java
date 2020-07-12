@@ -7,6 +7,7 @@ import com.rmr101.campus.service.SubjectService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,7 +26,7 @@ public class SubjectController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Add subject, returns the same subject contains a subject id")
-    public SubjectDto addSubject(@RequestBody SubjectDto subjectDto){
+    public SubjectDto addSubject(@Validated @RequestBody SubjectDto subjectDto){
         return subjectService.addSubject(subjectDto);
     }
 
