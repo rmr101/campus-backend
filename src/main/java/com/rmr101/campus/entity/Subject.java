@@ -15,10 +15,15 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID")
     private long id;
+    private int counter;
 
     @Column(unique = true)
     private String name;
 
+    @Column(length = 3, unique = true)
+    private String subjectCode;
+
+    @Column(columnDefinition = "text")
     private String introduction;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "subject")

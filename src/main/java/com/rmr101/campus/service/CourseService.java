@@ -111,8 +111,8 @@ public class CourseService {
 
     public List<CourseGetResponse> findCoursesBy(String courseName, String courseCode) {
         if(courseCode != null){
-            //todo:find by courseCode;
-            return null;
+            List<Course> courseList = courseRepository.findByCourseCodeLike("%" + courseCode + "%");
+            return courseMapper.courseToCourseGetResponse(courseList);
         }
         if(courseName != null){
             List<Course> courseList = courseRepository.findByNameLike("%" + courseName + "%");
@@ -128,6 +128,9 @@ public class CourseService {
 
         Course course = courseMapper.coursePostRequestToCourse(request);
         course.setSubject(subject);
+        subject.setCounter(subject.getCounter()+1);
+        course.setCourseCode(subject.getSubjectCode() + request.getYear() +
+                request.getSemester() + String.format("%03d", subject.getCounter()));
         courseRepository.save(course);
         return courseMapper.courseToCoursePostResponse(course);
     }

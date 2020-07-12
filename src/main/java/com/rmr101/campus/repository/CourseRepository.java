@@ -8,6 +8,8 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends CrudRepository<Course, Long> {
+    Course findByCourseCode(String courseCode);
     List<Course> findByNameLike(String name);
+    List<Course> findByCourseCodeLike(String courseCode);
 //    List<Course> findBySubjectId(int id);
 }
