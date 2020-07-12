@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class CoursePostResponse {
     private long id;
+    private String courseCode;
 }
