@@ -25,7 +25,7 @@ public class Course {
     private String semester;
 
 
-    @Column(length = 10, unique = true)
+    @Column(length = 12, unique = true)
     private String courseCode;
     @Column(columnDefinition = "text")
     private String introduction;
