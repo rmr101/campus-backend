@@ -1,8 +1,6 @@
 package com.rmr101.campus.controller;
 
-import com.rmr101.campus.dto.subject.SubjectGetDetails;
-import com.rmr101.campus.dto.subject.SubjectDto;
-import com.rmr101.campus.dto.subject.SubjectList;
+import com.rmr101.campus.dto.subject.*;
 import com.rmr101.campus.service.SubjectService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +24,8 @@ public class SubjectController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Add subject, returns the same subject contains a subject id")
-    public SubjectDto addSubject(@Validated @RequestBody SubjectDto subjectDto){
-        return subjectService.addSubject(subjectDto);
+    public SubjectPostResponse addSubject(@Validated @RequestBody SubjectPostRequest request){
+        return subjectService.addSubject(request);
     }
 
     @GetMapping("{id}")
@@ -35,4 +33,5 @@ public class SubjectController {
     public SubjectGetDetails getCourseListBySubjectId(@PathVariable long id){
         return subjectService.getSubjectDetailsById(id);
     }
+
 }
