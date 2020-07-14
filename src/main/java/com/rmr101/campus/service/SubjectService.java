@@ -61,6 +61,7 @@ public class SubjectService {
 
     public SubjectPostResponse addSubject(SubjectPostRequest request){
         Subject subject = subjectMapper.subjectPostRequestToSubject(request);
+        subject.setSubjectCode(subject.getSubjectCode().toUpperCase());
         subjectRepository.save(subject);
         return subjectMapper.subjectToSubjectPostResponse(subject);
     }
