@@ -1,8 +1,6 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.subject.SubjectGetDetails;
-import com.rmr101.campus.dto.subject.SubjectDto;
-import com.rmr101.campus.dto.subject.SubjectList;
+import com.rmr101.campus.dto.subject.*;
 import com.rmr101.campus.entity.Subject;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
@@ -59,6 +57,12 @@ public class SubjectService {
     }
     public Subject validateId(long id){
         return subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
+    }
+
+    public SubjectPostResponse addSubject(SubjectPostRequest request){
+        Subject subject = subjectMapper.subjectPostRequestToSubject(request);
+        subjectRepository.save(subject);
+        return subjectMapper.subjectToSubjectPostResponse(subject);
     }
 }
 
