@@ -16,7 +16,6 @@ public interface CourseAssignmentMapper {
     public CourseAssignmentGetResponse courseAssignmentToCourseAssignmentGetResponse(CourseAssignment courseAssignment);
     public List<CourseAssignmentGetResponse> courseAssignmentToCourseAssignmentGetResponse(List<CourseAssignment> courseAssignment);
     public CourseAssignmentPostResponse courseAssignmentToCourseAssignmentPostResponse(CourseAssignment courseAssignment);
-
     public CourseAssignment courseAssignmentPostRequestToCourseAssignment(CourseAssignmentPostRequest courseAssignmentPostRequest);
 
 
