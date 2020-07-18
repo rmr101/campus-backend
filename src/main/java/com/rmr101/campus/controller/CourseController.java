@@ -46,8 +46,22 @@ public class CourseController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Add a new course ----Role:admin")
     public CoursePostResponse addCourse(@Validated @RequestBody CoursePostRequest request){
-        return courseService.addCourse(request);
+        //TODO, add all or nothing;
+        CoursePostResponse coursePostResponse= courseService.addCourse(request);
+        TeacherCoursePostRequest teacherCoursePostRequest = new TeacherCoursePostRequest();
+        teacherCoursePostRequest.setCourseId(coursePostResponse.getId());
+        teacherCoursePostRequest.setTeacherUuid(request.getTeacherUuid());
+        teacherCourseService.addCourse(teacherCoursePostRequest);
+        return coursePostResponse;
     }
+
+    @PutMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "update course details")
+    public void updateCourse(@Validated @RequestBody CoursePutRequest request){
+
+    }
+
 
     @GetMapping("{courseId}")
     @ResponseStatus(value = HttpStatus.OK)

@@ -125,7 +125,6 @@ public class CourseService {
     public CoursePostResponse addCourse(CoursePostRequest request) {
         //validate subjectId???
         Subject subject = subjectService.validateId(request.getSubjectId());
-
         Course course = courseMapper.coursePostRequestToCourse(request);
         course.setSubject(subject);
         subject.setCounter(subject.getCounter()+1);
