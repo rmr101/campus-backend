@@ -5,6 +5,7 @@ import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetDetails;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
+import com.rmr101.campus.dto.teachercourse.TeacherCourseDeleteRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostResponse;
 import com.rmr101.campus.service.CourseAssignmentService;
@@ -17,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/courses")
@@ -46,8 +49,23 @@ public class CourseController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Add a new course ----Role:admin")
     public CoursePostResponse addCourse(@Validated @RequestBody CoursePostRequest request){
+        //TODO, add all or nothing;
+        CoursePostResponse coursePostResponse= courseService.addCourse(request);
+        TeacherCoursePostRequest teacherCoursePostRequest = new TeacherCoursePostRequest();
+        teacherCoursePostRequest.setCourseId(coursePostResponse.getId());
+        teacherCoursePostRequest.setTeacherUuid(request.getTeacherUuid());
+        teacherCourseService.addCourse(teacherCoursePostRequest);
         return courseService.addCourse(request);
     }
+
+    @PutMapping("/{courseId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "update course details", notes = "Returns null.")
+    public void updateCourse(@PathVariable long courseId,
+                             @Validated @RequestBody CoursePutRequest request){
+        courseService.updateCourse(courseId, request);
+    }
+
 
     @GetMapping("{courseId}")
     @ResponseStatus(value = HttpStatus.OK)
@@ -76,5 +94,13 @@ public class CourseController {
     @GetMapping("{courseId}/assignments/{assignmentId}")
     public CourseAssignmentGetDetails getCourseAssignmentById(@PathVariable long assignmentId){
         return courseAssignmentService.getAssignmentDetails(assignmentId);
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "delete a teacher from a course")
+    public void deleteTeacherCourse(@Validated @RequestBody TeacherCourseDeleteRequest request){
+        teacherCourseService.deleteTeacherCourse(request);
     }
 }

@@ -1,5 +1,6 @@
 package com.rmr101.campus.service;
 
+import com.rmr101.campus.dto.teachercourse.TeacherCourseDeleteRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostResponse;
 import com.rmr101.campus.entity.Teacher;
@@ -45,11 +46,16 @@ public class TeacherCourseService {
         return teacherCourseMapper.teacherCourseToTeacherCoursePostResponse(course);
     }
 
-    protected TeacherCourse checkDuplicate(UUID studentUuid, long courseId){
-        return teacherCourseRepository.findByTeacherUuidAndCourseId(studentUuid,courseId);
+    protected TeacherCourse checkDuplicate(UUID teacherUuid, long courseId){
+        return teacherCourseRepository.findByTeacherUuidAndCourseId(teacherUuid,courseId);
     }
 
     protected TeacherCourse getTeacherCourseById(long id){
         return teacherCourseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The teacher doesn't teach this course."));
+    }
+
+    public void deleteTeacherCourse(TeacherCourseDeleteRequest request) {
+        TeacherCourse teacherCourse = this.checkDuplicate(request.getTeacherUuid(), request.getCourseId());
+        teacherCourseRepository.delete(teacherCourse);
     }
 }
