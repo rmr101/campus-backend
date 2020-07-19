@@ -125,7 +125,6 @@ public class CourseService {
     public CoursePostResponse addCourse(CoursePostRequest request) {
         //validate subjectId???
         Subject subject = subjectService.validateId(request.getSubjectId());
-
         Course course = courseMapper.coursePostRequestToCourse(request);
         course.setSubject(subject);
         subject.setCounter(subject.getCounter()+1);
@@ -133,6 +132,14 @@ public class CourseService {
                 request.getSemester() + String.format("%03d", subject.getCounter()));
         courseRepository.save(course);
         return courseMapper.courseToCoursePostResponse(course);
+    }
+
+    public void updateCourse(long id, CoursePutRequest request){
+        Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
+        courseMapper.updateCourseFromPutRequest(request, course);
+        //Boolean value has to be treated separately;
+        course.setIsOpen(request.getIsOpen());
+        courseRepository.save(course);
     }
 
     public Course validateId(long courseId){

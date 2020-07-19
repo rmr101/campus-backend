@@ -18,7 +18,7 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
-    boolean isOpen = true;
+    private boolean isOpen = true;
     private String name;
     private String location;
     private String year;
@@ -48,4 +48,13 @@ public class Course {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
     private List<StudentCourse> students = new ArrayList<StudentCourse>();
+
+    public boolean getIsOpen() {
+        return this.isOpen;
+    }
+
+    public void setIsOpen(Boolean isOpen){
+        this.isOpen = isOpen;
+    }
+
 }
