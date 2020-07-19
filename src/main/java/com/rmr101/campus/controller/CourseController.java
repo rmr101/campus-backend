@@ -5,6 +5,7 @@ import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetDetails;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
+import com.rmr101.campus.dto.teachercourse.TeacherCourseDeleteRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostResponse;
 import com.rmr101.campus.service.CourseAssignmentService;
@@ -17,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/courses")
@@ -91,5 +94,13 @@ public class CourseController {
     @GetMapping("{courseId}/assignments/{assignmentId}")
     public CourseAssignmentGetDetails getCourseAssignmentById(@PathVariable long assignmentId){
         return courseAssignmentService.getAssignmentDetails(assignmentId);
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "delete a teacher from a course")
+    public void deleteTeacherCourse(@Validated @RequestBody TeacherCourseDeleteRequest request){
+        teacherCourseService.deleteTeacherCourse(request);
     }
 }
