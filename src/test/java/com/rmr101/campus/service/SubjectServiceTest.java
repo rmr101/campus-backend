@@ -1,4 +1,4 @@
-jpackage com.rmr101.campus.service;
+package com.rmr101.campus.service;
 
 import com.rmr101.campus.dto.subject.*;
 import com.rmr101.campus.entity.Course;
@@ -7,6 +7,7 @@ import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.SubjectMapper;
 import com.rmr101.campus.repository.SubjectRepository;
+import com.rmr101.campus.service.SubjectService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -103,6 +104,5 @@ public class SubjectServiceTest {
         verify(subjectRepository, times(1)).save(any(Subject.class));
         verify(subjectMapper, times(1)).subjectToSubjectPostResponse(any(Subject.class));
     }
-
 
 }
