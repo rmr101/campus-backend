@@ -52,14 +52,15 @@ public class CourseController {
         teacherCoursePostRequest.setCourseId(coursePostResponse.getId());
         teacherCoursePostRequest.setTeacherUuid(request.getTeacherUuid());
         teacherCourseService.addCourse(teacherCoursePostRequest);
-        return coursePostResponse;
+        return courseService.addCourse(request);
     }
 
-    @PutMapping
+    @PutMapping("/{courseId}")
     @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "update course details")
-    public void updateCourse(@Validated @RequestBody CoursePutRequest request){
-
+    @ApiOperation(value = "update course details", notes = "Returns null.")
+    public void updateCourse(@PathVariable long courseId,
+                             @Validated @RequestBody CoursePutRequest request){
+        courseService.updateCourse(courseId, request);
     }
 
 
