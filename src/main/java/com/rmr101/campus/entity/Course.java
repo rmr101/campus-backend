@@ -49,12 +49,12 @@ public class Course {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
     private List<StudentCourse> students = new ArrayList<StudentCourse>();
 
-    public boolean getIsOpen() {
-        return this.isOpen;
-    }
-
-    public void setIsOpen(Boolean isOpen){
-        this.isOpen = isOpen;
-    }
+//    public boolean getIsOpen() {
+//        return this.isOpen;
+//    }
+//
+//    public void setIsOpen(Boolean isOpen){
+//        this.isOpen = isOpen;
+//    }
 
 }

@@ -2,7 +2,6 @@ package com.rmr101.campus.controller;
 
 import com.rmr101.campus.dto.course.*;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetDetails;
-import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostRequest;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentPostResponse;
 import com.rmr101.campus.dto.teachercourse.TeacherCourseDeleteRequest;
@@ -12,7 +11,6 @@ import com.rmr101.campus.service.CourseAssignmentService;
 import com.rmr101.campus.service.CourseService;
 import com.rmr101.campus.service.TeacherCourseService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,27 +32,12 @@ public class CourseController {
     @Autowired
     private TeacherCourseService teacherCourseService;
 
-//    @GetMapping
-//    @ResponseStatus(value = HttpStatus.OK)
-//    @ApiOperation(value = "Find courses by query(name/code)")
-//    public CourseList findCoursesBy(@RequestParam(required = false) String name,
-//                                   @RequestParam(required = false) String code){
-//        CourseList courseList = new CourseList();
-//        courseList.setCourseList(courseService.findCoursesBy(name,code));
-//        return courseList;
-//    }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Add a new course ----Role:admin")
     public CoursePostResponse addCourse(@Validated @RequestBody CoursePostRequest request){
-        //TODO, add all or nothing;
-        CoursePostResponse coursePostResponse= courseService.addCourse(request);
-        TeacherCoursePostRequest teacherCoursePostRequest = new TeacherCoursePostRequest();
-        teacherCoursePostRequest.setCourseId(coursePostResponse.getId());
-        teacherCoursePostRequest.setTeacherUuid(request.getTeacherUuid());
-        teacherCourseService.addCourse(teacherCoursePostRequest);
         return courseService.addCourse(request);
     }
 
@@ -65,7 +48,6 @@ public class CourseController {
                              @Validated @RequestBody CoursePutRequest request){
         courseService.updateCourse(courseId, request);
     }
-
 
     @GetMapping("{courseId}")
     @ResponseStatus(value = HttpStatus.OK)
@@ -99,8 +81,8 @@ public class CourseController {
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "delete a teacher from a course")
-    public void deleteTeacherCourse(@Validated @RequestBody TeacherCourseDeleteRequest request){
-        teacherCourseService.deleteTeacherCourse(request);
+    @ApiOperation(value = "close a course(soft delete)", notes = "return null")
+    public void deleteTeacherCourse(@Validated @RequestBody CourseDeleteRequest request){
+        courseService.deleteCourse(request);
     }
 }
