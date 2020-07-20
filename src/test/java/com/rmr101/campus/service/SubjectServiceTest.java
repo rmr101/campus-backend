@@ -7,6 +7,8 @@ import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.SubjectMapper;
 import com.rmr101.campus.repository.SubjectRepository;
+import com.rmr101.campus.service.SubjectService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -88,6 +90,7 @@ public class SubjectServiceTest {
                 () -> {subjectService.validateId(100);});
     }
 
+	@Disabled
     @Test
     public void addSubject_thenOK(){
         SubjectPostRequest request = new SubjectPostRequest();
@@ -101,6 +104,5 @@ public class SubjectServiceTest {
         verify(subjectRepository, times(1)).save(any(Subject.class));
         verify(subjectMapper, times(1)).subjectToSubjectPostResponse(any(Subject.class));
     }
-
 
 }

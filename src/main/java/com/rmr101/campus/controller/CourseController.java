@@ -38,6 +38,12 @@ public class CourseController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Add a new course ----Role:admin")
     public CoursePostResponse addCourse(@Validated @RequestBody CoursePostRequest request){
+        //TODO, add all or nothing;
+        CoursePostResponse coursePostResponse= courseService.addCourse(request);
+        TeacherCoursePostRequest teacherCoursePostRequest = new TeacherCoursePostRequest();
+        teacherCoursePostRequest.setCourseId(coursePostResponse.getId());
+        teacherCoursePostRequest.setTeacherUuid(request.getTeacherUuid());
+        teacherCourseService.addCourse(teacherCoursePostRequest);
         return courseService.addCourse(request);
     }
 
@@ -84,5 +90,6 @@ public class CourseController {
     @ApiOperation(value = "close a course(soft delete)", notes = "return null")
     public void deleteTeacherCourse(@Validated @RequestBody CourseDeleteRequest request){
         courseService.deleteCourse(request);
+
     }
 }

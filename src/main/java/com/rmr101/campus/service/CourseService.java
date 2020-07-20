@@ -148,8 +148,6 @@ public class CourseService {
     public void updateCourse(long id, CoursePutRequest request){
         Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
         courseMapper.updateCourseFromPutRequest(request, course);
-        //Boolean value has to be treated separately;
-        //course.setIsOpen(request.getIsOpen());
         courseRepository.save(course);
     }
 
