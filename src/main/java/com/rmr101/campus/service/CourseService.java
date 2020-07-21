@@ -155,8 +155,8 @@ public class CourseService {
         return courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
     }
 
-    public void deleteCourse(CourseDeleteRequest request){
-        Course course = courseRepository.findById(request.getId()).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
+    public void deleteCourse(long courseId){
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
         course.setOpen(false);
         courseRepository.save(course);
     }

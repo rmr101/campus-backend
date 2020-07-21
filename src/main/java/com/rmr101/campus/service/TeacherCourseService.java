@@ -1,9 +1,7 @@
 package com.rmr101.campus.service;
 
-import com.rmr101.campus.dto.teachercourse.TeacherCourseDeleteRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostRequest;
 import com.rmr101.campus.dto.teachercourse.TeacherCoursePostResponse;
-import com.rmr101.campus.entity.Teacher;
 import com.rmr101.campus.entity.TeacherCourse;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.exception.RecordAlreadyExistException;
@@ -54,8 +52,8 @@ public class TeacherCourseService {
         return teacherCourseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The teacher doesn't teach this course."));
     }
 
-    public void deleteTeacherCourse(TeacherCourseDeleteRequest request) {
-        TeacherCourse teacherCourse = this.checkDuplicate(request.getTeacherUuid(), request.getCourseId());
+    public void deleteTeacherCourse(long courseId, UUID teacherUuid) {
+        TeacherCourse teacherCourse = this.checkDuplicate(teacherUuid, courseId);
         teacherCourseRepository.delete(teacherCourse);
     }
 }

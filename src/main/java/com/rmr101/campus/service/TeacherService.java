@@ -102,17 +102,6 @@ public class TeacherService {
         teacherRepository.save(teacher);
     }
 
-    public void reviewAssignment(long assignmentId, StudentAssignmentTeacherPutRequest request) {
-        StudentAssignment assignment = studentAssignmentRepository.findById(assignmentId)
-                .orElseThrow(()-> new InvalidIdException("The student doesn't have this assignment"));
-
-        assignment.setComment(request.getComment());
-        assignment.setScore(request.getScore());
-        assignment.setScored(true);
-
-        studentAssignmentRepository.save(assignment);
-    }
-
     public void addTeacher(UUID uuid, String campusId, String firstName, String lastName){
         Teacher teacher = new Teacher();
         teacher.setUuid(uuid);
@@ -130,7 +119,7 @@ public class TeacherService {
     public void setTeacherInactive(UUID teacherUuid){
         Teacher teacher = teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException("Teacher uuid doesn't exist"));
         teacher.setActive(false);
-        teacherRepository.save(teacher);
+//        teacherRepository.save(teacher);
     }
 
 }

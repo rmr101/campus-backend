@@ -48,7 +48,7 @@ public class StudentAssignmentService {
         return studentAssignmentMapper.studentAssignmentToStudentAssignmentGetResponse(assignment);
     }
 
-    //updated by student
+    //submit by student
     public void submitAssignment(long assignmentId,StudentAssignmentStudentPutRequest request){
         //validate
         StudentAssignment assignment = studentAssignmentRepository.findById(assignmentId)
@@ -60,20 +60,18 @@ public class StudentAssignmentService {
         studentAssignmentRepository.save(assignment);
     }
 
-    //updated by teacher
-//    public void updateAssignmentByTeacher(UUID TeacherUuid,StudentAssignmentTeacherPutRequest request){
-//        //validate
-//        StudentAssignment assignment = studentAssignmentRepository.findById(request.getId())
-//                .orElseThrow(()-> new InvalidIdException());
-//
-//        assignment.setComment(request.getComment());
-//        assignment.setScore(request.getScore());
-//        assignment.setScored(request.isScored());
-//
-//        studentAssignmentRepository.save(assignment);
-//    }
+    //review by teacher
+    public void reviewAssignment(long assignmentId, StudentAssignmentTeacherPutRequest request) {
+        StudentAssignment assignment = studentAssignmentRepository.findById(assignmentId)
+                .orElseThrow(()-> new InvalidIdException("The student doesn't have this assignment"));
 
-    //insert an assignment into student_assignment table
+        assignment.setComment(request.getComment());
+        assignment.setScore(request.getScore());
+        assignment.setScored(true);
+
+        studentAssignmentRepository.save(assignment);
+    }
+
     protected StudentAssignment addAssignment(UUID studentUuid, long courseAssignmentId){
         //validate studentUuid
         log.debug("Add assignment: student uuid = "+ studentUuid +" ,courseAssignment id = "+ courseAssignmentId);
