@@ -6,12 +6,14 @@ import com.rmr101.campus.dto.studentAssignment.StudentAssignmentTeacherPutReques
 import com.rmr101.campus.dto.teacher.TeacherGetDetails;
 import com.rmr101.campus.dto.teacher.TeacherList;
 import com.rmr101.campus.dto.teacher.TeacherUpdateRequest;
+import com.rmr101.campus.dto.teachercourse.TeacherCourseDeleteRequest;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.service.TeacherCourseService;
 import io.swagger.annotations.*;
 import com.rmr101.campus.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,5 +62,12 @@ public class TeacherController {
         teacherService.reviewAssignment(assignmentId,request);
     }
 
-
+    @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "remove a teacher from a course",
+                    notes = "return null")
+    public void deleteTeacherCourse(@Validated @RequestBody TeacherCourseDeleteRequest request){
+        teacherCourseService.deleteTeacherCourse(request);
+    }
 }
