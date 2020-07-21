@@ -1,12 +1,10 @@
 package com.rmr101.campus.controller;
 
-import com.rmr101.campus.dto.course.CourseList;
-import com.rmr101.campus.dto.student.StudentList;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentTeacherPutRequest;
 import com.rmr101.campus.dto.teacher.TeacherGetDetails;
-import com.rmr101.campus.dto.teacher.TeacherList;
 import com.rmr101.campus.dto.teacher.TeacherUpdateRequest;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
+import com.rmr101.campus.service.StudentAssignmentService;
 import com.rmr101.campus.service.TeacherCourseService;
 import io.swagger.annotations.*;
 import com.rmr101.campus.service.TeacherService;
@@ -25,6 +23,9 @@ public class TeacherController {
 
     @Autowired
     private TeacherCourseService teacherCourseService;
+
+    @Autowired
+    private StudentAssignmentService studentAssignmentService;
 
     @GetMapping("{uuid}")
     @ResponseStatus(value = HttpStatus.OK)
@@ -57,7 +58,7 @@ public class TeacherController {
             notes = "Returns null.")
     public void reviewAssignment(@PathVariable long assignmentId,
                                  @Validated @RequestBody StudentAssignmentTeacherPutRequest request){
-        teacherService.reviewAssignment(assignmentId,request);
+        studentAssignmentService.reviewAssignment(assignmentId,request);
     }
 
 

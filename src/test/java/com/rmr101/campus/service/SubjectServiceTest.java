@@ -90,12 +90,13 @@ public class SubjectServiceTest {
                 () -> {subjectService.validateId(100);});
     }
 
-	@Disabled
     @Test
     public void addSubject_thenOK(){
         SubjectPostRequest request = new SubjectPostRequest();
+        Subject subject = new Subject();
+        subject.setSubjectCode("moc");
 
-        when(subjectMapper.subjectPostRequestToSubject(any())).thenReturn(new Subject());
+        when(subjectMapper.subjectPostRequestToSubject(any())).thenReturn(subject);
         when(subjectRepository.save(any())).thenReturn(new Subject());
         when(subjectMapper.subjectToSubjectPostResponse(any())).thenReturn(new SubjectPostResponse());
 

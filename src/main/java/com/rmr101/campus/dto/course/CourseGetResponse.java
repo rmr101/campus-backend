@@ -11,7 +11,7 @@ import lombok.Setter;
 public class CourseGetResponse {
     private long id;
     private String name;
-    private Boolean isOpen;
+    private boolean isOpen;
     private String introduction;
     private String location;
     private String learningOutcome;

@@ -15,5 +15,4 @@ public class CoursePutRequest {
         private String workLoad;
         private String assessment;
         private long subjectId;
-        private Boolean isOpen;
 }

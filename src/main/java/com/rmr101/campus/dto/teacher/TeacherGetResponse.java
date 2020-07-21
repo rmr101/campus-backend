@@ -11,4 +11,6 @@ public class TeacherGetResponse {
     private String name;
     private String introduction;
     private String avatar;
+    private String campusId;
+    private boolean isActive;
 }
