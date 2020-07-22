@@ -4,12 +4,14 @@ package com.rmr101.campus.controller;
 import com.rmr101.campus.dto.course.CourseList;
 import com.rmr101.campus.dto.student.*;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentGetResponse;
+import com.rmr101.campus.dto.studentAssignment.StudentAssignmentS3Url;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostRequest;
 import com.rmr101.campus.dto.studentcourse.StudentCoursePostResponse;
 import com.rmr101.campus.dto.teacher.TeacherList;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.Student;
+import com.rmr101.campus.service.AmazonWebService;
 import com.rmr101.campus.service.StudentAssignmentService;
 import com.rmr101.campus.service.StudentCourseService;
 import com.rmr101.campus.service.StudentService;
@@ -31,6 +33,9 @@ public class StudentController {
 
     @Autowired
     private StudentCourseService studentCourseService;
+
+    @Autowired
+    private AmazonWebService amazonWebService;
 
     @Autowired
     private StudentAssignmentService studentAssignmentService;
@@ -79,10 +84,16 @@ public class StudentController {
     }
 
     @PutMapping("/assignments/{assignmentId}")
+    @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "submit an assignment",notes = "Role: student")
-    public void submitAssignment(@Validated @RequestBody StudentAssignmentStudentPutRequest request,
-                                 @PathVariable long assignmentId){
+    public StudentAssignmentS3Url submitAssignment(@Validated @RequestBody StudentAssignmentStudentPutRequest request,
+                                                   @PathVariable long assignmentId){
+
         studentAssignmentService.submitAssignment(assignmentId, request);
+
+        //this url is actually the objectKey.
+
+        return amazonWebService.preSignedUploadedUrl(request.getAttachmentUrl());
     }
 
     //course enrollment
