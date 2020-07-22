@@ -100,6 +100,4 @@ public class CourseController {
     public CourseAssignmentGetDetails getCourseAssignmentById(@PathVariable long assignmentId){
         return courseAssignmentService.getAssignmentDetails(assignmentId);
     }
-
-
 }

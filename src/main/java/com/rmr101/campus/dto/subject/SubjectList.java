@@ -7,5 +7,5 @@ import java.util.List;
 
 @Data
 public class SubjectList {
-    private List<SubjectDto> subjectList;
+    private List<SubjectGetResponse> subjectList;
 }
