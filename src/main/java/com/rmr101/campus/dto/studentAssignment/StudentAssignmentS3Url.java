@@ -5,4 +5,6 @@ import lombok.Data;
 @Data
 public class StudentAssignmentS3Url {
     private String url;
+    private String fileName;
+    private String objectKey;
 }

@@ -66,11 +66,11 @@ public class TeacherController {
                                  @Validated @RequestBody StudentAssignmentTeacherPutRequest request){
         studentAssignmentService.reviewAssignment(assignmentId,request);
     }
-    @GetMapping("/assignments/{objectKey}")
+    @GetMapping("/assignments")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "get a download link for an assignment submitted by student" ,
         notes = "Returns url")
-    public StudentAssignmentS3Url getAssignmentUrl(@PathVariable String objectKey){
+    public StudentAssignmentS3Url getAssignmentUrl(@RequestParam String objectKey){
 
         return amazonWebService.preSignedGetUrl(objectKey);
     }

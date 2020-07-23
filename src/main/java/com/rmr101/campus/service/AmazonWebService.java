@@ -12,6 +12,8 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentS3Url;
+import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.net.URL;
 
@@ -22,6 +24,9 @@ import java.util.List;
 
 @Service
 public class AmazonWebService {
+
+    @Autowired
+    StudentAssignmentService studentAssignmentService;
 
     private Regions clientRegion = Regions.AP_SOUTHEAST_2;
     // Fix this two for now:
@@ -56,8 +61,12 @@ public class AmazonWebService {
         }
     }
 
-    public StudentAssignmentS3Url preSignedUploadedUrl(String objectKey) throws SdkClientException {
+    public StudentAssignmentS3Url preSignedUploadedUrl(Long assignmentId, String fileName) throws SdkClientException {
 
+        String objectKey = objectKeySubFolder+fileName;
+        StudentAssignmentStudentPutRequest request = new StudentAssignmentStudentPutRequest();
+        request.setAttachmentUrl(objectKey);
+        studentAssignmentService.submitAssignment(assignmentId, request);
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
             .withCredentials(new ProfileCredentialsProvider())
             .withRegion(clientRegion)
@@ -72,12 +81,14 @@ public class AmazonWebService {
         // Generate the pre-signed URL.
         System.out.println("Generating pre-signed URL.");
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(
-            bucketName, objectKeySubFolder + objectKey)
+            bucketName, objectKey)
             .withMethod(HttpMethod.PUT)
             .withExpiration(expiration);
         URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
         StudentAssignmentS3Url S3Url = new StudentAssignmentS3Url();
         S3Url.setUrl(url.toString());
+        S3Url.setFileName(fileName);
+        S3Url.setObjectKey(objectKey);
         return S3Url;
     }
     public StudentAssignmentS3Url preSignedGetUrl(String objectKey) throws SdkClientException{
@@ -95,12 +106,13 @@ public class AmazonWebService {
         // Generate the presigned URL.
         System.out.println("Generating pre-signed URL.");
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
-            new GeneratePresignedUrlRequest(bucketName, objectKeySubFolder + objectKey)
+            new GeneratePresignedUrlRequest(bucketName, objectKey)
                 .withMethod(HttpMethod.GET)
                 .withExpiration(expiration);
         URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
         StudentAssignmentS3Url S3Url = new StudentAssignmentS3Url();
         S3Url.setUrl(url.toString());
+        S3Url.setObjectKey(objectKey);
         return S3Url;
     }
 }

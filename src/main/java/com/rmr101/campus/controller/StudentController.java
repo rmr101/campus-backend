@@ -86,14 +86,10 @@ public class StudentController {
     @PutMapping("/assignments/{assignmentId}")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "submit an assignment",notes = "Role: student")
-    public StudentAssignmentS3Url submitAssignment(@Validated @RequestBody StudentAssignmentStudentPutRequest request,
+    public StudentAssignmentS3Url submitAssignment(@Validated @RequestBody StudentAssignmentS3Url request,
                                                    @PathVariable long assignmentId){
 
-        studentAssignmentService.submitAssignment(assignmentId, request);
-
-        //this url is actually the objectKey.
-
-        return amazonWebService.preSignedUploadedUrl(request.getAttachmentUrl());
+        return amazonWebService.preSignedUploadedUrl(assignmentId,request.getFileName());
     }
 
     //course enrollment
