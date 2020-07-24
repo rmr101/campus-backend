@@ -5,12 +5,9 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.HttpMethod;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.rmr101.campus.config.AWSConfig;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentS3Url;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentStudentPutRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.net.URL;
 
 
-import java.util.List;
 
 //Tutorial link: https://docs.aws.amazon.com/AmazonS3/latest/dev/PresignedUrlUploadObjectJavaSDK.html
 
@@ -28,47 +24,22 @@ public class AmazonWebService {
     @Autowired
     StudentAssignmentService studentAssignmentService;
 
+    @Autowired
+    AWSConfig awsConfig;
+
     private Regions clientRegion = Regions.AP_SOUTHEAST_2;
     // Fix this two for now:
     private String bucketName = "campus-file-system";
     private String objectKeySubFolder = "assignment/";
-    private String ACCESS_KEY = "AKIAZVPGVNCTKAYINWHL";
-    private String SECRET_KEY = "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";
-
-    private BasicAWSCredentials awsCredentials = new BasicAWSCredentials(ACCESS_KEY,SECRET_KEY);
-
-    public void getListOfObject() throws SdkClientException{
-        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-            .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-            .withRegion(clientRegion)
-            .build();
-
-        // Get a list of objects in the bucket, two at a time, and
-        // print the name and size of each object.
-        ListObjectsRequest listRequest = new ListObjectsRequest().withBucketName(bucketName).withMaxKeys(2);
-        ObjectListing objects = s3Client.listObjects(listRequest);
-
-        while (true) {
-            List<S3ObjectSummary> summaries = objects.getObjectSummaries();
-            for (S3ObjectSummary summary : summaries) {
-                System.out.printf("Object \"%s\" retrieved with size %d\n", summary.getKey(), summary.getSize());
-            }
-            if (objects.isTruncated()) {
-                objects = s3Client.listNextBatchOfObjects(objects);
-            } else {
-                break;
-            }
-        }
-    }
 
     public StudentAssignmentS3Url preSignedUploadedUrl(Long assignmentId, String fileName) throws SdkClientException {
-
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials( awsConfig.getAccessKey(),awsConfig.getSecretKey());
         String objectKey = objectKeySubFolder+fileName;
         StudentAssignmentStudentPutRequest request = new StudentAssignmentStudentPutRequest();
         request.setAttachmentUrl(objectKey);
         studentAssignmentService.submitAssignment(assignmentId, request);
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-            .withCredentials(new ProfileCredentialsProvider())
+            .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
             .withRegion(clientRegion)
             .build();
 
@@ -92,9 +63,10 @@ public class AmazonWebService {
         return S3Url;
     }
     public StudentAssignmentS3Url preSignedGetUrl(String objectKey) throws SdkClientException{
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials( awsConfig.getAccessKey(),awsConfig.getSecretKey());
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
             .withRegion(clientRegion)
-            .withCredentials(new ProfileCredentialsProvider())
+            .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
             .build();
 
         // Set the presigned URL to expire after one hour.
