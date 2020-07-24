@@ -1,11 +1,11 @@
-package com.rmr101.campus.service;
+package com.rmr101.campus.utils;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
-@Service
-public class IdGenerateService {
+@Component
+public class CampusIdGenerator {
 
     public String generateCampusId(String role){
         Random rand = new Random();

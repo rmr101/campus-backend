@@ -1,13 +1,13 @@
-package com.rmr101.campus.service;
+package com.rmr101.campus.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class PasswordEncodeService {
+@Component
+public class CampusPasswordEncoder {
     private BCryptPasswordEncoder encoder;
 
-    public PasswordEncodeService(){
+    public CampusPasswordEncoder(){
         this.encoder = new BCryptPasswordEncoder();//default strength10
     }
     public String encodePassword(String password){
