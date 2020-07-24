@@ -130,7 +130,6 @@ public class CourseService {
 
     //add a course
     public CoursePostResponse addCourse(CoursePostRequest request) {
-        //validate subjectId???
         Subject subject = subjectService.validateId(request.getSubjectId());
         Course course = courseMapper.coursePostRequestToCourse(request);
         course.setSubject(subject);
@@ -141,7 +140,7 @@ public class CourseService {
         TeacherCoursePostRequest teacherCoursePostRequest = new TeacherCoursePostRequest();
         teacherCoursePostRequest.setCourseId(course.getId());
         teacherCoursePostRequest.setTeacherUuid(request.getTeacherUuid());
-        TeacherCoursePostResponse response = teacherCourseService.addCourse(teacherCoursePostRequest);
+        teacherCourseService.addCourse(teacherCoursePostRequest);
         return courseMapper.courseToCoursePostResponse(course);
     }
 
