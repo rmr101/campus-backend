@@ -1,8 +1,18 @@
 package com.rmr101.campus.mail;
 
-public interface UserMail {
-    public String getSenderAddress();
-    public String getReceiverAddress();
-    public String getSubject();
-    public String getText();
+import com.rmr101.campus.config.AwsMailConfig;
+
+public abstract class UserMail {
+    private String senderAddress = AwsMailConfig.FROM;
+    private String receiverAddress = AwsMailConfig.TO;
+
+    public String getSenderAddress(){
+        return senderAddress;
+    }
+
+    public String getReceiverAddress(){
+        return receiverAddress;
+    }
+    public abstract String getSubject();
+    public abstract String getText();
 }
