@@ -1,9 +1,11 @@
 package com.rmr101.campus.controller;
 
+import com.rmr101.campus.dto.studentAssignment.StudentAssignmentS3Url;
 import com.rmr101.campus.dto.studentAssignment.StudentAssignmentTeacherPutRequest;
 import com.rmr101.campus.dto.teacher.TeacherGetDetails;
 import com.rmr101.campus.dto.teacher.TeacherUpdateRequest;
 import com.rmr101.campus.dto.user.UserChangePasswordRequest;
+import com.rmr101.campus.service.AmazonWebService;
 import com.rmr101.campus.service.StudentAssignmentService;
 import com.rmr101.campus.service.TeacherCourseService;
 import io.swagger.annotations.*;
@@ -23,6 +25,10 @@ public class TeacherController {
 
     @Autowired
     private TeacherCourseService teacherCourseService;
+
+
+    @Autowired
+    private AmazonWebService amazonWebService;
 
     @Autowired
     private StudentAssignmentService studentAssignmentService;
@@ -60,6 +66,15 @@ public class TeacherController {
                                  @Validated @RequestBody StudentAssignmentTeacherPutRequest request){
         studentAssignmentService.reviewAssignment(assignmentId,request);
     }
+    @GetMapping("/assignments")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation(value = "get a download link for an assignment submitted by student" ,
+        notes = "Returns url")
+    public StudentAssignmentS3Url getAssignmentUrl(@RequestParam String objectKey){
+
+        return amazonWebService.preSignedGetUrl(objectKey);
+    }
+
 
 
 }
