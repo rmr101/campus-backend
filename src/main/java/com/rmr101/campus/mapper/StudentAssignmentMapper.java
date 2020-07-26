@@ -26,10 +26,8 @@ public interface StudentAssignmentMapper {
     })
     public StudentAssignmentGetResponse studentAssignmentToStudentAssignmentGetResponse(StudentAssignment assignment);
     public List<StudentAssignmentGetResponse> studentAssignmentToStudentAssignmentGetResponse(List<StudentAssignment> list);
-
     public StudentAssignment studentAssignmentStudentPutRequestToStudentAssignment(
             StudentAssignmentStudentPutRequest studentRequest);
-
     public StudentAssignment studentAssignmentTeacherPutRequestToStudentAssignment(
             StudentAssignmentTeacherPutRequest teacherRequest);
 }

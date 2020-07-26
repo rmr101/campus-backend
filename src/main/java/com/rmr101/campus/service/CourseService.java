@@ -141,7 +141,7 @@ public class CourseService {
         TeacherCoursePostRequest teacherCoursePostRequest = new TeacherCoursePostRequest();
         teacherCoursePostRequest.setCourseId(course.getId());
         teacherCoursePostRequest.setTeacherUuid(request.getTeacherUuid());
-        TeacherCoursePostResponse response = teacherCourseService.addCourse(teacherCoursePostRequest);
+        teacherCourseService.addCourse(teacherCoursePostRequest);
         return courseMapper.courseToCoursePostResponse(course);
     }
 
