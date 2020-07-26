@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class SubjectDto {
+public class SubjectGetResponse {
     private long id;
     @NotNull
     private String name;

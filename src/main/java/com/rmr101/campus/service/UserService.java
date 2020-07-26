@@ -6,14 +6,18 @@ import com.rmr101.campus.dto.user.UserChangePasswordRequest;
 import com.rmr101.campus.entity.User;
 import com.rmr101.campus.exception.AccessDeniedException;
 import com.rmr101.campus.exception.InvalidIdException;
-import com.rmr101.campus.exception.UnauthorizedException;
+import com.rmr101.campus.mail.PasswordResetMail;
+import com.rmr101.campus.mail.UserCreatedMail;
 import com.rmr101.campus.mapper.UserMapper;
 import com.rmr101.campus.repository.UserRepository;
+import com.rmr101.campus.utils.CampusEmailSender;
+import com.rmr101.campus.utils.CampusIdGenerator;
+import com.rmr101.campus.utils.CampusPasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Email;
 import java.util.UUID;
 
 @Service
@@ -33,15 +37,22 @@ public class UserService {
     private TeacherService teacherService;
 
     @Autowired
-    private PasswordEncodeService passwordEncodeService;
+    private CampusPasswordEncoder passwordEncoder;
 
     @Autowired
-    private IdGenerateService idGenerateService;
+    private CampusIdGenerator IdGenerator;
+
+    @Autowired
+    private CampusEmailSender emailSender;
 
     public UserPostResponse addTeacher(UserPostRequest request) {
         UserPostResponse response =  this.addUser(request,"TEACHER");
         //todo:send a message to create new student
         teacherService.addTeacher(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
+        UserCreatedMail mail = new UserCreatedMail(response.getCampusId(),
+                response.getCampusId(),
+                request.getFirstName() + " " + request.getLastName());
+        emailSender.sendEmail(mail);
         return response;
     }
 
@@ -49,6 +60,10 @@ public class UserService {
         UserPostResponse response = this.addUser(request,"STUDENT");
         //todo:send a message to create new student
         studentService.addStudent(response.getUuid(),response.getCampusId(),request.getFirstName(),request.getLastName());
+        UserCreatedMail mail = new UserCreatedMail(response.getCampusId(),
+                response.getCampusId(),
+                request.getFirstName() + " " + request.getLastName());
+        emailSender.sendEmail(mail);
         return response;
     }
 
@@ -57,7 +72,7 @@ public class UserService {
         user.setActive(true);
         user.setRole("ADMIN");
         user.setCampusId(username);
-        user.setPassword(passwordEncodeService.encodePassword(password));
+        user.setPassword(passwordEncoder.encodePassword(password));
         userRepository.save(user);
     }
 
@@ -68,15 +83,15 @@ public class UserService {
         user.setActive(true);
         user.setRole(role);
 
-        String campusId = idGenerateService.generateCampusId(role);
+        String campusId = IdGenerator.generateCampusId(role);
         log.debug("Generated campus id is" + campusId);
         //todo:check if duplicated should try n time and throw exception
         if(userRepository.findByCampusId(campusId).isPresent()){
             log.debug("Campus id is duplicated");
-            campusId = idGenerateService.generateCampusId(role);  //should be validate again ...
+            campusId = IdGenerator.generateCampusId(role);  //should be validate again ...
         }
         user.setCampusId(campusId);
-        user.setPassword(passwordEncodeService.encodePassword(campusId));
+        user.setPassword(passwordEncoder.encodePassword(campusId));
 
         userRepository.save(user);
         return userMapper.userToUserPostResponse(user);
@@ -84,15 +99,16 @@ public class UserService {
 
     public void resetPassword(UUID uuid){
         User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
-        user.setPassword(passwordEncodeService.encodePassword(user.getCampusId()));
+        user.setPassword(passwordEncoder.encodePassword(user.getCampusId()));
         userRepository.save(user);
+        emailSender.sendEmail(new PasswordResetMail());
     }
 
     public void changePassword(UUID uuid, UserChangePasswordRequest request){
         User user = userRepository.findById(uuid).orElseThrow(() -> new InvalidIdException("User uuid doesn't exist"));
-        if(!passwordEncodeService.matchPassword(request.getCurrentPassword(),user.getPassword()))
+        if(!passwordEncoder.matchPassword(request.getCurrentPassword(),user.getPassword()))
             throw new AccessDeniedException("Current password wrong!");
-        user.setPassword(passwordEncodeService.encodePassword(request.getNewPassword()));
+        user.setPassword(passwordEncoder.encodePassword(request.getNewPassword()));
         userRepository.save(user);
     }
 

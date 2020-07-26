@@ -4,15 +4,19 @@ import com.rmr101.campus.dto.course.*;
 import com.rmr101.campus.dto.courseassignment.CourseAssignmentGetResponse;
 import com.rmr101.campus.dto.student.StudentGetResponse;
 import com.rmr101.campus.dto.teacher.TeacherGetResponse;
+import com.rmr101.campus.dto.teachercourse.TeacherCoursePostRequest;
+import com.rmr101.campus.dto.teachercourse.TeacherCoursePostResponse;
 import com.rmr101.campus.entity.Course;
 import com.rmr101.campus.entity.StudentCourse;
 import com.rmr101.campus.entity.Subject;
+import com.rmr101.campus.entity.TeacherCourse;
 import com.rmr101.campus.exception.BadParameterException;
 import com.rmr101.campus.exception.InvalidIdException;
 import com.rmr101.campus.mapper.CourseAssignmentMapper;
 import com.rmr101.campus.mapper.CourseMapper;
 import com.rmr101.campus.mapper.StudentMapper;
 import com.rmr101.campus.mapper.TeacherMapper;
+import com.rmr101.campus.service.TeacherCourseService;
 import com.rmr101.campus.repository.CourseRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +43,9 @@ public class CourseService {
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private TeacherCourseService teacherCourseService;
 
     @Autowired
     private CourseAssignmentMapper courseAssignmentMapper;
@@ -125,18 +132,33 @@ public class CourseService {
     public CoursePostResponse addCourse(CoursePostRequest request) {
         //validate subjectId???
         Subject subject = subjectService.validateId(request.getSubjectId());
-
         Course course = courseMapper.coursePostRequestToCourse(request);
         course.setSubject(subject);
         subject.setCounter(subject.getCounter()+1);
         course.setCourseCode(subject.getSubjectCode() + request.getYear() +
                 request.getSemester() + String.format("%03d", subject.getCounter()));
         courseRepository.save(course);
+        TeacherCoursePostRequest teacherCoursePostRequest = new TeacherCoursePostRequest();
+        teacherCoursePostRequest.setCourseId(course.getId());
+        teacherCoursePostRequest.setTeacherUuid(request.getTeacherUuid());
+        TeacherCoursePostResponse response = teacherCourseService.addCourse(teacherCoursePostRequest);
         return courseMapper.courseToCoursePostResponse(course);
+    }
+
+    public void updateCourse(long id, CoursePutRequest request){
+        Course course = courseRepository.findById(id).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
+        courseMapper.updateCourseFromPutRequest(request, course);
+        courseRepository.save(course);
     }
 
     public Course validateId(long courseId){
         return courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
+    }
+
+    public void deleteCourse(long courseId){
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new InvalidIdException("The course id doesn't exist."));
+        course.setOpen(false);
+        courseRepository.save(course);
     }
 
 }

@@ -16,6 +16,7 @@ public class CoursePostRequest {
     private String learningOutcome;
     private String workLoad;
     private String assessment;
+    private UUID teacherUuid;
     @NotNull
     private long subjectId;
     //teacher UUID

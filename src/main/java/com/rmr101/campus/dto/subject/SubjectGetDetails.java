@@ -7,6 +7,6 @@ import java.util.List;
 
 @Data
 public class SubjectGetDetails {
-    private SubjectDto subjectDto;
+    private SubjectGetResponse subjectGetResponse;
     private List<CourseGetResponse> courseList;
 }

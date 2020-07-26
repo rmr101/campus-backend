@@ -23,26 +23,11 @@ public class SubjectService {
     @Autowired
     private CourseMapper courseMapper;
 
-    public SubjectDto addSubject(SubjectDto subjectDto) {
-        Subject subjectPo = subjectMapper.toSubject(subjectDto);
-
-        subjectRepository.save(subjectPo);
-
-        System.out.println(subjectPo);
-        subjectDto.setId(subjectPo.getId());
-        return subjectDto;
-    }
-
-//    public SubjectDto getSubjectById(long id) {
-//        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
-//        return subjectMapper.toSubjectDto(subject);
-//    }
-
     public SubjectList getAllSubject() {
         SubjectList subjectList = new SubjectList();
-        subjectList.setSubjectList(new ArrayList<SubjectDto>());
+        subjectList.setSubjectList(new ArrayList<SubjectGetResponse>());
         subjectRepository.findAll()
-                .forEach(po -> subjectList.getSubjectList().add(subjectMapper.toSubjectDto(po)));
+                .forEach(po -> subjectList.getSubjectList().add(subjectMapper.toSubjectGetResponse(po)));
         return subjectList;
     }
 
@@ -50,7 +35,7 @@ public class SubjectService {
         Subject subject = subjectRepository.findById(id).orElseThrow(() -> new InvalidIdException("Subject id doesn't exist."));
 
         SubjectGetDetails subjectDetails = new SubjectGetDetails();
-        subjectDetails.setSubjectDto(subjectMapper.toSubjectDto(subject));
+        subjectDetails.setSubjectGetResponse(subjectMapper.toSubjectGetResponse(subject));
         subjectDetails.setCourseList(courseMapper.courseToCourseGetResponse(subject.getCourses()));
 
         return subjectDetails;

@@ -1,7 +1,6 @@
 package com.rmr101.campus.dto.student;
 
 import lombok.Data;
-
 import javax.validation.constraints.NotNull;
 
 @Data

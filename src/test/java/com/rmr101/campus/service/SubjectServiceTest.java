@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,12 +34,11 @@ public class SubjectServiceTest {
     @Mock
     private CourseMapper courseMapper;
 
-
     @Test
     public void getAllSubject_thenOK(){
         List<Subject> subjectList = new ArrayList<Subject>();
         subjectList.add(new Subject());
-        when(subjectMapper.toSubjectDto(any(Subject.class))).thenReturn(new SubjectDto());
+        when(subjectMapper.toSubjectGetResponse(any(Subject.class))).thenReturn(new SubjectGetResponse());
         when(subjectRepository.findAll()).thenReturn(subjectList);
 
         SubjectList result = subjectService.getAllSubject();
@@ -50,17 +48,17 @@ public class SubjectServiceTest {
     @Test
     public void getSubjectDetailsById_whenIdExist_thenOK(){
         long id = 100;
-        SubjectDto subjectDto = new SubjectDto();
-        subjectDto.setId(id);
+        SubjectGetResponse subjectGetResponse = new SubjectGetResponse();
+        subjectGetResponse.setId(id);
         when(subjectRepository.findById(id)).thenReturn(Optional.of(new Subject()));
-        when(subjectMapper.toSubjectDto(any(Subject.class))).thenReturn(subjectDto);
+        when(subjectMapper.toSubjectGetResponse(any(Subject.class))).thenReturn(subjectGetResponse);
         when(courseMapper.courseToCourseGetResponse((List<Course>)any())).thenReturn(new ArrayList<>());
 
         SubjectGetDetails result = subjectService.getSubjectDetailsById(id);
-        verify(subjectMapper, times(1)).toSubjectDto(any(Subject.class));
+        verify(subjectMapper, times(1)).toSubjectGetResponse(any(Subject.class));
         verify(subjectRepository, times(1)).findById(id);
         verify(courseMapper, times(1)).courseToCourseGetResponse((List<Course>)any());
-        assertEquals(subjectDto.getId(), result.getSubjectDto().getId());
+        assertEquals(subjectGetResponse.getId(), result.getSubjectGetResponse().getId());
     }
 
     @Test
@@ -91,8 +89,10 @@ public class SubjectServiceTest {
     @Test
     public void addSubject_thenOK(){
         SubjectPostRequest request = new SubjectPostRequest();
+        Subject subject = new Subject();
+        subject.setSubjectCode("moc");
 
-        when(subjectMapper.subjectPostRequestToSubject(any())).thenReturn(new Subject());
+        when(subjectMapper.subjectPostRequestToSubject(any())).thenReturn(subject);
         when(subjectRepository.save(any())).thenReturn(new Subject());
         when(subjectMapper.subjectToSubjectPostResponse(any())).thenReturn(new SubjectPostResponse());
 
@@ -101,6 +101,4 @@ public class SubjectServiceTest {
         verify(subjectRepository, times(1)).save(any(Subject.class));
         verify(subjectMapper, times(1)).subjectToSubjectPostResponse(any(Subject.class));
     }
-
-
 }

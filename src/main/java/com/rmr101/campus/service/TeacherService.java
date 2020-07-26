@@ -40,39 +40,45 @@ public class TeacherService {
     private UserService userService;
 
     public List<TeacherGetResponse> findTeacherBy(String name, String campusId) {
-        if(campusId != null){
-            List<TeacherGetResponse> teacherList = new ArrayList<TeacherGetResponse>();
-            Optional<Teacher> teacher = teacherRepository.findByCampusId(campusId);
-            if(teacher.isPresent()){
-                teacherList.add(teacherMapper.teacherToTeacherGetResponse(teacher.get()));
-                return teacherList;
-            }
-            return teacherList;
-        }
-        if(name != null){
-            String firstName, lastName;
-            String[] keywords = name.split("\\s+");
-            switch(keywords.length){
-                case 1:
-                    firstName = lastName = "%" + keywords[0] + "%";
-                    break;
-                case 2:
-                    firstName = "%" + keywords[0] + "%";
-                    lastName = "%" + keywords[1] + "%";
-                    break;
-                default:
-                    throw new BadParameterException("Value of Parameter name is valid!");
-            }
-
-            List<Teacher> resultTeachers =
-                    teacherRepository.findByFirstNameLikeOrLastNameLike(firstName,lastName);
-            return teacherMapper.teacherToTeacherGetResponse(resultTeachers);
-        }
-        return null;
+        if(campusId != null)
+            return this.findByCampusId(campusId);
+        else
+            return this.findByName(name);
     }
 
-    public void changePassword(UUID uuid, UserChangePasswordRequest request) {
-        userService.changePassword(uuid, request);
+    public List<TeacherGetResponse> findByCampusId(String campusId){
+        if(campusId == null)
+            return null;
+        List<TeacherGetResponse> teacherList = new ArrayList<TeacherGetResponse>();
+        Optional<Teacher> teacher = teacherRepository.findByCampusId(campusId);
+        if(teacher.isPresent()){
+            teacherList.add(teacherMapper.teacherToTeacherGetResponse(teacher.get()));
+            return teacherList;
+        }
+        return teacherList;
+    }
+
+    public List<TeacherGetResponse> findByName(String name){
+        if(name == null)
+            return null;
+
+        String firstName, lastName;
+        String[] keywords = name.split("\\s+");
+        switch(keywords.length){
+            case 1:
+                firstName = lastName = "%" + keywords[0] + "%";
+                break;
+            case 2:
+                firstName = "%" + keywords[0] + "%";
+                lastName = "%" + keywords[1] + "%";
+                break;
+            default:
+                throw new BadParameterException("Value of Parameter name is valid!");
+        }
+
+        List<Teacher> resultTeachers =
+                teacherRepository.findByFirstNameLikeOrLastNameLike(firstName,lastName);
+        return teacherMapper.teacherToTeacherGetResponse(resultTeachers);
     }
 
     public TeacherGetDetails getTeacherDetailsByID(UUID uuid, String detail) {
@@ -94,23 +100,16 @@ public class TeacherService {
         return teacherDetails;
     }
 
+    public void changePassword(UUID uuid, UserChangePasswordRequest request) {
+        userService.changePassword(uuid, request);
+    }
+
     public void updateTeacher(UUID uuid, TeacherUpdateRequest request) {
         //validate uuid
         this.validateUuid(uuid);
         Teacher teacher = teacherMapper.teacherUpdateRequestToTeacher(request);
         teacher.setUuid(uuid);
         teacherRepository.save(teacher);
-    }
-
-    public void reviewAssignment(long assignmentId, StudentAssignmentTeacherPutRequest request) {
-        StudentAssignment assignment = studentAssignmentRepository.findById(assignmentId)
-                .orElseThrow(()-> new InvalidIdException("The student doesn't have this assignment"));
-
-        assignment.setComment(request.getComment());
-        assignment.setScore(request.getScore());
-        assignment.setScored(true);
-
-        studentAssignmentRepository.save(assignment);
     }
 
     public void addTeacher(UUID uuid, String campusId, String firstName, String lastName){
@@ -130,7 +129,6 @@ public class TeacherService {
     public void setTeacherInactive(UUID teacherUuid){
         Teacher teacher = teacherRepository.findById(teacherUuid).orElseThrow(()-> new InvalidIdException("Teacher uuid doesn't exist"));
         teacher.setActive(false);
-        teacherRepository.save(teacher);
+//        teacherRepository.save(teacher);
     }
-
 }
