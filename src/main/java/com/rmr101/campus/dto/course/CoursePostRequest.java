@@ -19,6 +19,4 @@ public class CoursePostRequest {
     private UUID teacherUuid;
     @NotNull
     private long subjectId;
-    //teacher UUID
-    private UUID teacherUuid;
 }
