@@ -46,6 +46,7 @@ Clouds:
 - AWS Simple Email Service
 
 CI/CD:
+- Java CI with Maven
 - Docker/ Docker Hub
 
 Development:
