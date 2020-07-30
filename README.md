@@ -26,7 +26,7 @@ deliver a learning management system for an educational institution.
 <li>AWS document upload and download for handing assignments</li>
 </ul>
 
-#### Tech stack for backend:
+## Tech stack for backend:
 
 Framework:
 - Spring Boot
