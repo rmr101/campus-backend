@@ -1,11 +1,11 @@
-## JR Academy Projects 3 - Campus system 1.0
+## JR Academy Project 3 - Campus system 1.0
 This is the backend project three from JR Academy. 
-Objective of this project is to deliver a learning management system for an educational institution.
+Objective of this project is to deliver a learning management system for an educational institution
 
 ### What's new?
 
-Added AWS based email function. 
-Users will receive email upon register and change password. 
+Added AWS based email function
+Users will receive email upon registration and change password
 
 ## Content
 - [Introduction](#jr-academy-projects-3---campus-system-10)
@@ -22,15 +22,13 @@ Users will receive email upon register and change password.
 - [Future Improvement](#future-improvement)
 
 ## About
-This is project three from JR Academy. 
+This is project three from JR Academy
 We are team RMR101. Objective of the project is to 
 deliver a learning management system for an educational institution.
 
 #### Backend Feature Summary
-<ul>
-<li>Secure log-in with encrypted password and JWT authentication</li>
-<li>AWS document upload and download for handing assignments</li>
-</ul>
+- Secure log-in with encrypted password and JWT authentication
+- AWS document upload and download for handing assignments
 
 #### Tech stack:
 
