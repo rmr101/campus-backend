@@ -13,6 +13,7 @@ Users will receive email upon register and change password.
 - [About](#about)
 - [Tech Stack](#tech-stack-for-backend)
 - [Database](#database)
+- [How to run this program locally](#how-to-run-this-program-locally)
 - [Future Improvement](#future-improvement)
 
 ## About
@@ -26,7 +27,7 @@ deliver a learning management system for an educational institution.
 <li>AWS document upload and download for handing assignments</li>
 </ul>
 
-## Tech stack for backend:
+#### Tech stack for Backend:
 
 Framework:
 - Spring Boot
@@ -53,15 +54,31 @@ Development:
 - Agile (Scrumn)
 - Github flow
 
-## Database
-#### EER diagram
+#### Database EER diagram
 ![](./demo/images/Campus_Database.jpg)
 
-## Database Configuration(connect to Docker Hub)
+## How to run this program locally
+- required programs
+    - JAVA version 14 [link](https://docs.oracle.com/en/java/javase/14/install/installation-jdk-microsoft-windows-platforms.html#GUID-A7E27B90-A28D-4237-9383-A58B416071CA)
+    - Docker [link](https://www.docker.com/get-started)
+    - IntelliJ IDEA (Recommended)
 
-- Start docker image:
+#### Spring Boot Configuration
+- Git Clone or [download](https://github.com/rmr101/campus-backend/archive/master.zip) 
+master code to your local drive 
+- Unzip and open downloaded file in IntelliJ IDEA or your preferred editor
+- Start the main application in<br> 
+    src/main/java/com.rmr101.campus/CampusApplication.java
+
+
+#### Database Configuration(connect to Docker Hub)
+- pull pre-packed mysql image from command line (Docker login required):
+
+    `docker pull nkanyang/mysql:admin`
     
-    `docker run -itd --name mysql-test -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql`
+- Start docker image:
+
+    `docker run -itd --name mysql-campus -p 3306:3306 -e MYSQL_CAMPUS_PASSWORD=123456 nkanyang/mysql:campus-admin`
 
 - login container
 
@@ -70,13 +87,18 @@ Development:
 - login mysql
 
     `mysql -u root -p`
-    input password
     
-- create database
- 
-   `create database campus;`
+    input password:
+    
+    `123456`
+    
+    `use campus`
+    
+    `select * from user;`
+    
+    it should display a campus_id as "admin", now we can log in as admin with password: admin 
 
-## Swagger UI
+#### Swagger UI
 
 - Step1: Start application 
 
@@ -88,10 +110,14 @@ Development:
 <ul>
 <li>generate a password reset email to users upon reset password request</li>
 <li>allow multiple teacher to teach one course</li>
+<li>pagination in search results</li>
+<li>add JWT function in SWAGGER UI for easier feature development</li>
 </ul>
 
 #### Tech:
 <ul>
 <li>add an long expiry JWT as log-in credential</li>
 <li>deploy to AWS for easy access and stronger security</li>
+<li>add load balancer </li>
+<li>move from http to https</li>
 </ul>
