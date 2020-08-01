@@ -11,9 +11,14 @@ Users will receive email upon register and change password.
 - [Introduction](#jr-academy-projects-3---campus-system-10)
 - [What's new](#whats-new)
 - [About](#about)
-- [Tech Stack](#tech-stack-for-backend)
-- [Database](#database)
-- [How to run this program locally](#how-to-run-this-program-locally)
+    - [Backeend Feature Summary](#backend-feature-summary)
+    - [Tech Stack](#tech-stack-for-backend)
+    - [Database Structure](#database-structure)
+- [Run this program locally](#run-this-program-locally)
+    - [Required programs](#required-programs)
+    - [Spring Boot Configuration](#spring-boot-configuration)
+    - [Database Configuration(connect to Docker Hub)](#database-configurationconnect-to-docker-hub)
+    - [Swagger UI](#swagger-ui)
 - [Future Improvement](#future-improvement)
 
 ## About
@@ -27,7 +32,7 @@ deliver a learning management system for an educational institution.
 <li>AWS document upload and download for handing assignments</li>
 </ul>
 
-#### Tech stack for Backend:
+#### Tech stack:
 
 Framework:
 - Spring Boot
@@ -54,15 +59,16 @@ Development:
 - Agile (Scrumn)
 - Github flow
 
-#### Database EER diagram
+#### Database Structure
 ![](./demo/images/Campus_Database.jpg)
 
-## How to run this program locally
-- required programs
-    - JAVA version 14 [link](https://docs.oracle.com/en/java/javase/14/install/installation-jdk-microsoft-windows-platforms.html#GUID-A7E27B90-A28D-4237-9383-A58B416071CA)
-    - Docker [link](https://www.docker.com/get-started)
-    - IntelliJ IDEA (Recommended)
+## Run this program locally
+#### Required programs
 
+- JAVA version 14 [download](https://docs.oracle.com/en/java/javase/14/install/installation-jdk-microsoft-windows-platforms.html#GUID-A7E27B90-A28D-4237-9383-A58B416071CA)
+- Docker [download](https://www.docker.com/get-started)
+- IntelliJ IDEA (Recommended) or preferred editor
+    
 #### Spring Boot Configuration
 - Git Clone or [download](https://github.com/rmr101/campus-backend/archive/master.zip) 
 master code to your local drive 
@@ -106,18 +112,14 @@ master code to your local drive
 
 
 ## Future Improvement
-#### Features
-<ul>
-<li>generate a password reset email to users upon reset password request</li>
-<li>allow multiple teacher to teach one course</li>
-<li>pagination in search results</li>
-<li>add JWT function in SWAGGER UI for easier feature development</li>
-</ul>
+#### Feature
+- generate a password reset email to users upon reset password request
+- allow multiple teachers to teach one course
+- pagination in search results
+- add JWT function in SWAGGER UI for easier feature development
 
-#### Tech:
-<ul>
-<li>add an long expiry JWT as log-in credential</li>
-<li>deploy to AWS for easy access and stronger security</li>
-<li>add load balancer </li>
-<li>move from http to https</li>
-</ul>
+
+#### Tech
+- add a long expiry JWT to keep users' login status
+- add load balancer
+- move from http to https
